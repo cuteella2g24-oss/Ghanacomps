@@ -54,7 +54,12 @@ export default function Home() {
               Goals. Assists. Saves. The ones everybody saw and the ones nobody talked about. Every Ghanaian. Every weekend. And when the weekend is done we go back to the legends.
             </Editable>
             <div className="row-btns">
-              <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" className="btn primary">Follow on X</a>
+              <span className="hero-follow">
+                Follow us on
+                <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" className="hero-follow-x" aria-label="Follow us on X">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+                </a>
+              </span>
               <Link to="/about" className="btn outline">Our Story</Link>
             </div>
           </div>
