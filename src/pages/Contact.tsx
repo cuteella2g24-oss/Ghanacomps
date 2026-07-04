@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
+import { Button } from '@/components/ui/button';
 
 export default function Contact() {
   const [name, setName] = useState('');
@@ -57,7 +58,7 @@ export default function Contact() {
                 <label className="form-lbl" htmlFor="fm">Your Message</label>
                 <textarea className="form-inp" id="fm" rows={5} placeholder="Tell us what you need..." required value={message} onChange={e => setMessage(e.target.value)} />
               </div>
-              <button type="submit" className="btn primary">Send Message</button>
+              <Button type="submit">Send Message</Button>
               {sent && (
                 <div className="form-ok" style={{ display: 'block' }}>Your message is ready. Just hit send in your email app and we will get back to you.</div>
               )}

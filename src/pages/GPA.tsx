@@ -5,6 +5,7 @@ import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { Button } from '@/components/ui/button';
 
 interface GpaLinks {
   mwr?: { caption: string; url: string };
@@ -61,8 +62,8 @@ function GpaBlock({
         <div className="gpa-admin-link admin-only" style={{ display: 'flex' }}>
           <input type="text" placeholder={`Link caption e.g. ${linkDefault}`} value={caption} onChange={e => setCaption(e.target.value)} />
           <input type="url" placeholder="Paste X or TikTok URL..." value={url} onChange={e => setUrl(e.target.value)} />
-          <button onClick={() => { if (!caption || !url) { alert('Please fill in both the caption and URL.'); return; } onSaveLink(id, caption, url); setCaption(''); setUrl(''); }} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-xl)' }}>Set Link</button>
-          <button onClick={() => onClearLink(id)} className="btn outline" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-xl)' }}>Remove</button>
+          <Button size="sm" onClick={() => { if (!caption || !url) { alert('Please fill in both the caption and URL.'); return; } onSaveLink(id, caption, url); setCaption(''); setUrl(''); }}>Set Link</Button>
+          <Button variant="outline" size="sm" onClick={() => onClearLink(id)}>Remove</Button>
         </div>
       )}
     </div>

@@ -6,6 +6,7 @@ import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { Button } from '@/components/ui/button';
 
 interface Performer { caption: string; url: string; }
 interface ExtraPlayer { id: string; name: string; club: string; league: string; label: string; }
@@ -161,8 +162,8 @@ export default function Players() {
             <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap' }}>
               <input type="text" placeholder='Caption e.g. "Kudus vs Man City — Matchday 38"' value={perfCaption} onChange={e => setPerfCaption(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
               <input type="url" placeholder="X or TikTok post URL..." value={perfUrl} onChange={e => setPerfUrl(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
-              <button onClick={addPerformer} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-2xl)' }}>Add Card</button>
-              <button onClick={() => setShowAddPerformer(false)} className="btn outline" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-2xl)' }}>Cancel</button>
+              <Button size="sm" onClick={addPerformer}>Add Card</Button>
+              <Button variant="outline" size="sm" onClick={() => setShowAddPerformer(false)}>Cancel</Button>
             </div>
           </div>
         )}

@@ -5,6 +5,7 @@ import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { Button } from '@/components/ui/button';
 
 interface ArchiveItem { player: string; match: string; comp: string; url: string; }
 
@@ -81,14 +82,14 @@ export default function BlackStars() {
             <Editable tag="div" eid="f1t" className="fix-title">Ghana vs Mexico</Editable>
             <Editable tag="div" eid="f1d" className="fix-det">Friday May 22 2026 · Venue in Mexico TBC · 17:00 GMT</Editable>
             <Editable tag="p" eid="f1-stake" style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)', margin: 'var(--space-lg) 0' }}>The final major World Cup warm-up. Mexico are a co-host nation and one of CONCACAF's strongest sides. Ghana lost 2-0 to them in 2023. Whoever takes the Ghana job will use this game to assess the squad before naming the World Cup 26-man roster. A big test under a new technical direction.</Editable>
-            <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" className="btn ghost">Follow for Updates</a>
+            <Button asChild variant="ghost"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Follow for Updates</a></Button>
           </div>
           <div className="fixture">
             <Editable tag="div" eid="f2l" className="fix-lbl">Final Warm-Up — Pre World Cup Friendly</Editable>
             <Editable tag="div" eid="f2t" className="fix-title">Wales vs Ghana</Editable>
             <Editable tag="div" eid="f2d" className="fix-det">Tuesday June 2 2026 · Cardiff City Stadium · KO Time TBC</Editable>
             <Editable tag="p" eid="f2-stake" style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)', margin: 'var(--space-lg) 0' }}>The last game before the World Cup. Wales did not qualify — they were knocked out on penalties by Bosnia and Herzegovina in the play-offs — but this historic first ever meeting between the two nations goes ahead. Ghana face Panama 15 days after this. The last chance for fringe players to make their case.</Editable>
-            <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" className="btn ghost">Stay Updated</a>
+            <Button asChild variant="ghost"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Stay Updated</a></Button>
           </div>
         </div>
       </section>
@@ -198,8 +199,8 @@ export default function BlackStars() {
               <input type="text" placeholder="Match (e.g. vs Nigeria — 2022 WC Playoff)..." value={arcMatch} onChange={e => setArcMatch(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
               <input type="text" placeholder="Competition, date, stats..." value={arcComp} onChange={e => setArcComp(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
               <input type="url" placeholder="X or TikTok URL..." value={arcUrl} onChange={e => setArcUrl(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
-              <button onClick={addArchiveCard} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-2xl)' }}>Add</button>
-              <button onClick={() => setShowAddPanel(false)} className="btn outline" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-2xl)' }}>Cancel</button>
+              <Button size="sm" onClick={addArchiveCard}>Add</Button>
+              <Button variant="outline" size="sm" onClick={() => setShowAddPanel(false)}>Cancel</Button>
             </div>
             <p style={{ fontSize: 'var(--fs-xs)', color: 'var(--sub)', marginTop: 'var(--space-sm)', fontStyle: 'italic' }}>To add multiple comps to one player — add the card first, then use the Edit button to update it.</p>
           </div>

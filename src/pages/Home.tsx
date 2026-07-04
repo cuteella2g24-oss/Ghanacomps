@@ -122,7 +122,7 @@ export default function Home() {
                     onChange={e => setNewsUrl(e.target.value)}
                     style={{ flex: 1, minWidth: '140px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }}
                   />
-                  <button onClick={addNews} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-xl)' }}>Add</button>
+                  <Button size="sm" onClick={addNews}>Add</Button>
                 </div>
               </div>
             )}

@@ -1,4 +1,5 @@
 import { useAdmin } from '../contexts/AdminContext';
+import { Button } from '@/components/ui/button';
 
 export default function AdminUI() {
   const { isAdmin, login, exit, save, reset, saveLabel } = useAdmin();
@@ -10,9 +11,9 @@ export default function AdminUI() {
       <div className={`admin-bar${isAdmin ? ' show' : ''}`} id="admin-bar">
         <span className="admin-bar-txt">Edit mode active — click any text to edit</span>
         <div className="admin-bar-btns">
-          <button className="btn outline" onClick={reset}>Reset Page</button>
-          <button className="btn outline" onClick={exit}>Exit</button>
-          <button className="btn primary" onClick={save}>{saveLabel}</button>
+          <Button variant="outline" size="sm" onClick={reset}>Reset Page</Button>
+          <Button variant="outline" size="sm" onClick={exit}>Exit</Button>
+          <Button size="sm" onClick={save}>{saveLabel}</Button>
         </div>
       </div>
     </>
