@@ -1,7 +1,12 @@
 /* ─── TAILWIND v4 + shadcn ───────────────────────────────────────────────
    Import Tailwind theme + utilities (preflight skipped — our reset below
-   covers it). shadcn's semantic tokens are mapped onto OUR design tokens in
-   @theme, so shadcn components inherit our color scheme + light/dark theming. */
+   covers it, inside @layer base). shadcn's semantic tokens are mapped onto
+   OUR design tokens in @theme, so shadcn components inherit our color scheme
+   + light/dark theming.
+   NOTE: layer order matters — our reset lives in `base` so Tailwind utilities
+   (e.g. p-6, bg-primary, border) can override it. An UN-layered reset would
+   beat every @layer and silently kill utility padding/background/border. */
+@layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
 
@@ -138,9 +143,11 @@
   --shadow-sm: 0 8px 22px -10px rgba(0,0,0,.55);  /* card hover depth */
 }
 
-/* ─── RESET ──────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid; }
-html { scroll-behavior: smooth; }
+/* ─── RESET (in @layer base so Tailwind utilities can override it) ──────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid; }
+  html { scroll-behavior: smooth; }
+}
 
 /* Smooth crossfade on theme change — applied only transiently by ThemeToggle,
    so it never interferes with hover/transform transitions the rest of the time. */
@@ -157,12 +164,14 @@ html.theme-transition *::after {
   html.theme-transition *::before,
   html.theme-transition *::after { transition: none !important; }
 }
-body { background: var(--bg); color: var(--white); font-family: var(--font-b); font-size: var(--fs-md); line-height: var(--lh-relaxed); -webkit-font-smoothing: antialiased; }
-a { color: inherit; text-decoration: none; }
-img { display: block; max-width: 100%; }
-ul { list-style: none; }
-button { cursor: pointer; border: none; background: none; font-family: inherit; }
-input, textarea, select { font-family: inherit; }
+@layer base {
+  body { background: var(--bg); color: var(--white); font-family: var(--font-b); font-size: var(--fs-md); line-height: var(--lh-relaxed); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  ul { list-style: none; }
+  button { cursor: pointer; border: none; background: none; font-family: inherit; }
+  input, textarea, select { font-family: inherit; }
+}
 
 /* ─── FLAG STRIPE ────────────────────────────────────────── */
 .stripe { display: flex; height: 4px; }
