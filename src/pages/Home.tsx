@@ -6,6 +6,9 @@ import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface NewsItem {
   title: string;
@@ -60,7 +63,7 @@ export default function Home() {
                   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
                 </a>
               </span>
-              <Link to="/about" className="btn outline">Our Story</Link>
+              <Button asChild variant="outline"><Link to="/about">Our Story</Link></Button>
             </div>
           </div>
 
@@ -149,7 +152,7 @@ export default function Home() {
             <Editable tag="p" eid="h-gatw-b" className="gpa-body">Every week we pick the best Ghanaian goal and the most important assist.</Editable>
           </div>
         </div>
-        <Link to="/gpa" className="btn ghost">Read Full GPA Weekly</Link>
+        <Button asChild variant="ghost"><Link to="/gpa">Read Full GPA Weekly</Link></Button>
       </section>
 
       {/* MARQUEE */}
@@ -166,30 +169,30 @@ export default function Home() {
         <h2 className="d2" style={{ marginBottom: 'var(--space-xl)' }}>We Cover Every <span className="gold">Ghanaian.</span></h2>
         <p className="lead" style={{ marginBottom: 'var(--space-6xl)' }}>Every weekend we go through the matches and put together compilations of the Ghanaians who stood out. Goals, assists, saves and performances that deserved more attention. When the weekend is done we go back to the legends.</p>
         <div className="g-auto">
-          <div className="card">
+          <Card>
             <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>⚽</div>
-            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Weekend Highlights</div>
+            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Weekend Highlights</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>Goals, assists, saves and standout performances from Ghanaians playing abroad. Posted every weekend.</p>
-            <div style={{ marginTop: 'var(--space-xl)' }}><Link to="/players" className="btn ghost" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-xs) var(--space-lg)' }}>Current Players</Link></div>
-          </div>
-          <div className="card">
+            <div style={{ marginTop: 'var(--space-xl)' }}><Button asChild variant="ghost" size="sm"><Link to="/players">Current Players</Link></Button></div>
+          </Card>
+          <Card>
             <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>📼</div>
-            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Legend Throwbacks</div>
+            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Legend Throwbacks</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>Ghana has had incredible players. We bring those moments back for a generation that never saw them.</p>
-            <div style={{ marginTop: 'var(--space-xl)' }}><Link to="/legends" className="btn ghost" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-xs) var(--space-lg)' }}>View Legends</Link></div>
-          </div>
-          <div className="card">
+            <div style={{ marginTop: 'var(--space-xl)' }}><Button asChild variant="ghost" size="sm"><Link to="/legends">View Legends</Link></Button></div>
+          </Card>
+          <Card>
             <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>🇬🇭</div>
-            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Black Stars</div>
+            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Black Stars</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>When Ghana play we cover everything. Lineups, live goals, individual player comps and a full breakdown.</p>
-            <div style={{ marginTop: 'var(--space-xl)' }}><Link to="/blackstars" className="btn ghost" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-xs) var(--space-lg)' }}>Black Stars Hub</Link></div>
-          </div>
-          <div className="card">
+            <div style={{ marginTop: 'var(--space-xl)' }}><Button asChild variant="ghost" size="sm"><Link to="/blackstars">Black Stars Hub</Link></Button></div>
+          </Card>
+          <Card>
             <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>💬</div>
-            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>We Take Requests</div>
+            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>We Take Requests</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>Drop a player or game in our X comments. We work on every game we can access and we do it fast.</p>
-            <div style={{ marginTop: 'var(--space-xl)' }}><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" className="btn ghost" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-xs) var(--space-lg)' }}>Find Us on X</a></div>
-          </div>
+            <div style={{ marginTop: 'var(--space-xl)' }}><Button asChild variant="ghost" size="sm"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Find Us on X</a></Button></div>
+          </Card>
         </div>
       </section>
 
@@ -202,20 +205,20 @@ export default function Home() {
         <div className="g-seam">
           <a href="https://x.com/Ghanacomps/status/2021318754206933129" target="_blank" rel="noopener" className="post-card">
             <div className="post-thumb"><img src="/assets/x_fatawu.jpg" alt="Fatawu vs Southampton" /><div className="post-badge">X</div><div className="post-overlay"><div className="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></div></div></div>
-            <div className="post-body"><div className="post-tag" style={{ color: 'var(--red)' }}>★ Biggest Post — 1.3M Views</div><div className="post-title">Fatawu Issahaku — Stunning Goal vs Southampton</div><p className="post-desc">The clip that put Ghana Comps on the map.</p><span className="btn ghost" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-xs) var(--space-lg)', marginTop: 'var(--space-md)', display: 'inline-block' }}>Watch on X</span></div>
+            <div className="post-body"><div className="post-tag" style={{ color: 'var(--red)' }}>★ Biggest Post — 1.3M Views</div><div className="post-title">Fatawu Issahaku — Stunning Goal vs Southampton</div><p className="post-desc">The clip that put Ghana Comps on the map.</p><span className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'mt-2.5')}>Watch on X</span></div>
           </a>
           <a href="https://x.com/Ghanacomps/status/2028823927577817257" target="_blank" rel="noopener" className="post-card">
             <div className="post-thumb"><img src="/assets/x_essien.jpg" alt="Essien vs Italy 2006" /><div className="post-badge">X</div><div className="post-overlay"><div className="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></div></div></div>
-            <div className="post-body"><div className="post-tag">Legend</div><div className="post-title">Michael Essien vs Italy — 2006 World Cup</div><p className="post-desc">Essien saw this and reposted it on his TikTok and Facebook. Two months in and the legends were watching.</p><span className="btn ghost" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-xs) var(--space-lg)', marginTop: 'var(--space-md)', display: 'inline-block' }}>Watch on X</span></div>
+            <div className="post-body"><div className="post-tag">Legend</div><div className="post-title">Michael Essien vs Italy — 2006 World Cup</div><p className="post-desc">Essien saw this and reposted it on his TikTok and Facebook. Two months in and the legends were watching.</p><span className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'mt-2.5')}>Watch on X</span></div>
           </a>
           <a href="https://x.com/Ghanacomps/status/2029905846784655770" target="_blank" rel="noopener" className="post-card">
             <div className="post-thumb"><img src="/assets/x_abedi.jpg" alt="Abedi Pele vs Nigeria 1992" /><div className="post-badge">X</div><div className="post-overlay"><div className="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></div></div></div>
-            <div className="post-body"><div className="post-tag">Legend</div><div className="post-title">Abedi Pele vs Nigeria — 1992 AFCON</div><div className="post-stats">18K Views · 806 Likes</div><p className="post-desc">Ghana's greatest ever. The archive doing what it does.</p><span className="btn ghost" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-xs) var(--space-lg)', marginTop: 'var(--space-md)', display: 'inline-block' }}>Watch on X</span></div>
+            <div className="post-body"><div className="post-tag">Legend</div><div className="post-title">Abedi Pele vs Nigeria — 1992 AFCON</div><div className="post-stats">18K Views · 806 Likes</div><p className="post-desc">Ghana's greatest ever. The archive doing what it does.</p><span className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'mt-2.5')}>Watch on X</span></div>
           </a>
         </div>
         <div className="row-btns" style={{ marginTop: 'var(--space-4xl)' }}>
-          <Link to="/legends" className="btn ghost">Legends Archive</Link>
-          <Link to="/players" className="btn ghost">Current Players</Link>
+          <Button asChild variant="ghost"><Link to="/legends">Legends Archive</Link></Button>
+          <Button asChild variant="ghost"><Link to="/players">Current Players</Link></Button>
         </div>
       </section>
 
@@ -224,9 +227,9 @@ export default function Home() {
         <div className="eyebrow">Find Us Online</div>
         <h2 className="d2" style={{ marginBottom: 'var(--space-5xl)' }}>Follow the <span className="gold">Journey.</span></h2>
         <div className="g2">
-          <div className="platform-card"><div className="plat-icon">𝕏</div><div className="plat-name">Twitter / X</div><div className="plat-handle">@Ghanacomps ✓ Verified</div><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" className="btn primary">Follow Now</a></div>
-          <div className="platform-card"><div className="plat-icon">🎵</div><div className="plat-name">TikTok</div><div className="plat-handle">@ghanacompss</div><a href="https://tiktok.com/@ghanacompss" target="_blank" rel="noopener" className="btn primary">Follow Now</a></div>
-          <div className="platform-card"><div className="plat-icon">👥</div><div className="plat-name">Facebook</div><div className="plat-handle">Ghana Comps</div><a href="https://www.facebook.com/share/1GL7b1Qsuq/" target="_blank" rel="noopener" className="btn primary">Follow Now</a></div>
+          <div className="platform-card"><div className="plat-icon">𝕏</div><div className="plat-name">Twitter / X</div><div className="plat-handle">@Ghanacomps ✓ Verified</div><Button asChild><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Follow Now</a></Button></div>
+          <div className="platform-card"><div className="plat-icon">🎵</div><div className="plat-name">TikTok</div><div className="plat-handle">@ghanacompss</div><Button asChild><a href="https://tiktok.com/@ghanacompss" target="_blank" rel="noopener">Follow Now</a></Button></div>
+          <div className="platform-card"><div className="plat-icon">👥</div><div className="plat-name">Facebook</div><div className="plat-handle">Ghana Comps</div><Button asChild><a href="https://www.facebook.com/share/1GL7b1Qsuq/" target="_blank" rel="noopener">Follow Now</a></Button></div>
         </div>
       </section>
 

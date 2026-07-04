@@ -1,3 +1,34 @@
+/* ─── TAILWIND v4 + shadcn ───────────────────────────────────────────────
+   Import Tailwind theme + utilities (preflight skipped — our reset below
+   covers it). shadcn's semantic tokens are mapped onto OUR design tokens in
+   @theme, so shadcn components inherit our color scheme + light/dark theming. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--white);
+  --color-card: var(--raised);
+  --color-card-foreground: var(--white);
+  --color-popover: var(--raised);
+  --color-popover-foreground: var(--white);
+  --color-primary: var(--gold);
+  --color-primary-foreground: var(--on-gold);
+  --color-secondary: var(--surface);
+  --color-secondary-foreground: var(--white);
+  --color-muted: var(--surface);
+  --color-muted-foreground: var(--sub);
+  --color-accent: var(--lift);
+  --color-accent-foreground: var(--white);
+  --color-destructive: var(--red);
+  --color-destructive-foreground: var(--on-brand);
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--gold);
+  --font-sans: var(--font-b);
+  --font-serif: var(--font-d);
+}
+
 /* ─── TOKENS ─────────────────────────────────────────────────────────────
    Single source of truth for color. RULES:
    • Never write a raw hex/rgb hue in a rule — always reference a token below.
@@ -108,7 +139,7 @@
 }
 
 /* ─── RESET ──────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid; }
 html { scroll-behavior: smooth; }
 
 /* Smooth crossfade on theme change — applied only transiently by ThemeToggle,
