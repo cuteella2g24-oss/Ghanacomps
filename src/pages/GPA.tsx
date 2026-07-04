@@ -61,8 +61,8 @@ function GpaBlock({
         <div className="gpa-admin-link admin-only" style={{ display: 'flex' }}>
           <input type="text" placeholder={`Link caption e.g. ${linkDefault}`} value={caption} onChange={e => setCaption(e.target.value)} />
           <input type="url" placeholder="Paste X or TikTok URL..." value={url} onChange={e => setUrl(e.target.value)} />
-          <button onClick={() => { if (!caption || !url) { alert('Please fill in both the caption and URL.'); return; } onSaveLink(id, caption, url); setCaption(''); setUrl(''); }} className="btn primary" style={{ fontSize: '0.6rem', padding: '7px 14px' }}>Set Link</button>
-          <button onClick={() => onClearLink(id)} className="btn outline" style={{ fontSize: '0.6rem', padding: '7px 14px' }}>Remove</button>
+          <button onClick={() => { if (!caption || !url) { alert('Please fill in both the caption and URL.'); return; } onSaveLink(id, caption, url); setCaption(''); setUrl(''); }} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: '7px 14px' }}>Set Link</button>
+          <button onClick={() => onClearLink(id)} className="btn outline" style={{ fontSize: 'var(--fs-2xs)', padding: '7px 14px' }}>Remove</button>
         </div>
       )}
     </div>
@@ -91,7 +91,7 @@ export default function GPA() {
       <div className="page-header">
         <div className="eyebrow">Updated Every Week</div>
         <h1 className="d2"><span className="gold">GPA</span> Weekly.</h1>
-        <p style={{ fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--sub)', marginTop: '4px' }}>Ghanaian Players Abroad</p>
+        <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--sub)', marginTop: '4px' }}>Ghanaian Players Abroad</p>
         <p className="lead" style={{ marginTop: '10px' }}>Every week we break down what happened, what stood out and what deserved more attention.</p>
       </div>
 

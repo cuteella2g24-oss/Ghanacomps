@@ -99,10 +99,10 @@ export default function About() {
             <p className="lead">As the platform grows we want to use it to shine a light on young Ghanaian talent. Players who deserve to be seen but have not had that chance yet.</p>
           </div>
           <div style={{ border: '1px dashed rgb(var(--gold-rgb) / .25)', padding: '28px 24px', position: 'relative' }}>
-            <span style={{ position: 'absolute', top: '-10px', left: '18px', background: 'var(--bg)', padding: '2px 10px', fontSize: '0.56rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--gold)' }}>Coming Soon</span>
-            <div style={{ fontSize: '1.4rem', marginBottom: '10px' }}>🌱</div>
-            <div style={{ fontFamily: 'var(--font-d)', fontSize: '1.2rem', color: 'var(--white)', marginBottom: '10px' }}>Young Talent Showcase</div>
-            <p className="lead" style={{ fontSize: '0.82rem' }}>When we build Ghana Comps to the right level we want to start featuring young footballers from across the country. Giving them visibility and putting them in front of scouts and clubs who might otherwise never have seen them.</p>
+            <span style={{ position: 'absolute', top: '-10px', left: '18px', background: 'var(--bg)', padding: '2px 10px', fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)' }}>Coming Soon</span>
+            <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: '10px' }}>🌱</div>
+            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-xl)', color: 'var(--white)', marginBottom: '10px' }}>Young Talent Showcase</div>
+            <p className="lead" style={{ fontSize: 'var(--fs-base)' }}>When we build Ghana Comps to the right level we want to start featuring young footballers from across the country. Giving them visibility and putting them in front of scouts and clubs who might otherwise never have seen them.</p>
           </div>
         </div>
       </section>
@@ -111,7 +111,7 @@ export default function About() {
       <section className="alt reveal">
         <div className="eyebrow">The People</div>
         <h2 className="d2" style={{ marginBottom: '8px' }}>What Ghana Football Fans Are <span className="gold">Saying.</span></h2>
-        <p className="lead" style={{ marginBottom: '32px', fontSize: '0.82rem' }}>We post. They react. And the conversation never stops.</p>
+        <p className="lead" style={{ marginBottom: '32px', fontSize: 'var(--fs-base)' }}>We post. They react. And the conversation never stops.</p>
 
         {reactionGroups.map(group => (
           <div key={group.label} className="player-group">
@@ -134,10 +134,10 @@ export default function About() {
       <section className="reveal">
         <div className="eyebrow">The Requests</div>
         <h2 className="d2" style={{ marginBottom: '8px' }}>They Ask. <span className="gold">We Deliver.</span></h2>
-        <p className="lead" style={{ marginBottom: '28px', fontSize: '0.82rem' }}>Every request goes into the list. Some footage is copyrighted and not always available but when we can do it we do it fast.</p>
+        <p className="lead" style={{ marginBottom: '28px', fontSize: 'var(--fs-base)' }}>Every request goes into the list. Some footage is copyrighted and not always available but when we can do it we do it fast.</p>
 
         <div style={{ marginBottom: '32px' }}>
-          <p style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '12px' }}>★ Requested and Delivered in 24 Hours</p>
+          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '12px' }}>★ Requested and Delivered in 24 Hours</p>
           <div className="req-pair">
             <div><div className="req-lbl">The Request</div><img src="/assets/reactions/req01.jpg" alt="" style={{ width: '100%', borderRadius: '3px', border: '1px solid var(--line)' }} /></div>
             <div className="req-arrow">→</div>
@@ -146,7 +146,7 @@ export default function About() {
         </div>
 
         <div style={{ marginBottom: '28px' }}>
-          <p style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--sub)', marginBottom: '12px' }}>More Requests</p>
+          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--sub)', marginBottom: '12px' }}>More Requests</p>
           <div className="req-grid">
             <div className="req-single"><img src="/assets/reactions/req04.jpg" alt="" style={{ width: '100%', borderRadius: '3px' }} /></div>
             <div className="req-single"><img src="/assets/reactions/req05.jpg" alt="" style={{ width: '100%', borderRadius: '3px' }} /></div>
@@ -158,7 +158,7 @@ export default function About() {
         </div>
 
         <div style={{ marginBottom: '28px' }}>
-          <p style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--sub)', marginBottom: '12px' }}>Requests Granted</p>
+          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--sub)', marginBottom: '12px' }}>Requests Granted</p>
           <div className="req-grid">
             <div className="req-single"><img src="/assets/reactions/req10.jpg" alt="" style={{ width: '100%', borderRadius: '3px' }} /></div>
           </div>
@@ -169,11 +169,11 @@ export default function About() {
       <section className="alt reveal">
         <div className="eyebrow">Special Moment</div>
         <h2 className="d2" style={{ marginBottom: '8px' }}>When <span className="gold">Essien Watched.</span></h2>
-        <p className="lead" style={{ marginBottom: '24px', fontSize: '0.82rem' }}>Two months in and we were already reaching the legends. Michael Essien saw our compilation and acknowledged it on both his TikTok and his Facebook.</p>
+        <p className="lead" style={{ marginBottom: '24px', fontSize: 'var(--fs-base)' }}>Two months in and we were already reaching the legends. Michael Essien saw our compilation and acknowledged it on both his TikTok and his Facebook.</p>
         <div className="special-box">
-          <div style={{ fontSize: '0.58rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '14px' }}>★ Special Moment</div>
-          <p className="italic" style={{ fontSize: '0.95rem', color: 'var(--white)', maxWidth: '560px', lineHeight: 1.75 }}>"Incredible experience, Thanks #ghanacomps @fifaworldcup"</p>
-          <p style={{ fontSize: '0.6rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--sub)', marginTop: '8px' }}>Michael Essien ✓ — on TikTok and Facebook</p>
+          <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '14px' }}>★ Special Moment</div>
+          <p className="italic" style={{ fontSize: 'var(--fs-lg)', color: 'var(--white)', maxWidth: '560px', lineHeight: 'var(--lh-body)' }}>"Incredible experience, Thanks #ghanacomps @fifaworldcup"</p>
+          <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: 'var(--ls-3)', textTransform: 'uppercase', color: 'var(--sub)', marginTop: '8px' }}>Michael Essien ✓ — on TikTok and Facebook</p>
           <div className="special-screens">
             <div className="special-screen">
               <img src="/assets/essien_tiktok.jpg" alt="Essien TikTok repost" />

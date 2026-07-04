@@ -146,7 +146,7 @@ export default function Players() {
           </div>
         ) : (
           <div style={{ border: '1px dashed rgb(var(--gold-rgb) / .2)', padding: '28px 20px', textAlign: 'center' }}>
-            <p style={{ fontSize: '0.78rem', color: 'var(--sub)', fontStyle: 'italic' }}>No performers added yet this week. Follow <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--gold)' }}>@Ghanacomps on X</a> to see all the comps live.</p>
+            <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--sub)', fontStyle: 'italic' }}>No performers added yet this week. Follow <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--gold)' }}>@Ghanacomps on X</a> to see all the comps live.</p>
           </div>
         )}
 
@@ -157,12 +157,12 @@ export default function Players() {
 
         {isAdmin && showAddPerformer && (
           <div style={{ marginTop: '14px', padding: '18px', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
-            <div style={{ fontSize: '0.56rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '10px' }}>Add Performer Card</div>
+            <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '10px' }}>Add Performer Card</div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              <input type="text" placeholder='Caption e.g. "Kudus vs Man City — Matchday 38"' value={perfCaption} onChange={e => setPerfCaption(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: '0.8rem', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
-              <input type="url" placeholder="X or TikTok post URL..." value={perfUrl} onChange={e => setPerfUrl(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: '0.8rem', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
-              <button onClick={addPerformer} className="btn primary" style={{ fontSize: '0.62rem', padding: '8px 16px' }}>Add Card</button>
-              <button onClick={() => setShowAddPerformer(false)} className="btn outline" style={{ fontSize: '0.62rem', padding: '8px 16px' }}>Cancel</button>
+              <input type="text" placeholder='Caption e.g. "Kudus vs Man City — Matchday 38"' value={perfCaption} onChange={e => setPerfCaption(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: 'var(--fs-base)', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
+              <input type="url" placeholder="X or TikTok post URL..." value={perfUrl} onChange={e => setPerfUrl(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: 'var(--fs-base)', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
+              <button onClick={addPerformer} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: '8px 16px' }}>Add Card</button>
+              <button onClick={() => setShowAddPerformer(false)} className="btn outline" style={{ fontSize: 'var(--fs-2xs)', padding: '8px 16px' }}>Cancel</button>
             </div>
           </div>
         )}
@@ -172,7 +172,7 @@ export default function Players() {
       <section className="alt">
         <div className="eyebrow">Full Squad Directory</div>
         <h2 className="d2" style={{ marginBottom: '8px' }}>Ghanaians <span className="gold">Playing Abroad.</span></h2>
-        <p className="lead" style={{ marginBottom: '16px', fontSize: '0.82rem' }}>We track as many Ghanaians playing abroad as we can. If we are missing someone or a club is wrong, <Link to="/contact" style={{ color: 'var(--gold)' }}>contact us</Link> and we will update it.</p>
+        <p className="lead" style={{ marginBottom: '16px', fontSize: 'var(--fs-base)' }}>We track as many Ghanaians playing abroad as we can. If we are missing someone or a club is wrong, <Link to="/contact" style={{ color: 'var(--gold)' }}>contact us</Link> and we will update it.</p>
 
         <input type="text" className="search player-search" placeholder="Search player by name..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} style={{ marginBottom: '20px' }} />
 
@@ -196,14 +196,14 @@ export default function Players() {
                 <div className="player-lg">{p.label}</div>
                 <div className="player-name">{p.name}</div>
                 <div className="player-meta">{p.club}</div>
-                {isAdmin && <button onClick={() => removeExtra(i)} style={{ marginTop: '6px', background: 'var(--red)', color: '#fff', border: 'none', fontSize: '0.6rem', padding: '3px 8px', cursor: 'pointer', borderRadius: '2px' }}>Remove</button>}
+                {isAdmin && <button onClick={() => removeExtra(i)} style={{ marginTop: '6px', background: 'var(--red)', color: '#fff', border: 'none', fontSize: 'var(--fs-2xs)', padding: '3px 8px', cursor: 'pointer', borderRadius: '2px' }}>Remove</button>}
               </div>
             );
           })}
         </div>
 
         <button className="add-player-btn" onClick={addPlayer}>+ Add New Player</button>
-        <p style={{ fontSize: '0.72rem', color: 'var(--sub)', fontStyle: 'italic', marginTop: '14px', padding: '10px 14px', border: '1px solid var(--line)' }}>Missing a player or wrong club? <Link to="/contact" style={{ color: 'var(--gold)' }}>Contact us</Link> and we will update it.</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--sub)', fontStyle: 'italic', marginTop: '14px', padding: '10px 14px', border: '1px solid var(--line)' }}>Missing a player or wrong club? <Link to="/contact" style={{ color: 'var(--gold)' }}>Contact us</Link> and we will update it.</p>
       </section>
 
       <Footer />

@@ -58,6 +58,61 @@ inventing new ones:
 - `/ .3`–`.4` — hover / focus borders
 - `/ .9` — near-solid overlays (play button)
 
+---
+
+# Typography
+
+Same rule: **never write a raw `rem` font-size, `em` letter-spacing, unitless
+line-height, or numeric font-weight in a rule** — reference a token. Applies to
+CSS and inline `style={{}}`.
+
+## Families
+| Token | Value | Use |
+|-------|-------|-----|
+| `--font-d` | Bebas Neue | display — headings, names, numbers |
+| `--font-b` | DM Sans | body / UI (default) |
+| `--font-a` | Playfair Display | accent — italic quotes |
+
+## Size scale (rem, root = 16px)
+| Token | rem | px | Use |
+|-------|-----|----|-----|
+| `--fs-micro` | 0.56 | 9.0 | eyebrows, tags, meta, micro-labels |
+| `--fs-2xs` | 0.62 | 9.9 | buttons, filters, nav links |
+| `--fs-xs` | 0.68 | 10.9 | small links, footer, admin text |
+| `--fs-sm` | 0.76 | 12.2 | secondary body, captions, details |
+| `--fs-base` | 0.82 | 13.1 | default card body copy |
+| `--fs-md` | 0.90 | 14.4 | body / lead paragraphs |
+| `--fs-lg` | 0.95 | 15.2 | emphasis body, small titles |
+| `--fs-xl` | 1.10 | 17.6 | card / player titles |
+| `--fs-2xl` | 1.30 | 20.8 | section subtitles, small display |
+| `--fs-3xl` | 1.70 | 27.2 | large display names |
+| `--fs-4xl` | 2.10 | 33.6 | stat numbers |
+| `--fs-d1` | clamp(2.2→4.8) | — | hero display |
+| `--fs-d2` | clamp(1.8→3.5) | — | page-header display |
+| `--fs-d3` | clamp(1.3→2.0) | — | section display |
+
+## Weight
+`--fw-medium` 500 · `--fw-semibold` 600 (body default is 400).
+
+## Leading (line-height)
+`--lh-none` 1 · `--lh-display` 0.9 · `--lh-snug` 1.1 · `--lh-heading` 1.5 ·
+`--lh-normal` 1.6 · `--lh-body` 1.75 · `--lh-relaxed` 1.85
+
+## Tracking (letter-spacing, uppercase labels)
+`--ls-1` 0.08em · `--ls-2` 0.12em · `--ls-3` 0.16em · `--ls-4` 0.2em · `--ls-5` 0.3em
+
+## Appearance shifts from rationalizing (approved)
+The 36 ad-hoc sizes were snapped to the 11-step scale. Notable (>1px) shifts:
+- **1.4rem → 1.3rem** (−1.6px): card headings (`.gpa-name`, `.editor-heading`,
+  `.fix-title`, `.gpa-write-heading`) — the most visible change.
+- **1.2rem → 1.1rem** (−1.6px): `.plat-num`, icon glyphs, one About title.
+- **1.5rem → 1.3rem** (−3.2px): `.plat-icon` (an emoji glyph only).
+- **0.88rem → 0.82rem** (−1px): `.quote-txt`, `.editor-body`.
+- **1rem → 0.95rem** (−0.8px): `.nav-name`, `.performer-caption`.
+
+Letter-spacing: most uppercase labels moved by ±0.02em (imperceptible).
+Line-height kept faithful (±0.05 max).
+
 ## Known follow-ups (not yet done)
 - Several gold-fill elements still set `color: var(--bg)` instead of
   `var(--on-gold)` (e.g. `.performer-link`, `.gpa-link-btn:hover`,

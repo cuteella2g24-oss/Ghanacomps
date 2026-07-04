@@ -93,7 +93,7 @@ export default function Legends() {
               <Editable tag="span" eid="l1-era" className="era-pill g">1980s to 1990s</Editable>
               <Editable tag="div" eid="l1-name" className="lc-name">Abedi Pelé</Editable>
               <Editable tag="div" eid="l1-pos" className="lc-pos">Attacking Midfielder · Marseille, Lyon</Editable>
-              <Editable tag="p" eid="l1-bio" style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>Three time African Footballer of the Year. Ghana has never produced a player quite like him. A wizard in every sense of the word.</Editable>
+              <Editable tag="p" eid="l1-bio" style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>Three time African Footballer of the Year. Ghana has never produced a player quite like him. A wizard in every sense of the word.</Editable>
             </div>
             <div className="lc-comps">
               <div className="lc-comps-lbl">Our Comps</div>
@@ -112,7 +112,7 @@ export default function Legends() {
               <Editable tag="div" eid="l2-name" className="lc-name">Michael Essien</Editable>
               <Editable tag="div" eid="l2-pos" className="lc-pos">Midfielder · Chelsea, Real Madrid</Editable>
               <div className="lc-badge">★ Acknowledged on TikTok and Facebook</div>
-              <Editable tag="p" eid="l2-bio" style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>The Bison. One of the most complete midfielders in the world at his peak. Box to box, physical, technical and always in the right place.</Editable>
+              <Editable tag="p" eid="l2-bio" style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>The Bison. One of the most complete midfielders in the world at his peak. Box to box, physical, technical and always in the right place.</Editable>
             </div>
             <div className="lc-comps">
               <div className="lc-comps-lbl">Our Comps</div>
@@ -130,7 +130,7 @@ export default function Legends() {
               <Editable tag="span" eid="l3-era" className="era-pill gr">2000s to 2010s</Editable>
               <Editable tag="div" eid="l3-name" className="lc-name">Asamoah Gyan</Editable>
               <Editable tag="div" eid="l3-pos" className="lc-pos">Striker · Sunderland, Al Ain</Editable>
-              <Editable tag="p" eid="l3-bio" style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>Ghana's all time top scorer. The goal machine. Powerful, direct and clinical. He carried Ghana on his back for years.</Editable>
+              <Editable tag="p" eid="l3-bio" style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>Ghana's all time top scorer. The goal machine. Powerful, direct and clinical. He carried Ghana on his back for years.</Editable>
             </div>
             <div className="lc-comps">
               <div className="lc-comps-lbl">Our Comps</div>
@@ -147,7 +147,7 @@ export default function Legends() {
               <Editable tag="span" eid="l4-era" className="era-pill g">1990s to 2000s</Editable>
               <Editable tag="div" eid="l4-name" className="lc-name">Stephen Appiah</Editable>
               <Editable tag="div" eid="l4-pos" className="lc-pos">Midfielder · Juventus, Fenerbahce</Editable>
-              <Editable tag="p" eid="l4-bio" style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>Captain Fantastic. The man who led Ghana to their first ever World Cup in 2006. Elegant, intelligent and everything you want in a leader.</Editable>
+              <Editable tag="p" eid="l4-bio" style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>Captain Fantastic. The man who led Ghana to their first ever World Cup in 2006. Elegant, intelligent and everything you want in a leader.</Editable>
             </div>
             <div className="lc-comps">
               <div className="lc-comps-lbl">Our Comps</div>
@@ -162,7 +162,7 @@ export default function Legends() {
               <Editable tag="span" eid="l5-era" className="era-pill r">2000s to 2010s</Editable>
               <Editable tag="div" eid="l5-name" className="lc-name">Kwadwo Asamoah</Editable>
               <Editable tag="div" eid="l5-pos" className="lc-pos">Midfielder · Juventus, Inter Milan</Editable>
-              <Editable tag="p" eid="l5-bio" style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>One of the most versatile players Ghana has ever produced. His display against Uruguay at the 2010 World Cup is still talked about.</Editable>
+              <Editable tag="p" eid="l5-bio" style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>One of the most versatile players Ghana has ever produced. His display against Uruguay at the 2010 World Cup is still talked about.</Editable>
             </div>
             <div className="lc-comps">
               <div className="lc-comps-lbl">Our Comps</div>
@@ -178,7 +178,7 @@ export default function Legends() {
               <Editable tag="span" eid="l6-era" className="era-pill gr">2000s to 2010s</Editable>
               <Editable tag="div" eid="l6-name" className="lc-name">Anthony Annan</Editable>
               <Editable tag="div" eid="l6-pos" className="lc-pos">Defensive Midfielder · Schalke, Rosenborg</Editable>
-              <Editable tag="p" eid="l6-bio" style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>Our biggest legend comp. 76K views. The football world went back and remembered just how good he was against Uruguay at the 2010 World Cup.</Editable>
+              <Editable tag="p" eid="l6-bio" style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>Our biggest legend comp. 76K views. The football world went back and remembered just how good he was against Uruguay at the 2010 World Cup.</Editable>
             </div>
             <div className="lc-comps">
               <div className="lc-comps-lbl">Our Comps</div>
@@ -193,7 +193,7 @@ export default function Legends() {
               <Editable tag="span" eid="l7-era" className="era-pill g">2000s</Editable>
               <Editable tag="div" eid="l7-name" className="lc-name">Richard Kingson</Editable>
               <Editable tag="div" eid="l7-pos" className="lc-pos">Goalkeeper · Blackpool, Birmingham City</Editable>
-              <Editable tag="p" eid="l7-bio" style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>Olele. One of the most loved goalkeepers in Ghana's history. His performance against Italy at the 2006 World Cup showed exactly what he was capable of.</Editable>
+              <Editable tag="p" eid="l7-bio" style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>Olele. One of the most loved goalkeepers in Ghana's history. His performance against Italy at the 2006 World Cup showed exactly what he was capable of.</Editable>
             </div>
             <div className="lc-comps">
               <div className="lc-comps-lbl">Our Comps</div>
@@ -208,7 +208,7 @@ export default function Legends() {
               <Editable tag="span" eid="l8-era" className="era-pill g">2000s to 2010s</Editable>
               <Editable tag="div" eid="l8-name" className="lc-name">Fatau Dauda</Editable>
               <Editable tag="div" eid="l8-pos" className="lc-pos">Goalkeeper</Editable>
-              <Editable tag="p" eid="l8-bio" style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>Denied prime Cristiano Ronaldo 8 times. One of the most underrated goalkeeper performances in Ghana's World Cup history.</Editable>
+              <Editable tag="p" eid="l8-bio" style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>Denied prime Cristiano Ronaldo 8 times. One of the most underrated goalkeeper performances in Ghana's World Cup history.</Editable>
             </div>
             <div className="lc-comps">
               <div className="lc-comps-lbl">Our Comps</div>
@@ -223,7 +223,7 @@ export default function Legends() {
               <Editable tag="span" eid="l9-era" className="era-pill r">2000s to 2010s</Editable>
               <Editable tag="div" eid="l9-name" className="lc-name">Kevin Prince Boateng</Editable>
               <Editable tag="div" eid="l9-pos" className="lc-pos">Midfielder · AC Milan, Schalke</Editable>
-              <Editable tag="p" eid="l9-bio" style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>One of the most technically gifted players to ever pull on the Black Stars shirt. His performances at the 2010 World Cup were something special.</Editable>
+              <Editable tag="p" eid="l9-bio" style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>One of the most technically gifted players to ever pull on the Black Stars shirt. His performances at the 2010 World Cup were something special.</Editable>
             </div>
             <div className="lc-comps">
               <div className="lc-comps-lbl">Our Comps</div>
@@ -242,7 +242,7 @@ export default function Legends() {
                   <span className={`era-pill ${era}`}>{d.era}</span>
                   <div className="lc-name">{d.name}</div>
                   <div className="lc-pos">{d.pos_display}</div>
-                  <p style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>{d.bio}</p>
+                  <p style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>{d.bio}</p>
                 </div>
                 <div className="lc-comps">
                   <div className="lc-comps-lbl">Our Comps</div>
@@ -271,7 +271,7 @@ export default function Legends() {
       <section className="alt">
         <div className="eyebrow">Cult Heroes</div>
         <h2 className="d2" style={{ marginBottom: '8px' }}>Not Every Player <span className="gold">Became a Legend.</span></h2>
-        <Editable tag="p" eid="cult-intro" className="lead" style={{ marginBottom: '24px', fontSize: '0.82rem' }}>But some of them became something else entirely.</Editable>
+        <Editable tag="p" eid="cult-intro" className="lead" style={{ marginBottom: '24px', fontSize: 'var(--fs-base)' }}>But some of them became something else entirely.</Editable>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', gap: '2px', background: 'var(--line)' }}>
           {/* Quincy */}
           <div className="legend-card" data-pos="striker" style={{ display: cardVisible('striker', 'quincy owusu abeyie') ? '' : 'none' }}>
@@ -279,7 +279,7 @@ export default function Legends() {
               <Editable tag="span" eid="ch1-era" className="era-pill g">2000s to 2010s</Editable>
               <Editable tag="div" eid="ch1-name" className="lc-name">Quincy Owusu Abeyie</Editable>
               <Editable tag="div" eid="ch1-pos" className="lc-pos">Forward · Arsenal, Spartak Moscow</Editable>
-              <Editable tag="p" eid="ch1-bio" style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>One of the most naturally gifted Ghanaians of his generation. The cult hero Ghana never forgot.</Editable>
+              <Editable tag="p" eid="ch1-bio" style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>One of the most naturally gifted Ghanaians of his generation. The cult hero Ghana never forgot.</Editable>
             </div>
             <div className="lc-comps">
               <div className="lc-comps-lbl">Our Comps</div>
@@ -296,7 +296,7 @@ export default function Legends() {
                   <span className={`era-pill ${era}`}>{d.era}</span>
                   <div className="lc-name">{d.name}</div>
                   <div className="lc-pos">{d.pos_display}</div>
-                  <p style={{ padding: 0, marginBottom: '12px', fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--body)' }}>{d.bio}</p>
+                  <p style={{ padding: 0, marginBottom: '12px', fontSize: 'var(--fs-base)', lineHeight: 'var(--lh-body)', color: 'var(--body)' }}>{d.bio}</p>
                 </div>
                 <div className="lc-comps">
                   <div className="lc-comps-lbl">Our Comps</div>

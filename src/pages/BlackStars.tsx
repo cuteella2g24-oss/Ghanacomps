@@ -80,14 +80,14 @@ export default function BlackStars() {
             <Editable tag="div" eid="f1l" className="fix-lbl">Next Fixture — Pre World Cup Friendly</Editable>
             <Editable tag="div" eid="f1t" className="fix-title">Ghana vs Mexico</Editable>
             <Editable tag="div" eid="f1d" className="fix-det">Friday May 22 2026 · Venue in Mexico TBC · 17:00 GMT</Editable>
-            <Editable tag="p" eid="f1-stake" style={{ fontSize: '0.78rem', color: 'var(--body)', lineHeight: 1.7, margin: '12px 0' }}>The final major World Cup warm-up. Mexico are a co-host nation and one of CONCACAF's strongest sides. Ghana lost 2-0 to them in 2023. Whoever takes the Ghana job will use this game to assess the squad before naming the World Cup 26-man roster. A big test under a new technical direction.</Editable>
+            <Editable tag="p" eid="f1-stake" style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)', margin: '12px 0' }}>The final major World Cup warm-up. Mexico are a co-host nation and one of CONCACAF's strongest sides. Ghana lost 2-0 to them in 2023. Whoever takes the Ghana job will use this game to assess the squad before naming the World Cup 26-man roster. A big test under a new technical direction.</Editable>
             <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" className="btn ghost">Follow for Updates</a>
           </div>
           <div className="fixture">
             <Editable tag="div" eid="f2l" className="fix-lbl">Final Warm-Up — Pre World Cup Friendly</Editable>
             <Editable tag="div" eid="f2t" className="fix-title">Wales vs Ghana</Editable>
             <Editable tag="div" eid="f2d" className="fix-det">Tuesday June 2 2026 · Cardiff City Stadium · KO Time TBC</Editable>
-            <Editable tag="p" eid="f2-stake" style={{ fontSize: '0.78rem', color: 'var(--body)', lineHeight: 1.7, margin: '12px 0' }}>The last game before the World Cup. Wales did not qualify — they were knocked out on penalties by Bosnia and Herzegovina in the play-offs — but this historic first ever meeting between the two nations goes ahead. Ghana face Panama 15 days after this. The last chance for fringe players to make their case.</Editable>
+            <Editable tag="p" eid="f2-stake" style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)', margin: '12px 0' }}>The last game before the World Cup. Wales did not qualify — they were knocked out on penalties by Bosnia and Herzegovina in the play-offs — but this historic first ever meeting between the two nations goes ahead. Ghana face Panama 15 days after this. The last chance for fringe players to make their case.</Editable>
             <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" className="btn ghost">Stay Updated</a>
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function BlackStars() {
       <section className="alt">
         <div className="eyebrow">Black Stars Standouts Archive</div>
         <h2 className="d2" style={{ marginBottom: '8px' }}>Player <span className="gold">Archive.</span></h2>
-        <p className="lead" style={{ marginBottom: '20px', fontSize: '0.82rem' }}>Every current Black Stars player we have covered. Updated every time Ghana plays or a new comp drops. When players retire they move to the Legends section.</p>
+        <p className="lead" style={{ marginBottom: '20px', fontSize: 'var(--fs-base)' }}>Every current Black Stars player we have covered. Updated every time Ghana plays or a new comp drops. When players retire they move to the Legends section.</p>
 
         <input type="text" className="search archive-search" placeholder="Search by player name..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
 
@@ -192,16 +192,16 @@ export default function BlackStars() {
 
         {isAdmin && showAddPanel && (
           <div style={{ marginTop: '14px', padding: '18px', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
-            <div style={{ fontSize: '0.56rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '10px' }}>Add New Archive Card</div>
+            <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '10px' }}>Add New Archive Card</div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              <input type="text" placeholder="Player name..." value={arcPlayer} onChange={e => setArcPlayer(e.target.value)} style={{ flex: 1, minWidth: '140px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: '0.8rem', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
-              <input type="text" placeholder="Match (e.g. vs Nigeria — 2022 WC Playoff)..." value={arcMatch} onChange={e => setArcMatch(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: '0.8rem', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
-              <input type="text" placeholder="Competition, date, stats..." value={arcComp} onChange={e => setArcComp(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: '0.8rem', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
-              <input type="url" placeholder="X or TikTok URL..." value={arcUrl} onChange={e => setArcUrl(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: '0.8rem', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
-              <button onClick={addArchiveCard} className="btn primary" style={{ fontSize: '0.62rem', padding: '8px 16px' }}>Add</button>
-              <button onClick={() => setShowAddPanel(false)} className="btn outline" style={{ fontSize: '0.62rem', padding: '8px 16px' }}>Cancel</button>
+              <input type="text" placeholder="Player name..." value={arcPlayer} onChange={e => setArcPlayer(e.target.value)} style={{ flex: 1, minWidth: '140px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: 'var(--fs-base)', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
+              <input type="text" placeholder="Match (e.g. vs Nigeria — 2022 WC Playoff)..." value={arcMatch} onChange={e => setArcMatch(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: 'var(--fs-base)', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
+              <input type="text" placeholder="Competition, date, stats..." value={arcComp} onChange={e => setArcComp(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: 'var(--fs-base)', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
+              <input type="url" placeholder="X or TikTok URL..." value={arcUrl} onChange={e => setArcUrl(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: 'var(--fs-base)', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
+              <button onClick={addArchiveCard} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: '8px 16px' }}>Add</button>
+              <button onClick={() => setShowAddPanel(false)} className="btn outline" style={{ fontSize: 'var(--fs-2xs)', padding: '8px 16px' }}>Cancel</button>
             </div>
-            <p style={{ fontSize: '0.7rem', color: 'var(--sub)', marginTop: '8px', fontStyle: 'italic' }}>To add multiple comps to one player — add the card first, then use the Edit button to update it.</p>
+            <p style={{ fontSize: 'var(--fs-xs)', color: 'var(--sub)', marginTop: '8px', fontStyle: 'italic' }}>To add multiple comps to one player — add the card first, then use the Edit button to update it.</p>
           </div>
         )}
       </section>

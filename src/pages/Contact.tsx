@@ -34,7 +34,7 @@ export default function Contact() {
         <div className="g2">
           <div>
             <div className="eyebrow plain">Send a Message</div>
-            <p className="lead" style={{ marginBottom: '20px', fontSize: '0.82rem' }}>Fill in the form and click Send Message. Your email app will open with everything pre-filled. Just hit send.</p>
+            <p className="lead" style={{ marginBottom: '20px', fontSize: 'var(--fs-base)' }}>Fill in the form and click Send Message. Your email app will open with everything pre-filled. Just hit send.</p>
             <form onSubmit={handleSubmit} noValidate>
               <div className="form-row">
                 <label className="form-lbl" htmlFor="fn">Your Name</label>
@@ -69,7 +69,7 @@ export default function Contact() {
               <div className="stack-icon">📧</div>
               <div>
                 <div className="stack-t">Email Us</div>
-                <a href="mailto:compsghana@gmail.com" style={{ color: 'var(--gold)', fontSize: '0.82rem' }}>compsghana@gmail.com</a>
+                <a href="mailto:compsghana@gmail.com" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>compsghana@gmail.com</a>
                 <div className="stack-b" style={{ marginTop: '3px' }}>For general enquiries, feedback and content requests.</div>
               </div>
             </div>
@@ -77,7 +77,7 @@ export default function Contact() {
               <div className="stack-icon">𝕏</div>
               <div>
                 <div className="stack-t">Find Us on X</div>
-                <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: '0.82rem' }}>@Ghanacomps ✓</a>
+                <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>@Ghanacomps ✓</a>
                 <div className="stack-b" style={{ marginTop: '3px' }}>Drop your comp requests in our quotes or comments. We go through all of them.</div>
               </div>
             </div>
@@ -85,7 +85,7 @@ export default function Contact() {
               <div className="stack-icon">🎵</div>
               <div>
                 <div className="stack-t">Find Us on TikTok</div>
-                <a href="https://tiktok.com/@ghanacompss" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: '0.82rem' }}>@ghanacompss</a>
+                <a href="https://tiktok.com/@ghanacompss" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>@ghanacompss</a>
                 <div className="stack-b" style={{ marginTop: '3px' }}>Goals, assists and skills every weekend on TikTok.</div>
               </div>
             </div>
@@ -93,7 +93,7 @@ export default function Contact() {
               <div className="stack-icon">👥</div>
               <div>
                 <div className="stack-t">Find Us on Facebook</div>
-                <a href="https://www.facebook.com/share/1GL7b1Qsuq/" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: '0.82rem' }}>Ghana Comps on Facebook</a>
+                <a href="https://www.facebook.com/share/1GL7b1Qsuq/" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>Ghana Comps on Facebook</a>
                 <div className="stack-b" style={{ marginTop: '3px' }}>Follow us on Facebook for highlights, throwbacks and updates.</div>
               </div>
             </div>
@@ -109,7 +109,7 @@ export default function Contact() {
       </section>
 
       <section className="alt" style={{ textAlign: 'center' }}>
-        <p className="italic reveal" style={{ fontSize: '0.95rem', color: 'var(--body)', lineHeight: 1.85, maxWidth: '580px', margin: '0 auto' }}>
+        <p className="italic reveal" style={{ fontSize: 'var(--fs-lg)', color: 'var(--body)', lineHeight: 'var(--lh-relaxed)', maxWidth: '580px', margin: '0 auto' }}>
           Ghana Comps has big plans ahead. Brand partnerships, deeper coverage and a platform that helps young Ghanaian talent get discovered. <strong style={{ color: 'var(--white)' }}>Watch this space.</strong>
         </p>
       </section>
