@@ -173,25 +173,25 @@ export default function Home() {
             <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>⚽</div>
             <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Weekend Highlights</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>Goals, assists, saves and standout performances from Ghanaians playing abroad. Posted every weekend.</p>
-            <div style={{ marginTop: 'var(--space-xl)' }}><Button asChild variant="ghost" size="sm"><Link to="/players">Current Players</Link></Button></div>
+            <div className="mt-auto pt-[var(--space-xl)]"><Button asChild variant="ghost" size="sm"><Link to="/players">Current Players</Link></Button></div>
           </Card>
           <Card>
             <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>📼</div>
             <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Legend Throwbacks</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>Ghana has had incredible players. We bring those moments back for a generation that never saw them.</p>
-            <div style={{ marginTop: 'var(--space-xl)' }}><Button asChild variant="ghost" size="sm"><Link to="/legends">View Legends</Link></Button></div>
+            <div className="mt-auto pt-[var(--space-xl)]"><Button asChild variant="ghost" size="sm"><Link to="/legends">View Legends</Link></Button></div>
           </Card>
           <Card>
             <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>🇬🇭</div>
             <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Black Stars</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>When Ghana play we cover everything. Lineups, live goals, individual player comps and a full breakdown.</p>
-            <div style={{ marginTop: 'var(--space-xl)' }}><Button asChild variant="ghost" size="sm"><Link to="/blackstars">Black Stars Hub</Link></Button></div>
+            <div className="mt-auto pt-[var(--space-xl)]"><Button asChild variant="ghost" size="sm"><Link to="/blackstars">Black Stars Hub</Link></Button></div>
           </Card>
           <Card>
             <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>💬</div>
             <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>We Take Requests</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>Drop a player or game in our X comments. We work on every game we can access and we do it fast.</p>
-            <div style={{ marginTop: 'var(--space-xl)' }}><Button asChild variant="ghost" size="sm"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Find Us on X</a></Button></div>
+            <div className="mt-auto pt-[var(--space-xl)]"><Button asChild variant="ghost" size="sm"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Find Us on X</a></Button></div>
           </Card>
         </div>
       </section>
