@@ -44,7 +44,7 @@ export default function About() {
       <div className="page-header reveal">
         <div className="eyebrow">Our Story</div>
         <h1 className="d2">About <span className="gold">Ghana Comps.</span></h1>
-        <p className="lead italic" style={{ marginTop: '10px' }}>We started this because we love Ghanaian football and felt it was not getting the attention it deserved. So we decided to change that.</p>
+        <p className="lead italic" style={{ marginTop: 'var(--space-md)' }}>We started this because we love Ghanaian football and felt it was not getting the attention it deserved. So we decided to change that.</p>
       </div>
 
       {/* WHAT WE DO */}
@@ -52,9 +52,9 @@ export default function About() {
         <div className="g2">
           <div>
             <div className="eyebrow">What We Do</div>
-            <h2 className="d2" style={{ marginBottom: '14px' }}>We Cover Every <span className="gold">Ghanaian.</span></h2>
-            <p className="lead" style={{ marginBottom: '12px' }}>Every weekend we go through the matches and put together compilations of the Ghanaians who stood out. Goals, assists, saves and performances worth talking about. We do not cover every single player every week. We focus on the ones who had something worth showing.</p>
-            <p className="lead" style={{ marginBottom: '12px' }}>We have to be honest about one thing. Not every game is available to us. Some footage is copyrighted and we simply cannot access it. We work with what we can get and we make the most of every clip we have.</p>
+            <h2 className="d2" style={{ marginBottom: 'var(--space-xl)' }}>We Cover Every <span className="gold">Ghanaian.</span></h2>
+            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}>Every weekend we go through the matches and put together compilations of the Ghanaians who stood out. Goals, assists, saves and performances worth talking about. We do not cover every single player every week. We focus on the ones who had something worth showing.</p>
+            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}>We have to be honest about one thing. Not every game is available to us. Some footage is copyrighted and we simply cannot access it. We work with what we can get and we make the most of every clip we have.</p>
             <p className="lead">We also take requests. <strong>Drop a player or a game in our X comments and we will get to every game we can access.</strong> Find us at <strong>@Ghanacomps ✓</strong> on X and <strong>@ghanacompss</strong> on TikTok.</p>
           </div>
           <div className="stack">
@@ -71,9 +71,9 @@ export default function About() {
         <div className="g2">
           <div>
             <div className="eyebrow">Our Story</div>
-            <h2 className="d2" style={{ marginBottom: '14px' }}>Started <span className="gold">January 2026.</span></h2>
-            <p className="lead" style={{ marginBottom: '12px' }}>Ghana Comps launched in January 2026 with one goal. Make sure Ghanaian football gets the attention it deserves. We post every weekend. We cover the players who stood out. And we bring back the legends.</p>
-            <p className="lead" style={{ marginBottom: '12px' }}><strong>Very early on Michael Essien saw our compilation and reposted it on both his personal TikTok and his Facebook page.</strong> That meant everything. Two months in and we were already reaching the legends themselves.</p>
+            <h2 className="d2" style={{ marginBottom: 'var(--space-xl)' }}>Started <span className="gold">January 2026.</span></h2>
+            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}>Ghana Comps launched in January 2026 with one goal. Make sure Ghanaian football gets the attention it deserves. We post every weekend. We cover the players who stood out. And we bring back the legends.</p>
+            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}><strong>Very early on Michael Essien saw our compilation and reposted it on both his personal TikTok and his Facebook page.</strong> That meant everything. Two months in and we were already reaching the legends themselves.</p>
             <p className="lead">Fans have been incredible too. People telling us they never knew certain players were that good. People saying we are keeping the legacy of Ghanaian legends alive. That is exactly why we do this.</p>
           </div>
           <div className="quote-stack">
@@ -81,7 +81,7 @@ export default function About() {
             <div className="quote-block r"><p className="quote-txt">"I didn't know this player was that good. Thank you for this."</p><p className="quote-src">Fan reaction on X</p></div>
             <div className="quote-block gr"><p className="quote-txt">"Love what you are doing for Ghanaian football. Keep it up."</p><p className="quote-src">Fan reaction on X</p></div>
             <div className="quote-block special">
-              <p className="quote-src" style={{ marginBottom: '6px', marginTop: 0 }}>★ Special Moment</p>
+              <p className="quote-src" style={{ marginBottom: 'var(--space-xs)', marginTop: 0 }}>★ Special Moment</p>
               <p className="quote-txt">Michael Essien acknowledged and reposted our compilation on both his Facebook and his TikTok. Two months in and the legends were already watching.</p>
             </div>
           </div>
@@ -93,15 +93,15 @@ export default function About() {
         <div className="g2" style={{ alignItems: 'start' }}>
           <div>
             <div className="eyebrow">Our Vision</div>
-            <h2 className="d2" style={{ marginBottom: '14px' }}>This Is Just <span className="gold">the Start.</span></h2>
-            <p className="lead" style={{ marginBottom: '12px' }}>We want Ghana Comps to be the place people come to when they want Ghanaian football. Not just highlights but the full story. Attribute compilations showing what made certain legends so special.</p>
-            <p className="lead" style={{ marginBottom: '12px' }}>Think something like Asamoah Gyan — The Goal Machine. Or Ghanaian legends at their biggest stages. Abedi Pele at Marseille. Essien at Chelsea. Appiah at Juventus. Moments that defined careers and carried the Ghana flag at the very highest level.</p>
+            <h2 className="d2" style={{ marginBottom: 'var(--space-xl)' }}>This Is Just <span className="gold">the Start.</span></h2>
+            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}>We want Ghana Comps to be the place people come to when they want Ghanaian football. Not just highlights but the full story. Attribute compilations showing what made certain legends so special.</p>
+            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}>Think something like Asamoah Gyan — The Goal Machine. Or Ghanaian legends at their biggest stages. Abedi Pele at Marseille. Essien at Chelsea. Appiah at Juventus. Moments that defined careers and carried the Ghana flag at the very highest level.</p>
             <p className="lead">As the platform grows we want to use it to shine a light on young Ghanaian talent. Players who deserve to be seen but have not had that chance yet.</p>
           </div>
-          <div style={{ border: '1px dashed rgb(var(--gold-rgb) / .25)', padding: '28px 24px', position: 'relative' }}>
-            <span style={{ position: 'absolute', top: '-10px', left: '18px', background: 'var(--bg)', padding: '2px 10px', fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)' }}>Coming Soon</span>
-            <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: '10px' }}>🌱</div>
-            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-xl)', color: 'var(--white)', marginBottom: '10px' }}>Young Talent Showcase</div>
+          <div style={{ border: '1px dashed rgb(var(--gold-rgb) / .25)', padding: 'var(--space-6xl) var(--space-5xl)', position: 'relative' }}>
+            <span style={{ position: 'absolute', top: '-10px', left: '18px', background: 'var(--bg)', padding: 'var(--space-3xs) var(--space-md)', fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)' }}>Coming Soon</span>
+            <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-md)' }}>🌱</div>
+            <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-xl)', color: 'var(--white)', marginBottom: 'var(--space-md)' }}>Young Talent Showcase</div>
             <p className="lead" style={{ fontSize: 'var(--fs-base)' }}>When we build Ghana Comps to the right level we want to start featuring young footballers from across the country. Giving them visibility and putting them in front of scouts and clubs who might otherwise never have seen them.</p>
           </div>
         </div>
@@ -110,8 +110,8 @@ export default function About() {
       {/* FAN REACTIONS GALLERY */}
       <section className="alt reveal">
         <div className="eyebrow">The People</div>
-        <h2 className="d2" style={{ marginBottom: '8px' }}>What Ghana Football Fans Are <span className="gold">Saying.</span></h2>
-        <p className="lead" style={{ marginBottom: '32px', fontSize: 'var(--fs-base)' }}>We post. They react. And the conversation never stops.</p>
+        <h2 className="d2" style={{ marginBottom: 'var(--space-sm)' }}>What Ghana Football Fans Are <span className="gold">Saying.</span></h2>
+        <p className="lead" style={{ marginBottom: 'var(--space-7xl)', fontSize: 'var(--fs-base)' }}>We post. They react. And the conversation never stops.</p>
 
         {reactionGroups.map(group => (
           <div key={group.label} className="player-group">
@@ -133,34 +133,34 @@ export default function About() {
       {/* REQUESTS */}
       <section className="reveal">
         <div className="eyebrow">The Requests</div>
-        <h2 className="d2" style={{ marginBottom: '8px' }}>They Ask. <span className="gold">We Deliver.</span></h2>
-        <p className="lead" style={{ marginBottom: '28px', fontSize: 'var(--fs-base)' }}>Every request goes into the list. Some footage is copyrighted and not always available but when we can do it we do it fast.</p>
+        <h2 className="d2" style={{ marginBottom: 'var(--space-sm)' }}>They Ask. <span className="gold">We Deliver.</span></h2>
+        <p className="lead" style={{ marginBottom: 'var(--space-6xl)', fontSize: 'var(--fs-base)' }}>Every request goes into the list. Some footage is copyrighted and not always available but when we can do it we do it fast.</p>
 
-        <div style={{ marginBottom: '32px' }}>
-          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '12px' }}>★ Requested and Delivered in 24 Hours</p>
+        <div style={{ marginBottom: 'var(--space-7xl)' }}>
+          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-lg)' }}>★ Requested and Delivered in 24 Hours</p>
           <div className="req-pair">
-            <div><div className="req-lbl">The Request</div><img src="/assets/reactions/req01.jpg" alt="" style={{ width: '100%', borderRadius: '3px', border: '1px solid var(--line)' }} /></div>
+            <div><div className="req-lbl">The Request</div><img src="/assets/reactions/req01.jpg" alt="" style={{ width: '100%', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)' }} /></div>
             <div className="req-arrow">→</div>
-            <div><div className="req-lbl">Delivered Next Day</div><img src="/assets/reactions/req11.jpg" alt="" style={{ width: '100%', borderRadius: '3px', border: '1px solid var(--line)' }} /></div>
+            <div><div className="req-lbl">Delivered Next Day</div><img src="/assets/reactions/req11.jpg" alt="" style={{ width: '100%', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)' }} /></div>
           </div>
         </div>
 
-        <div style={{ marginBottom: '28px' }}>
-          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--sub)', marginBottom: '12px' }}>More Requests</p>
+        <div style={{ marginBottom: 'var(--space-6xl)' }}>
+          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--sub)', marginBottom: 'var(--space-lg)' }}>More Requests</p>
           <div className="req-grid">
-            <div className="req-single"><img src="/assets/reactions/req04.jpg" alt="" style={{ width: '100%', borderRadius: '3px' }} /></div>
-            <div className="req-single"><img src="/assets/reactions/req05.jpg" alt="" style={{ width: '100%', borderRadius: '3px' }} /></div>
-            <div className="req-single"><img src="/assets/reactions/req06.jpg" alt="" style={{ width: '100%', borderRadius: '3px' }} /></div>
-            <div className="req-single"><img src="/assets/reactions/req07.jpg" alt="" style={{ width: '100%', borderRadius: '3px' }} /></div>
-            <div className="req-single"><img src="/assets/reactions/req09.jpg" alt="" style={{ width: '100%', borderRadius: '3px' }} /></div>
-            <div className="req-single"><img src="/assets/reactions/req08.jpg" alt="" style={{ width: '100%', borderRadius: '3px' }} /></div>
+            <div className="req-single"><img src="/assets/reactions/req04.jpg" alt="" style={{ width: '100%', borderRadius: 'var(--radius-md)' }} /></div>
+            <div className="req-single"><img src="/assets/reactions/req05.jpg" alt="" style={{ width: '100%', borderRadius: 'var(--radius-md)' }} /></div>
+            <div className="req-single"><img src="/assets/reactions/req06.jpg" alt="" style={{ width: '100%', borderRadius: 'var(--radius-md)' }} /></div>
+            <div className="req-single"><img src="/assets/reactions/req07.jpg" alt="" style={{ width: '100%', borderRadius: 'var(--radius-md)' }} /></div>
+            <div className="req-single"><img src="/assets/reactions/req09.jpg" alt="" style={{ width: '100%', borderRadius: 'var(--radius-md)' }} /></div>
+            <div className="req-single"><img src="/assets/reactions/req08.jpg" alt="" style={{ width: '100%', borderRadius: 'var(--radius-md)' }} /></div>
           </div>
         </div>
 
-        <div style={{ marginBottom: '28px' }}>
-          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--sub)', marginBottom: '12px' }}>Requests Granted</p>
+        <div style={{ marginBottom: 'var(--space-6xl)' }}>
+          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--sub)', marginBottom: 'var(--space-lg)' }}>Requests Granted</p>
           <div className="req-grid">
-            <div className="req-single"><img src="/assets/reactions/req10.jpg" alt="" style={{ width: '100%', borderRadius: '3px' }} /></div>
+            <div className="req-single"><img src="/assets/reactions/req10.jpg" alt="" style={{ width: '100%', borderRadius: 'var(--radius-md)' }} /></div>
           </div>
         </div>
       </section>
@@ -168,12 +168,12 @@ export default function About() {
       {/* ESSIEN SPECIAL MOMENT */}
       <section className="alt reveal">
         <div className="eyebrow">Special Moment</div>
-        <h2 className="d2" style={{ marginBottom: '8px' }}>When <span className="gold">Essien Watched.</span></h2>
-        <p className="lead" style={{ marginBottom: '24px', fontSize: 'var(--fs-base)' }}>Two months in and we were already reaching the legends. Michael Essien saw our compilation and acknowledged it on both his TikTok and his Facebook.</p>
+        <h2 className="d2" style={{ marginBottom: 'var(--space-sm)' }}>When <span className="gold">Essien Watched.</span></h2>
+        <p className="lead" style={{ marginBottom: 'var(--space-5xl)', fontSize: 'var(--fs-base)' }}>Two months in and we were already reaching the legends. Michael Essien saw our compilation and acknowledged it on both his TikTok and his Facebook.</p>
         <div className="special-box">
-          <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '14px' }}>★ Special Moment</div>
+          <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-xl)' }}>★ Special Moment</div>
           <p className="italic" style={{ fontSize: 'var(--fs-lg)', color: 'var(--white)', maxWidth: '560px', lineHeight: 'var(--lh-body)' }}>"Incredible experience, Thanks #ghanacomps @fifaworldcup"</p>
-          <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: 'var(--ls-3)', textTransform: 'uppercase', color: 'var(--sub)', marginTop: '8px' }}>Michael Essien ✓ — on TikTok and Facebook</p>
+          <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: 'var(--ls-3)', textTransform: 'uppercase', color: 'var(--sub)', marginTop: 'var(--space-sm)' }}>Michael Essien ✓ — on TikTok and Facebook</p>
           <div className="special-screens">
             <div className="special-screen">
               <img src="/assets/essien_tiktok.jpg" alt="Essien TikTok repost" />

@@ -61,8 +61,8 @@ function GpaBlock({
         <div className="gpa-admin-link admin-only" style={{ display: 'flex' }}>
           <input type="text" placeholder={`Link caption e.g. ${linkDefault}`} value={caption} onChange={e => setCaption(e.target.value)} />
           <input type="url" placeholder="Paste X or TikTok URL..." value={url} onChange={e => setUrl(e.target.value)} />
-          <button onClick={() => { if (!caption || !url) { alert('Please fill in both the caption and URL.'); return; } onSaveLink(id, caption, url); setCaption(''); setUrl(''); }} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: '7px 14px' }}>Set Link</button>
-          <button onClick={() => onClearLink(id)} className="btn outline" style={{ fontSize: 'var(--fs-2xs)', padding: '7px 14px' }}>Remove</button>
+          <button onClick={() => { if (!caption || !url) { alert('Please fill in both the caption and URL.'); return; } onSaveLink(id, caption, url); setCaption(''); setUrl(''); }} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-xl)' }}>Set Link</button>
+          <button onClick={() => onClearLink(id)} className="btn outline" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-xl)' }}>Remove</button>
         </div>
       )}
     </div>
@@ -91,14 +91,14 @@ export default function GPA() {
       <div className="page-header">
         <div className="eyebrow">Updated Every Week</div>
         <h1 className="d2"><span className="gold">GPA</span> Weekly.</h1>
-        <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--sub)', marginTop: '4px' }}>Ghanaian Players Abroad</p>
-        <p className="lead" style={{ marginTop: '10px' }}>Every week we break down what happened, what stood out and what deserved more attention.</p>
+        <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--sub)', marginTop: 'var(--space-2xs)' }}>Ghanaian Players Abroad</p>
+        <p className="lead" style={{ marginTop: 'var(--space-md)' }}>Every week we break down what happened, what stood out and what deserved more attention.</p>
       </div>
 
       {/* 1. MATCHWEEK REVIEW */}
       <section>
         <div className="eyebrow">Matchweek Review</div>
-        <h2 className="d2" style={{ marginBottom: '20px' }}><Editable tag="span" eid="mwr-heading" className="gold">Matchweek 34 Review.</Editable></h2>
+        <h2 className="d2" style={{ marginBottom: 'var(--space-4xl)' }}><Editable tag="span" eid="mwr-heading" className="gold">Matchweek 34 Review.</Editable></h2>
         <div style={{ maxWidth: '760px' }}>
           <GpaBlock
             id="mwr"
@@ -119,7 +119,7 @@ export default function GPA() {
       {/* 2. PLAYER OF THE WEEK */}
       <section className="alt">
         <div className="eyebrow">Player of the Week</div>
-        <h2 className="d2" style={{ marginBottom: '20px' }}>Who <span className="gold">Stood Out.</span></h2>
+        <h2 className="d2" style={{ marginBottom: 'var(--space-4xl)' }}>Who <span className="gold">Stood Out.</span></h2>
         <div style={{ maxWidth: '760px' }}>
           <GpaBlock
             id="potw"
@@ -142,7 +142,7 @@ export default function GPA() {
       {/* 3. GOAL AND ASSIST */}
       <section>
         <div className="eyebrow">Goal and Assist of the Week</div>
-        <h2 className="d2" style={{ marginBottom: '20px' }}>The Moments <span className="gold">Worth Watching.</span></h2>
+        <h2 className="d2" style={{ marginBottom: 'var(--space-4xl)' }}>The Moments <span className="gold">Worth Watching.</span></h2>
         <div style={{ maxWidth: '760px' }}>
           <GpaBlock
             id="goal"
@@ -176,7 +176,7 @@ export default function GPA() {
       {/* 4. UNDERRATED */}
       <section className="alt">
         <div className="eyebrow">Underrated Performance of the Week</div>
-        <h2 className="d2" style={{ marginBottom: '14px' }}>The One <span className="gold">Everybody Missed.</span></h2>
+        <h2 className="d2" style={{ marginBottom: 'var(--space-xl)' }}>The One <span className="gold">Everybody Missed.</span></h2>
         <div style={{ maxWidth: '760px' }}>
           <GpaBlock
             id="up"

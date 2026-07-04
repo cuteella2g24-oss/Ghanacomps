@@ -121,8 +121,8 @@ export default function Players() {
       <div className="page-header">
         <div className="eyebrow">Updated Every Weekend</div>
         <h1 className="d2">Current <span className="gold">Players.</span></h1>
-        <p className="lead" style={{ marginTop: '10px' }}>Click any weekend performer card to watch the comp on X or TikTok.</p>
-        <div className="filters" style={{ marginTop: '20px', marginBottom: 0 }}>
+        <p className="lead" style={{ marginTop: 'var(--space-md)' }}>Click any weekend performer card to watch the comp on X or TikTok.</p>
+        <div className="filters" style={{ marginTop: 'var(--space-4xl)', marginBottom: 0 }}>
           {[['all','All'],['pl','Premier League'],['l1','Ligue 1'],['ll','La Liga'],['sa','Serie A'],['bl','Bundesliga'],['ch','Championship'],['ot','Other']].map(([lg, label]) => (
             <button key={lg} className={`f-btn${activeLeague === lg ? ' on' : ''}`} onClick={() => setActiveLeague(lg)}>{label}</button>
           ))}
@@ -132,7 +132,7 @@ export default function Players() {
       {/* WEEKEND PERFORMERS */}
       <section>
         <div className="eyebrow">This Weekend</div>
-        <h2 className="d2" style={{ marginBottom: '16px' }}>Weekend <span className="gold">Performers.</span></h2>
+        <h2 className="d2" style={{ marginBottom: 'var(--space-2xl)' }}>Weekend <span className="gold">Performers.</span></h2>
 
         {performers.length > 0 ? (
           <div className="performers-grid">
@@ -145,24 +145,24 @@ export default function Players() {
             ))}
           </div>
         ) : (
-          <div style={{ border: '1px dashed rgb(var(--gold-rgb) / .2)', padding: '28px 20px', textAlign: 'center' }}>
+          <div style={{ border: '1px dashed rgb(var(--gold-rgb) / .2)', padding: 'var(--space-6xl) var(--space-4xl)', textAlign: 'center' }}>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--sub)', fontStyle: 'italic' }}>No performers added yet this week. Follow <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--gold)' }}>@Ghanacomps on X</a> to see all the comps live.</p>
           </div>
         )}
 
-        <div style={{ marginTop: '12px', display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ marginTop: 'var(--space-lg)', display: 'flex', gap: 'var(--space-md)', flexWrap: 'wrap', alignItems: 'center' }}>
           <button className="add-performer-btn" onClick={() => setShowAddPerformer(s => !s)}>+ Add Performer</button>
           <button className="clear-performers-btn" onClick={clearPerformers}>Clear All</button>
         </div>
 
         {isAdmin && showAddPerformer && (
-          <div style={{ marginTop: '14px', padding: '18px', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
-            <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '10px' }}>Add Performer Card</div>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              <input type="text" placeholder='Caption e.g. "Kudus vs Man City — Matchday 38"' value={perfCaption} onChange={e => setPerfCaption(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: 'var(--fs-base)', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
-              <input type="url" placeholder="X or TikTok post URL..." value={perfUrl} onChange={e => setPerfUrl(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: '8px 10px', fontSize: 'var(--fs-base)', borderRadius: '2px', fontFamily: 'var(--font-b)' }} />
-              <button onClick={addPerformer} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: '8px 16px' }}>Add Card</button>
-              <button onClick={() => setShowAddPerformer(false)} className="btn outline" style={{ fontSize: 'var(--fs-2xs)', padding: '8px 16px' }}>Cancel</button>
+          <div style={{ marginTop: 'var(--space-xl)', padding: 'var(--space-3xl)', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
+            <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-md)' }}>Add Performer Card</div>
+            <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap' }}>
+              <input type="text" placeholder='Caption e.g. "Kudus vs Man City — Matchday 38"' value={perfCaption} onChange={e => setPerfCaption(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
+              <input type="url" placeholder="X or TikTok post URL..." value={perfUrl} onChange={e => setPerfUrl(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
+              <button onClick={addPerformer} className="btn primary" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-2xl)' }}>Add Card</button>
+              <button onClick={() => setShowAddPerformer(false)} className="btn outline" style={{ fontSize: 'var(--fs-2xs)', padding: 'var(--space-sm) var(--space-2xl)' }}>Cancel</button>
             </div>
           </div>
         )}
@@ -171,10 +171,10 @@ export default function Players() {
       {/* FULL SQUAD DIRECTORY */}
       <section className="alt">
         <div className="eyebrow">Full Squad Directory</div>
-        <h2 className="d2" style={{ marginBottom: '8px' }}>Ghanaians <span className="gold">Playing Abroad.</span></h2>
-        <p className="lead" style={{ marginBottom: '16px', fontSize: 'var(--fs-base)' }}>We track as many Ghanaians playing abroad as we can. If we are missing someone or a club is wrong, <Link to="/contact" style={{ color: 'var(--gold)' }}>contact us</Link> and we will update it.</p>
+        <h2 className="d2" style={{ marginBottom: 'var(--space-sm)' }}>Ghanaians <span className="gold">Playing Abroad.</span></h2>
+        <p className="lead" style={{ marginBottom: 'var(--space-2xl)', fontSize: 'var(--fs-base)' }}>We track as many Ghanaians playing abroad as we can. If we are missing someone or a club is wrong, <Link to="/contact" style={{ color: 'var(--gold)' }}>contact us</Link> and we will update it.</p>
 
-        <input type="text" className="search player-search" placeholder="Search player by name..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} style={{ marginBottom: '20px' }} />
+        <input type="text" className="search player-search" placeholder="Search player by name..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} style={{ marginBottom: 'var(--space-4xl)' }} />
 
         <div className="g-auto">
           {staticPlayers.map(p => {
@@ -196,14 +196,14 @@ export default function Players() {
                 <div className="player-lg">{p.label}</div>
                 <div className="player-name">{p.name}</div>
                 <div className="player-meta">{p.club}</div>
-                {isAdmin && <button onClick={() => removeExtra(i)} style={{ marginTop: '6px', background: 'var(--red)', color: '#fff', border: 'none', fontSize: 'var(--fs-2xs)', padding: '3px 8px', cursor: 'pointer', borderRadius: '2px' }}>Remove</button>}
+                {isAdmin && <button onClick={() => removeExtra(i)} style={{ marginTop: 'var(--space-xs)', background: 'var(--red)', color: '#fff', border: 'none', fontSize: 'var(--fs-2xs)', padding: 'var(--space-2xs) var(--space-sm)', cursor: 'pointer', borderRadius: 'var(--radius-sm)' }}>Remove</button>}
               </div>
             );
           })}
         </div>
 
         <button className="add-player-btn" onClick={addPlayer}>+ Add New Player</button>
-        <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--sub)', fontStyle: 'italic', marginTop: '14px', padding: '10px 14px', border: '1px solid var(--line)' }}>Missing a player or wrong club? <Link to="/contact" style={{ color: 'var(--gold)' }}>Contact us</Link> and we will update it.</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--sub)', fontStyle: 'italic', marginTop: 'var(--space-xl)', padding: 'var(--space-md) var(--space-xl)', border: '1px solid var(--line)' }}>Missing a player or wrong club? <Link to="/contact" style={{ color: 'var(--gold)' }}>Contact us</Link> and we will update it.</p>
       </section>
 
       <Footer />

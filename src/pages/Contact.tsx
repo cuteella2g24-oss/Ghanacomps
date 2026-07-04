@@ -27,14 +27,14 @@ export default function Contact() {
       <div className="page-header reveal">
         <div className="eyebrow">Get In Touch</div>
         <h1 className="d2">Talk to <span className="gold">Ghana Comps.</span></h1>
-        <p className="lead" style={{ marginTop: '10px' }}>Want to suggest a player or a game? Have feedback? Or just want to connect? We read everything.</p>
+        <p className="lead" style={{ marginTop: 'var(--space-md)' }}>Want to suggest a player or a game? Have feedback? Or just want to connect? We read everything.</p>
       </div>
 
       <section className="reveal">
         <div className="g2">
           <div>
             <div className="eyebrow plain">Send a Message</div>
-            <p className="lead" style={{ marginBottom: '20px', fontSize: 'var(--fs-base)' }}>Fill in the form and click Send Message. Your email app will open with everything pre-filled. Just hit send.</p>
+            <p className="lead" style={{ marginBottom: 'var(--space-4xl)', fontSize: 'var(--fs-base)' }}>Fill in the form and click Send Message. Your email app will open with everything pre-filled. Just hit send.</p>
             <form onSubmit={handleSubmit} noValidate>
               <div className="form-row">
                 <label className="form-lbl" htmlFor="fn">Your Name</label>
@@ -70,7 +70,7 @@ export default function Contact() {
               <div>
                 <div className="stack-t">Email Us</div>
                 <a href="mailto:compsghana@gmail.com" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>compsghana@gmail.com</a>
-                <div className="stack-b" style={{ marginTop: '3px' }}>For general enquiries, feedback and content requests.</div>
+                <div className="stack-b" style={{ marginTop: 'var(--space-2xs)' }}>For general enquiries, feedback and content requests.</div>
               </div>
             </div>
             <div className="stack-item">
@@ -78,7 +78,7 @@ export default function Contact() {
               <div>
                 <div className="stack-t">Find Us on X</div>
                 <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>@Ghanacomps ✓</a>
-                <div className="stack-b" style={{ marginTop: '3px' }}>Drop your comp requests in our quotes or comments. We go through all of them.</div>
+                <div className="stack-b" style={{ marginTop: 'var(--space-2xs)' }}>Drop your comp requests in our quotes or comments. We go through all of them.</div>
               </div>
             </div>
             <div className="stack-item">
@@ -86,7 +86,7 @@ export default function Contact() {
               <div>
                 <div className="stack-t">Find Us on TikTok</div>
                 <a href="https://tiktok.com/@ghanacompss" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>@ghanacompss</a>
-                <div className="stack-b" style={{ marginTop: '3px' }}>Goals, assists and skills every weekend on TikTok.</div>
+                <div className="stack-b" style={{ marginTop: 'var(--space-2xs)' }}>Goals, assists and skills every weekend on TikTok.</div>
               </div>
             </div>
             <div className="stack-item">
@@ -94,7 +94,7 @@ export default function Contact() {
               <div>
                 <div className="stack-t">Find Us on Facebook</div>
                 <a href="https://www.facebook.com/share/1GL7b1Qsuq/" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>Ghana Comps on Facebook</a>
-                <div className="stack-b" style={{ marginTop: '3px' }}>Follow us on Facebook for highlights, throwbacks and updates.</div>
+                <div className="stack-b" style={{ marginTop: 'var(--space-2xs)' }}>Follow us on Facebook for highlights, throwbacks and updates.</div>
               </div>
             </div>
             <div className="stack-item" style={{ borderLeft: '2px solid var(--gold)' }}>

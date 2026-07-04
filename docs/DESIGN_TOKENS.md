@@ -113,6 +113,45 @@ The 36 ad-hoc sizes were snapped to the 11-step scale. Notable (>1px) shifts:
 Letter-spacing: most uppercase labels moved by ±0.02em (imperceptible).
 Line-height kept faithful (±0.05 max).
 
+---
+
+# Spacing
+
+Same rule: **never write a raw px value for `padding` / `margin` / `gap`** —
+reference a token. Applies to CSS and inline `style={{}}`. Other px (widths,
+borders, positioning, transforms) are intentionally left alone.
+
+**Compact-faithful scale:** the design is dense and deliberately tuned, so the
+populous values (10/12/14/16/18/20px) are kept exact; only sparse oddballs were
+snapped to the nearest rung (≤2px, one exception noted below).
+
+| Token | px | Token | px |
+|-------|----|-------|----|
+| `--space-3xs` | 2 | `--space-4xl` | 20 |
+| `--space-2xs` | 4 | `--space-5xl` | 24 |
+| `--space-xs` | 6 | `--space-6xl` | 28 |
+| `--space-sm` | 8 | `--space-7xl` | 32 |
+| `--space-md` | 10 *(base)* | `--space-8xl` | 36 |
+| `--space-lg` | 12 | `--space-9xl` | 40 |
+| `--space-xl` | 14 | `--space-10xl` | 52 |
+| `--space-2xl` | 16 | `--space-11xl` | 60 *(hero)* |
+| `--space-3xl` | 18 | | |
+
+**Snaps applied** (everything at 10/12/14/16/18/20/24/28/32/36/40/52/60 is exact):
+`1→2`, `3→4`, `5→6`, `7→8`, `9→8`, `13→12`, `22→24`, `26→24` — all ≤2px.
+One larger shift: **`44→40`** (−4px) on the page-header bottom padding only.
+
+# Border radius
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `--radius-sm` | 2px | buttons, inputs, pills, tags (dominant) |
+| `--radius-md` | 3px | mid elements |
+| `--radius-lg` | 4px | images, larger cards |
+| `--radius-full` | 50% | circles: logos, icon buttons |
+
+Faithful — no radius values changed.
+
 ## Known follow-ups (not yet done)
 - Several gold-fill elements still set `color: var(--bg)` instead of
   `var(--on-gold)` (e.g. `.performer-link`, `.gpa-link-btn:hover`,
