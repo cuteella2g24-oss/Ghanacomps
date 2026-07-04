@@ -655,7 +655,7 @@ select.form-inp option { background: var(--raised); }
 
 /* ─── GPA CARDS ──────────────────────────────────────────── */
 .gpa-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-4xl); margin: var(--space-5xl) 0; }
-.gpa-card { background: var(--raised); border: 1px solid var(--line); border-radius: var(--radius-md); padding: var(--space-5xl) var(--space-4xl); }
+.gpa-card { background: var(--raised); border: 1px solid var(--line); border-radius: var(--radius-md); padding: var(--space-5xl); }
 .gpa-lbl { font-size: var(--fs-micro); letter-spacing: var(--ls-4); text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-sm); }
 .gpa-name { font-family: var(--font-d); font-size: var(--fs-2xl); color: var(--white); margin-bottom: var(--space-2xs); }
 .gpa-body { font-family: var(--font-a); font-style: italic; font-size: var(--fs-base); color: var(--body); line-height: var(--lh-body); }
