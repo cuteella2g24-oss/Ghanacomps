@@ -750,8 +750,21 @@ select.form-inp option { background: var(--raised); }
   padding: var(--space-6xl) var(--space-5xl); margin-top: var(--space-8xl);
 }
 .special-screens { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl); margin-top: var(--space-3xl); }
-.special-screen { border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--elev-1); }  /* POLISH §5 (image radius) + §7 About */
-.special-screen img { width: 100%; }
+.special-screen {
+  position: relative; display: block; width: 100%; padding: 0; margin: 0; text-align: left;
+  background: var(--raised); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--elev-1); cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+  transition: border-color var(--dur-med) var(--ease-spring),
+              box-shadow var(--dur-med) var(--ease-spring),
+              transform var(--dur-med) var(--ease-spring);
+}  /* POLISH §5 (image radius) + §7 About — now tap-to-expand */
+.special-screen:hover {
+  border-color: rgb(var(--gold-rgb) / .38);
+  box-shadow: var(--elev-2); transform: translateY(-2px);
+}
+.special-screen:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.special-screen img { width: 100%; display: block; }
 .screen-lbl { font-size: var(--fs-micro); letter-spacing: var(--ls-3); text-transform: uppercase; color: var(--sub); text-align: center; padding: var(--space-sm); background: var(--lift); }
 
 /* ─── STACKED LIST ───────────────────────────────────────── */
@@ -785,13 +798,11 @@ select.form-inp option { background: var(--raised); }
   padding: var(--space-xs) var(--space-lg); font-size: var(--fs-micro); letter-spacing: var(--ls-4);
   text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-xl);
 }
-.react-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-md); }
+.react-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-lg); }
 .react-img {
-  width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--line);
-  display: block;
-  transition: border-color var(--dur-fast) var(--ease-soft), transform var(--dur-med) var(--ease-spring);  /* POLISH §7 About */
+  width: 100%; height: 100%; object-fit: cover; object-position: top;
+  display: block; border-radius: inherit;
 }
-.react-img:hover { border-color: rgb(var(--gold-rgb) /.38); transform: scale(1.015); }
 
 /* Requests */
 .req-pair {
@@ -1219,8 +1230,56 @@ body.edit .admin-only.flex { display: flex; }
 }
 body.edit .add-comp-panel { display: flex; }
 
-/* ─── REACT IMG WRAP ──────────────────────────────────────── */
-.react-img-wrap { position: relative; display: block; border-radius: var(--radius-lg); box-shadow: var(--elev-1); }  /* POLISH §7 About */
+/* ─── REACT IMG WRAP — uniform tap-to-expand matrix (Apple even grid) ──────
+   Every tile is a fixed 4/5 portrait so rows never go ragged; the screenshot
+   is cover-cropped from the top so the author avatar + name + opening lines
+   stay visible. The tile is a real <button> that opens the image lightbox, and
+   it rides the shared card-lift motion (rest --elev-1 → hover --elev-2 +
+   translateY, never scale) so it matches the rest of the site. */
+.react-img-wrap {
+  position: relative; display: block; width: 100%; padding: 0; margin: 0;
+  aspect-ratio: 4 / 5; overflow: hidden; cursor: pointer;
+  background: var(--raised); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); box-shadow: var(--elev-1);
+  -webkit-appearance: none; appearance: none;
+  transition: border-color var(--dur-med) var(--ease-spring),
+              box-shadow var(--dur-med) var(--ease-spring),
+              transform var(--dur-med) var(--ease-spring);
+}
+.react-img-wrap:hover {
+  border-color: rgb(var(--gold-rgb) / .38);
+  box-shadow: var(--elev-2); transform: translateY(-2px);
+}
+.react-img-wrap:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Decorative expand affordance — frosted disc, bottom-right, strengthens on
+   hover/focus. The <button> carries the label; this is aria-hidden. */
+.react-expand-glyph, .special-screen .react-expand-glyph {
+  position: absolute; bottom: var(--space-md); right: var(--space-md);
+  width: 34px; height: 34px; border-radius: var(--radius-full);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--video-glyph-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid rgba(255,255,255,.28);
+  opacity: 0; transform: scale(.9); pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-soft),
+              transform var(--dur-med) var(--ease-spring),
+              background var(--dur-fast) var(--ease-soft);
+}
+.react-expand-glyph svg {
+  width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.react-img-wrap:hover .react-expand-glyph,
+.react-img-wrap:focus-visible .react-expand-glyph,
+.special-screen:hover .react-expand-glyph,
+.special-screen:focus-visible .react-expand-glyph {
+  opacity: 1; transform: scale(1);
+}
+.react-img-wrap:hover .react-expand-glyph,
+.special-screen:hover .react-expand-glyph { background: rgba(255,255,255,.24); }
+
 .react-remove-btn {
   display: none;
   position: absolute;
@@ -2236,6 +2295,21 @@ body.edit .react-remove-btn { display: flex !important; }
   background: #000;
 }
 .gc-lightbox.is-ready .gc-lightbox-el { opacity: 1; }
+
+/* Image lightbox (still screenshots): the stage narrows and the frame drops its
+   fixed video ratio so the untruncated screenshot sets its own aspect within a
+   sensible viewport cap. Reuses every other .gc-lightbox* shell rule. */
+.gc-lightbox-img .gc-lightbox-stage { width: auto; max-width: min(100%, 560px); }
+.gc-lightbox-imgframe {
+  aspect-ratio: auto; width: auto; max-width: 100%;
+  max-height: calc(100vh - var(--space-11xl) * 2);
+  background: #000; display: flex;
+}
+.gc-lightbox-imgframe .gc-lightbox-el {
+  position: static; width: 100%; height: auto;
+  max-height: calc(100vh - var(--space-11xl) * 2);
+  object-fit: contain;
+}
 .gc-lightbox-fallback {
   position: absolute; inset: 0; z-index: 2;
   display: flex; flex-direction: column; align-items: center; justify-content: center;

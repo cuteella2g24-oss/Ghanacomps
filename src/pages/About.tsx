@@ -2,7 +2,25 @@ import { useState, useEffect } from 'react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
+import ImageLightbox from '../components/ImageLightbox';
 import { useAdmin } from '../contexts/AdminContext';
+
+/** Decorative expand affordance — a frosted disc + ⤢ glyph, bottom-right of a
+ *  tap-to-expand tile. The host <button> carries the accessible label. */
+const ExpandGlyph = () => (
+  <span className="react-expand-glyph" aria-hidden="true">
+    <svg viewBox="0 0 24 24">
+      <path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5" />
+    </svg>
+  </span>
+);
+
+/** Full-size screenshot currently open in the lightbox (null = closed). */
+interface LightboxState {
+  src: string;
+  label: string;
+  triggerEl: HTMLElement | null;
+}
 
 const reactionGroups = [
   { label: '⚽ Michael Essien', images: [{ id: 'rimg-1', src: 'r16' }, { id: 'rimg-2', src: 'r06' }, { id: 'rimg-3', src: 'r20' }] },
@@ -23,6 +41,7 @@ function getRemovedImgs(): string[] {
 export default function About() {
   const { isAdmin } = useAdmin();
   const [removedImgs, setRemovedImgs] = useState<string[]>(getRemovedImgs);
+  const [lightbox, setLightbox] = useState<LightboxState | null>(null);
 
   useEffect(() => {
     setRemovedImgs(getRemovedImgs());
@@ -34,6 +53,10 @@ export default function About() {
     const updated = [...removedImgs, id];
     localStorage.setItem('gc_removed_imgs', JSON.stringify(updated));
     setRemovedImgs(updated);
+  }
+
+  function openLightbox(e: React.MouseEvent<HTMLButtonElement>, src: string, label: string) {
+    setLightbox({ src, label, triggerEl: e.currentTarget });
   }
 
   return (
@@ -129,14 +152,41 @@ export default function About() {
           <div key={group.label} className="player-group">
             <div className="group-label">{group.label}</div>
             <div className="react-grid">
-              {group.images.filter(img => !removedImgs.includes(img.id)).map(img => (
-                <div key={img.id} className="react-img-wrap" id={img.id}>
-                  <img src={`/assets/reactions/${img.src}.jpg`} alt="" className="react-img" />
-                  {isAdmin && (
-                    <button className="react-remove-btn" onClick={() => removeReactImg(img.id)}>✕</button>
-                  )}
-                </div>
-              ))}
+              {group.images.filter(img => !removedImgs.includes(img.id)).map((img, i) => {
+                const src = `/assets/reactions/${img.src}.jpg`;
+                const label = `${group.label.replace(/^[^\p{L}]+/u, '').trim()} — fan reaction ${i + 1}`;
+                return (
+                  <button
+                    key={img.id}
+                    type="button"
+                    className="react-img-wrap"
+                    id={img.id}
+                    aria-label={`View ${label}`}
+                    onClick={e => openLightbox(e, src, label)}
+                  >
+                    <img src={src} alt="" className="react-img" />
+                    <ExpandGlyph />
+                    {isAdmin && (
+                      <span
+                        className="react-remove-btn"
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Remove this screenshot"
+                        onClick={e => { e.stopPropagation(); removeReactImg(img.id); }}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            removeReactImg(img.id);
+                          }
+                        }}
+                      >
+                        ✕
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         ))}
@@ -191,20 +241,41 @@ export default function About() {
           <p className="italic" style={{ fontSize: 'var(--fs-lg)', color: 'var(--white)', maxWidth: '560px', lineHeight: 'var(--lh-body)' }}>"Incredible experience, Thanks #ghanacomps @fifaworldcup"</p>
           <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: 'var(--ls-3)', textTransform: 'uppercase', color: 'var(--sub)', marginTop: 'var(--space-sm)' }}>Michael Essien ✓ — on TikTok and Facebook</p>
           <div className="special-screens">
-            <div className="special-screen">
+            <button
+              type="button"
+              className="special-screen"
+              aria-label="View Essien TikTok repost"
+              onClick={e => openLightbox(e, '/assets/essien_tiktok.jpg', 'Essien TikTok repost')}
+            >
               <img src="/assets/essien_tiktok.jpg" alt="Essien TikTok repost" />
+              <ExpandGlyph />
               <div className="screen-lbl">TikTok — 113.2K Likes</div>
-            </div>
-            <div className="special-screen">
+            </button>
+            <button
+              type="button"
+              className="special-screen"
+              aria-label="View Essien Facebook repost"
+              onClick={e => openLightbox(e, '/assets/essien_facebook.jpg', 'Essien Facebook repost')}
+            >
               <img src="/assets/essien_facebook.jpg" alt="Essien Facebook repost" />
+              <ExpandGlyph />
               <div className="screen-lbl">Facebook — 5K Likes · 54K Views</div>
-            </div>
+            </button>
           </div>
         </div>
       </section>
 
       <Footer />
       <Stripe />
+
+      {lightbox && (
+        <ImageLightbox
+          src={lightbox.src}
+          label={lightbox.label}
+          triggerEl={lightbox.triggerEl}
+          onClose={() => setLightbox(null)}
+        />
+      )}
     </>
   );
 }
