@@ -2479,7 +2479,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-social-cell.tiktok { width: 325px; }
 .gc-social-note {
   font-size: var(--fs-sm); color: var(--sub); margin-top: var(--space-md);
-  font-style: italic; font-family: var(--font-a);
+  font-family: var(--font-b);
 }
 /* Graceful pre-load / failed-script fallback inside the corral. */
 .gc-social-fallback {
