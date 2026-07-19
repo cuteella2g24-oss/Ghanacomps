@@ -1522,7 +1522,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-feed-t { font-size: var(--fs-base); color: var(--white); line-height: var(--lh-heading); }
 .gc-feed-empty {
   padding: var(--space-5xl) var(--space-2xl); font-size: var(--fs-sm);
-  color: var(--sub); font-style: italic;
+  color: var(--sub);
 }
 
 /* ─── SECTION HEADER — B variant (eyebrow + rule, §1.5) ──────
