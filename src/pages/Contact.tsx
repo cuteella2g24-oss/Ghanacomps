@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
+import SportyIcon from '../components/SportyIcon';
 import { Button } from '@/components/ui/button';
 
 export default function Contact() {
@@ -71,44 +72,44 @@ export default function Contact() {
             </form>
           </div>
 
-          <div className="stack">
-            <div className="stack-item">
-              <div className="stack-icon">📧</div>
-              <div>
-                <div className="stack-t">Email Us</div>
+          <div className="gc-sportcards">
+            <div className="gc-sportcard">
+              <span className="gc-sportcard-chip"><SportyIcon name="mail" /></span>
+              <div className="gc-sportcard-body">
+                <div className="gc-sportcard-t">Email Us</div>
                 <a href="mailto:compsghana@gmail.com" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>compsghana@gmail.com</a>
-                <div className="stack-b" style={{ marginTop: 'var(--space-2xs)' }}>For general enquiries, feedback and content requests.</div>
+                <div className="gc-sportcard-b" style={{ marginTop: 'var(--space-2xs)' }}>For general enquiries, feedback and content requests.</div>
               </div>
             </div>
-            <div className="stack-item">
-              <div className="stack-icon">𝕏</div>
-              <div>
-                <div className="stack-t">Find Us on X</div>
+            <div className="gc-sportcard">
+              <span className="gc-sportcard-chip"><SportyIcon name="broadcast" /></span>
+              <div className="gc-sportcard-body">
+                <div className="gc-sportcard-t">Find Us on X</div>
                 <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>@Ghanacomps ✓</a>
-                <div className="stack-b" style={{ marginTop: 'var(--space-2xs)' }}>Drop your comp requests in our quotes or comments. We go through all of them.</div>
+                <div className="gc-sportcard-b" style={{ marginTop: 'var(--space-2xs)' }}>Drop your comp requests in our quotes or comments. We go through all of them.</div>
               </div>
             </div>
-            <div className="stack-item">
-              <div className="stack-icon">🎵</div>
-              <div>
-                <div className="stack-t">Find Us on TikTok</div>
+            <div className="gc-sportcard">
+              <span className="gc-sportcard-chip"><SportyIcon name="ball" /></span>
+              <div className="gc-sportcard-body">
+                <div className="gc-sportcard-t">Find Us on TikTok</div>
                 <a href="https://tiktok.com/@ghanacompss" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>@ghanacompss</a>
-                <div className="stack-b" style={{ marginTop: 'var(--space-2xs)' }}>Goals, assists and skills every weekend on TikTok.</div>
+                <div className="gc-sportcard-b" style={{ marginTop: 'var(--space-2xs)' }}>Goals, assists and skills every weekend on TikTok.</div>
               </div>
             </div>
-            <div className="stack-item">
-              <div className="stack-icon">👥</div>
-              <div>
-                <div className="stack-t">Find Us on Facebook</div>
+            <div className="gc-sportcard">
+              <span className="gc-sportcard-chip"><SportyIcon name="broadcast" /></span>
+              <div className="gc-sportcard-body">
+                <div className="gc-sportcard-t">Find Us on Facebook</div>
                 <a href="https://www.facebook.com/share/1GL7b1Qsuq/" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>Ghana Comps on Facebook</a>
-                <div className="stack-b" style={{ marginTop: 'var(--space-2xs)' }}>Follow us on Facebook for highlights, throwbacks and updates.</div>
+                <div className="gc-sportcard-b" style={{ marginTop: 'var(--space-2xs)' }}>Follow us on Facebook for highlights, throwbacks and updates.</div>
               </div>
             </div>
-            <div className="stack-item" style={{ borderLeft: '2px solid var(--gold)' }}>
-              <div className="stack-icon">📌</div>
-              <div>
-                <div className="stack-t">A Note on Requests</div>
-                <div className="stack-b">We work on every game we can access. Some footage is copyrighted and not always available. The best place to drop requests is in the quotes and comments on our X posts.</div>
+            <div className="gc-sportcard gc-sportcard--accent">
+              <span className="gc-sportcard-chip"><SportyIcon name="whistle" /></span>
+              <div className="gc-sportcard-body">
+                <div className="gc-sportcard-t">A Note on Requests</div>
+                <div className="gc-sportcard-b">We work on every game we can access. Some footage is copyrighted and not always available. The best place to drop requests is in the quotes and comments on our X posts.</div>
               </div>
             </div>
           </div>

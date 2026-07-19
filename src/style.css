@@ -450,6 +450,32 @@ section.alt { background: var(--surface); }
 .eyebrow::before { content: ''; display: block; width: 16px; height: 1px; background: var(--gold); }
 .eyebrow.plain::before { display: none; }
 
+/* WHAT WE DO — centered section + glass, rectangular cards (user request) */
+.gc-wwd { text-align: center; }
+.gc-wwd .eyebrow { justify-content: center; }
+.gc-wwd .lead { max-width: 640px; margin-left: auto; margin-right: auto; }
+.gc-wwd-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-xl); max-width: 980px; margin: 0 auto;
+}
+.gc-glasscard {
+  align-items: center; text-align: center;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  background: var(--raised); /* opaque fallback */
+}
+.gc-glasscard .gc-sportcard-chip { margin-left: auto; margin-right: auto; }
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .gc-glasscard {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+@media (max-width: 768px) {
+  .gc-wwd-grid { grid-template-columns: 1fr; max-width: 460px; }
+}
+
 .d1 { font-family: var(--font-d); font-size: var(--fs-d1); line-height: var(--lh-display); letter-spacing: -0.015em; }
 .d2 { font-family: var(--font-d); font-size: var(--fs-d2); line-height: var(--lh-display); letter-spacing: -0.012em; }
 .d3 { font-family: var(--font-d); font-size: var(--fs-d3); line-height: var(--lh-none); letter-spacing: -0.008em; }
@@ -885,14 +911,15 @@ footer { padding: var(--space-8xl) 5vw var(--space-5xl); background: var(--surfa
 @media (prefers-reduced-motion: reduce) {
   .card, .post-card, .legend-card, .player-card,
   .archive-card, .performer-card, .fixture, .gpa-card,
-  .gc-segcard, .gc-fixture, .gc-vcard, [data-slot="card"] {
+  .gc-segcard, .gc-fixture, .gc-vcard, .gc-sportcard, [data-slot="card"] {
     transition: border-color var(--dur-fast) var(--ease-soft),
                 box-shadow var(--dur-fast) var(--ease-soft);
   }
   .card:hover, .post-card:hover, .legend-card:hover, .player-card:hover,
   .archive-card:hover, .performer-card:hover,
   .fixture:hover, .gpa-card:hover,
-  .gc-segcard:hover, .gc-fixture:hover, .gc-vcard:hover, [data-slot="card"]:hover { transform: none; }
+  .gc-segcard:hover, .gc-fixture:hover, .gc-vcard:hover,
+  .gc-sportcard--link:hover, [data-slot="card"]:hover { transform: none; }
   /* Video-card internals: freeze poster/glyph scale under reduced-motion. */
   .gc-vcard:hover .gc-vcard-poster,
   .gc-vcard:hover .gc-vcard-glyph { transform: none; }
@@ -1314,33 +1341,6 @@ body.edit .react-remove-btn { display: flex !important; }
    dot is decorative reinforcement (frozen under reduced-motion, §6). */
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .2; } }
 
-/* ─── TICKER (B, §1.3) — Home only ───────────────────────────
-   The promoted marquee as a broadcast lower-third: gold bar, a pinned red LIVE
-   bug, and the player-name list scrolling with ◆ dividers. Reuses the existing
-   marquee keyframe pattern (translateX 0 → -50% over a duplicated list).
-   Motion freezes under reduced-motion; overflow:hidden truncates the list. */
-.gc-ticker {
-  position: relative; overflow: hidden;
-  background: var(--gold); padding: var(--space-sm) 0;
-}
-.gc-ticker::before {
-  content: 'Live'; position: absolute; left: 0; top: 0; bottom: 0; z-index: 2;
-  display: flex; align-items: center; padding: 0 var(--space-2xl);
-  background: var(--red); color: var(--on-brand);
-  font-weight: var(--fw-semibold); font-size: var(--fs-2xs);
-  letter-spacing: var(--ls-3); text-transform: uppercase;
-}
-.gc-ticker-track {
-  display: inline-flex; white-space: nowrap; padding-left: 64px;
-  animation: marquee 38s linear infinite;
-}
-.gc-ticker-track span {
-  font-family: var(--font-d); font-weight: var(--fw-semibold);
-  font-size: var(--fs-sm); letter-spacing: var(--ls-3);
-  color: var(--on-gold); padding: 0 var(--space-lg);
-}
-.gc-ticker-track .dot { opacity: .3; }
-
 /* ─── FLAG-CHEVRON MOTIF (B, §1.4) ───────────────────────────
    Angled broadcast keylines on a decorative ::before at z-index 0. Gold is the
    widest/strongest band; red + green are hairlines. Three intensity registers
@@ -1578,6 +1578,113 @@ body.edit .react-remove-btn { display: flex !important; }
   letter-spacing: 0.004em;  /* POLISH §2.2 — serif editorial body */
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   SPORTY CARD (SPORTY_CARD_SPEC) — the container refinement layer.
+   Authored OUTSIDE @layer, same convention as .gc-segcard/.stack above, so it
+   wins over Tailwind utilities without !important. Every value is a :root token
+   or an rgb(var(--*-rgb) / <alpha>) transparency — no new brand color. The
+   feature-list box (About/Contact) becomes distinct, rounded, elevated cards
+   with a custom line-icon chip; grid + seam-cell contexts adopt lighter
+   variants. Icon color rides currentColor off the chip (see SportyIcon.tsx).
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Container — a real gapped stack (12px), transparent bg: the old
+   `background: var(--line)` seam is gone, so the items read as separate. */
+.gc-sportcards { display: flex; flex-direction: column; gap: var(--space-lg); }
+
+.gc-sportcard {
+  background: var(--raised); border: 1px solid var(--line);
+  border-radius: var(--radius-xl);          /* 14px — the confident radius */
+  box-shadow: var(--elev-1);                /* rests on tier-1 depth */
+  padding: var(--space-4xl);                /* 20px */
+  display: flex; align-items: flex-start; gap: var(--space-lg);
+  /* Same spring timing as the shipped card family (.gc-segcard, [data-slot=card]) */
+  transition: border-color var(--dur-med) var(--ease-spring),
+              box-shadow var(--dur-med) var(--ease-spring),
+              transform var(--dur-med) var(--ease-spring);
+}
+
+/* Only interactive cards lift + get a focus ring; static info cards
+   (About/Contact list) must NOT pretend to be clickable. */
+.gc-sportcard--link:hover {
+  border-color: rgb(var(--gold-rgb) / .3);
+  box-shadow: var(--elev-2); transform: translateY(-2px);
+}
+.gc-sportcard--link:hover .gc-sportcard-chip {
+  background: rgb(var(--gold-rgb) / .16); border-color: rgb(var(--gold-rgb) / .35);
+}
+.gc-sportcard--link:active { transform: translateY(-1px); }
+.gc-sportcard--link:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Gold 2px left-edge folded into the rounded card (Contact "Note"). */
+.gc-sportcard--accent { position: relative; overflow: hidden; }
+.gc-sportcard--accent::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: var(--gold);
+}
+
+/* Grid variant (Home "What We Do"): tighter radius so tiled cards aren't
+   bubbly, chip stacked above the title. Adopts the grid's existing gap. */
+.gc-sportcard--tight { border-radius: var(--radius-lg); flex-direction: column; }
+.gc-sportcard--tight .gc-sportcard-chip { margin-bottom: var(--space-lg); }
+
+/* The icon chip — the sporty personality made physical. Same ghosted-gold
+   recipe as .lc-badge / admin add-blocks, squared to a soft chip. */
+.gc-sportcard-chip {
+  flex: 0 0 auto; width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: var(--radius-lg);
+  background: rgb(var(--gold-rgb) / .10);
+  border: 1px solid rgb(var(--gold-rgb) / .22);
+  color: var(--gold);                       /* drives currentColor in the SVG */
+  transition: background var(--dur-fast) var(--ease-soft),
+              border-color var(--dur-fast) var(--ease-soft);
+}
+.gc-sportcard-chip.r  { background: rgb(var(--red-rgb) / .10);   border-color: rgb(var(--red-rgb) / .28);   color: var(--red); }
+.gc-sportcard-chip.gr { background: rgb(var(--green-rgb) / .10); border-color: rgb(var(--green-rgb) / .28); color: var(--green); }
+.gc-sportcard-chip svg {
+  width: 24px; height: 24px;
+  fill: none; stroke: currentColor; stroke-width: 1.75;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* Smaller chip for the Black Stars seam cells (tighter padding). */
+.gc-sportcard-chip--sm { width: 36px; height: 36px; }
+.gc-sportcard-chip--sm svg { width: 20px; height: 20px; }
+
+/* Content column — alias the existing .stack-t/.stack-b type scale. */
+.gc-sportcard-body { min-width: 0; }
+.gc-sportcard-t {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-lg); color: var(--white);
+  line-height: var(--lh-snug); margin-bottom: var(--space-2xs);
+}
+.gc-sportcard-b { font-size: var(--fs-sm); color: var(--sub); line-height: var(--lh-normal); }
+
+/* Light theme (paper): deepen the tint + drop the stroke to the darker
+   --gold-hi (#a07e08) so the icons read clearly on paper. Note: these glyphs
+   are decorative (aria-hidden; the adjacent card title carries the meaning),
+   so WCAG 1.4.11 non-text contrast does not bind — this is a visual-legibility
+   tuning, not a contrast-conformance claim (measured ~2.6:1). Flag chips ride
+   their auto-flipped --red/--green channels on paper. */
+:root[data-theme="light"] .gc-sportcard-chip {
+  background: rgb(var(--gold-rgb) / .14);
+  border-color: rgb(var(--gold-rgb) / .30);
+  color: var(--gold-hi);
+}
+:root[data-theme="light"] .gc-sportcard--link:hover .gc-sportcard-chip {
+  background: rgb(var(--gold-rgb) / .20); border-color: rgb(var(--gold-rgb) / .40);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .gc-sportcard-chip {
+    background: rgb(var(--gold-rgb) / .14);
+    border-color: rgb(var(--gold-rgb) / .30);
+    color: var(--gold-hi);
+  }
+  :root:not([data-theme]) .gc-sportcard--link:hover .gc-sportcard-chip {
+    background: rgb(var(--gold-rgb) / .20); border-color: rgb(var(--gold-rgb) / .40);
+  }
+}
+
 /* ─── FOUNDATION RESPONSIVE ──────────────────────────────────
    Reuse the existing 900 / 768 stops (no new breakpoints). */
 @media (max-width: 900px) {
@@ -1595,7 +1702,6 @@ body.edit .react-remove-btn { display: flex !important; }
 @media (prefers-reduced-motion: reduce) {
   .gc-scorebug span.live::before,
   .gc-feed-dot { animation: none; }
-  .gc-ticker-track { animation: none; }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

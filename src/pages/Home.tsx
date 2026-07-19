@@ -4,6 +4,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
+import SportyIcon from '../components/SportyIcon';
 import { useAdmin } from '../contexts/AdminContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -46,14 +47,6 @@ export default function Home() {
     <>
       <Stripe />
       <Nav />
-
-      {/* TICKER — promoted marquee lower-third */}
-      <div className="gc-ticker" aria-hidden="true">
-        <div className="gc-ticker-track">
-          <span>Thomas Partey</span><span className="dot">◆</span><span>Mohammed Kudus</span><span className="dot">◆</span><span>Fatawu Issahaku</span><span className="dot">◆</span><span>Antoine Semenyo</span><span className="dot">◆</span><span>Jordan Ayew</span><span className="dot">◆</span><span>Ibrahim Sulemana</span><span className="dot">◆</span><span>Ernest Nuamah</span><span className="dot">◆</span><span>Kamaldeen Sulemana</span><span className="dot">◆</span><span>Inaki Williams</span><span className="dot">◆</span>
-          <span>Thomas Partey</span><span className="dot">◆</span><span>Mohammed Kudus</span><span className="dot">◆</span><span>Fatawu Issahaku</span><span className="dot">◆</span><span>Antoine Semenyo</span><span className="dot">◆</span><span>Jordan Ayew</span><span className="dot">◆</span><span>Ibrahim Sulemana</span><span className="dot">◆</span><span>Ernest Nuamah</span><span className="dot">◆</span><span>Kamaldeen Sulemana</span><span className="dot">◆</span><span>Inaki Williams</span><span className="dot">◆</span>
-        </div>
-      </div>
 
       {/* HERO — broadcast title card */}
       <section className="gc-hero gc-chevrons loud">
@@ -155,18 +148,21 @@ export default function Home() {
         <div className="gc-segcards">
           <div className="gc-segcard">
             <span className="gc-segcard-n">01</span>
+            <span className="gc-sportcard-chip gc-sportcard-chip--sm"><SportyIcon name="tactics" /></span>
             <div className="gc-seglbl">Matchweek Review</div>
             <Editable tag="div" eid="h-mwr-n" className="gc-segname">Matchweek Review</Editable>
             <Editable tag="p" eid="h-mwr-b" className="gc-segbody">Our weekly breakdown of everything that happened in Ghanaian football. Updated every Monday.</Editable>
           </div>
           <div className="gc-segcard r">
             <span className="gc-segcard-n">02</span>
+            <span className="gc-sportcard-chip gc-sportcard-chip--sm r"><SportyIcon name="boot" /></span>
             <div className="gc-seglbl r">Player of the Week</div>
             <Editable tag="div" eid="h-potw-n" className="gc-segname">Updated Monday</Editable>
             <Editable tag="p" eid="h-potw-b" className="gc-segbody">We watch every match and pick the one Ghanaian who stood tallest that week.</Editable>
           </div>
           <div className="gc-segcard gr">
             <span className="gc-segcard-n">03</span>
+            <span className="gc-sportcard-chip gc-sportcard-chip--sm gr"><SportyIcon name="goal" /></span>
             <div className="gc-seglbl gr">Goal and Assist of the Week</div>
             <Editable tag="div" eid="h-gatw-n" className="gc-segname">Coming Monday</Editable>
             <Editable tag="p" eid="h-gatw-b" className="gc-segbody">Every week we pick the best Ghanaian goal and the most important assist.</Editable>
@@ -184,31 +180,31 @@ export default function Home() {
       </div>
 
       {/* WHAT WE DO */}
-      <section className="reveal">
+      <section className="reveal gc-wwd">
         <div className="eyebrow">What We Do</div>
         <h2 className="d2" style={{ marginBottom: 'var(--space-xl)' }}>We Cover Every <span className="gold">Ghanaian.</span></h2>
         <p className="lead" style={{ marginBottom: 'var(--space-6xl)' }}>Every weekend we go through the matches and put together compilations of the Ghanaians who stood out. Goals, assists, saves and performances that deserved more attention. When the weekend is done we go back to the legends.</p>
-        <div className="g-auto">
-          <Card>
-            <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>⚽</div>
+        <div className="gc-wwd-grid">
+          <Card className="gc-glasscard">
+            <span className="gc-sportcard-chip" style={{ marginBottom: 'var(--space-lg)' }}><SportyIcon name="ball" /></span>
             <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Weekend Highlights</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>Goals, assists, saves and standout performances from Ghanaians playing abroad. Posted every weekend.</p>
             <div className="mt-auto pt-[var(--space-xl)]"><Button asChild variant="ghost" size="sm"><Link to="/players">Current Players</Link></Button></div>
           </Card>
-          <Card>
-            <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>📼</div>
+          <Card className="gc-glasscard">
+            <span className="gc-sportcard-chip" style={{ marginBottom: 'var(--space-lg)' }}><SportyIcon name="trophy" /></span>
             <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Legend Throwbacks</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>Ghana has had incredible players. We bring those moments back for a generation that never saw them.</p>
             <div className="mt-auto pt-[var(--space-xl)]"><Button asChild variant="ghost" size="sm"><Link to="/legends">View Legends</Link></Button></div>
           </Card>
-          <Card>
-            <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>🇬🇭</div>
+          <Card className="gc-glasscard">
+            <span className="gc-sportcard-chip gr" style={{ marginBottom: 'var(--space-lg)' }}><SportyIcon name="stadium" /></span>
             <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>Black Stars</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>When Ghana play we cover everything. Lineups, live goals, individual player comps and a full breakdown.</p>
             <div className="mt-auto pt-[var(--space-xl)]"><Button asChild variant="ghost" size="sm"><Link to="/blackstars">Black Stars Hub</Link></Button></div>
           </Card>
-          <Card>
-            <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-sm)' }}>💬</div>
+          <Card className="gc-glasscard">
+            <span className="gc-sportcard-chip" style={{ marginBottom: 'var(--space-lg)' }}><SportyIcon name="whistle" /></span>
             <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-lg)', fontWeight: 'var(--fw-semibold)', color: 'var(--white)', marginBottom: 'var(--space-xs)' }}>We Take Requests</div>
             <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--body)', lineHeight: 'var(--lh-body)' }}>Drop a player or game in our X comments. We work on every game we can access and we do it fast.</p>
             <div className="mt-auto pt-[var(--space-xl)]"><Button asChild variant="ghost" size="sm"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Find Us on X</a></Button></div>

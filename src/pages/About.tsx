@@ -3,6 +3,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
 import ImageLightbox from '../components/ImageLightbox';
+import SportyIcon from '../components/SportyIcon';
 import { useAdmin } from '../contexts/AdminContext';
 
 /** Decorative expand affordance — a frosted disc + ⤢ glyph, bottom-right of a
@@ -86,11 +87,11 @@ export default function About() {
             <p>We have to be honest about one thing. Not every game is available to us. Some footage is copyrighted and we simply cannot access it. We work with what we can get and we make the most of every clip we have.</p>
             <p>We also take requests. <strong>Drop a player or a game in our X comments and we will get to every game we can access.</strong> Find us at <strong>@Ghanacomps ✓</strong> on X and <strong>@ghanacompss</strong> on TikTok.</p>
           </div>
-          <div className="stack">
-            <div className="stack-item"><div className="stack-icon">⚽</div><div><div className="stack-t">Weekend Highlights</div><div className="stack-b">Goals, assists, saves and standout performances from Ghanaians playing abroad. Every weekend.</div></div></div>
-            <div className="stack-item"><div className="stack-icon">📼</div><div><div className="stack-t">Legend Throwbacks</div><div className="stack-b">Ghana has had incredible players. We bring those moments back for a new generation.</div></div></div>
-            <div className="stack-item"><div className="stack-icon">🇬🇭</div><div><div className="stack-t">Black Stars Coverage</div><div className="stack-b">Full matchday coverage when Ghana play. Lineups, live goals, comps and post match breakdown.</div></div></div>
-            <div className="stack-item"><div className="stack-icon">💬</div><div><div className="stack-t">We Take Requests</div><div className="stack-b">Drop them in our X comments. We work on every game we can access. Some footage is copyrighted and not always available.</div></div></div>
+          <div className="gc-sportcards">
+            <div className="gc-sportcard"><span className="gc-sportcard-chip"><SportyIcon name="ball" /></span><div className="gc-sportcard-body"><div className="gc-sportcard-t">Weekend Highlights</div><div className="gc-sportcard-b">Goals, assists, saves and standout performances from Ghanaians playing abroad. Every weekend.</div></div></div>
+            <div className="gc-sportcard"><span className="gc-sportcard-chip"><SportyIcon name="trophy" /></span><div className="gc-sportcard-body"><div className="gc-sportcard-t">Legend Throwbacks</div><div className="gc-sportcard-b">Ghana has had incredible players. We bring those moments back for a new generation.</div></div></div>
+            <div className="gc-sportcard"><span className="gc-sportcard-chip gr"><SportyIcon name="stadium" /></span><div className="gc-sportcard-body"><div className="gc-sportcard-t">Black Stars Coverage</div><div className="gc-sportcard-b">Full matchday coverage when Ghana play. Lineups, live goals, comps and post match breakdown.</div></div></div>
+            <div className="gc-sportcard"><span className="gc-sportcard-chip"><SportyIcon name="whistle" /></span><div className="gc-sportcard-body"><div className="gc-sportcard-t">We Take Requests</div><div className="gc-sportcard-b">Drop them in our X comments. We work on every game we can access. Some footage is copyrighted and not always available.</div></div></div>
           </div>
         </div>
       </section>
