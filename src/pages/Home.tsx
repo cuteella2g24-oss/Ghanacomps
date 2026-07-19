@@ -222,17 +222,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FIND US */}
-      <section className="reveal">
-        <div className="eyebrow">Find Us Online</div>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-5xl)' }}>Follow the <span className="gold">Journey.</span></h2>
-        <div className="g2">
-          <div className="platform-card"><div className="plat-icon">𝕏</div><div className="plat-name">Twitter / X</div><div className="plat-handle">@Ghanacomps ✓ Verified</div><Button asChild><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Follow Now</a></Button></div>
-          <div className="platform-card"><div className="plat-icon">🎵</div><div className="plat-name">TikTok</div><div className="plat-handle">@ghanacompss</div><Button asChild><a href="https://tiktok.com/@ghanacompss" target="_blank" rel="noopener">Follow Now</a></Button></div>
-          <div className="platform-card"><div className="plat-icon">👥</div><div className="plat-name">Facebook</div><div className="plat-handle">Ghana Comps</div><Button asChild><a href="https://www.facebook.com/share/1GL7b1Qsuq/" target="_blank" rel="noopener">Follow Now</a></Button></div>
-        </div>
-      </section>
-
       <Footer />
       <Stripe />
     </>
