@@ -67,7 +67,7 @@
   --on-gold: #0a0a0a;        /* text/icon sitting on a gold fill */
 
   /* ── Type: families ── */
-  --font-d:  'Playfair Display', serif;  /* display (headings, numbers) */
+  --font-d:  'EB Garamond', serif;  /* display (headings, numbers) */
   --font-b:  'DM Sans', sans-serif;      /* body / UI */
   --font-a:  'EB Garamond', serif;       /* accent (italic quotes) */
 
