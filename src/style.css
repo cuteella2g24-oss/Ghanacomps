@@ -447,9 +447,9 @@ section.alt { background: var(--surface); }
 .eyebrow {
   display: flex; align-items: center; gap: var(--space-md);
   font-size: var(--fs-2xs); letter-spacing: var(--ls-5); text-transform: uppercase;
-  color: var(--gold); margin-bottom: var(--space-md);
+  color: var(--sub); margin-bottom: var(--space-md);
 }
-.eyebrow::before { content: ''; display: block; width: 16px; height: 1px; background: var(--gold); }
+.eyebrow::before { content: ''; display: block; width: 16px; height: 1px; background: rgb(var(--gold-rgb) / .5); }
 .eyebrow.plain::before { display: none; }
 
 /* WHAT WE DO — centered section + glass, rectangular cards (user request) */
@@ -489,7 +489,7 @@ section.alt { background: var(--surface); }
 .md-title, .foot-name, .gpa-write-heading, .performer-caption, .archive-player {
   font-weight: var(--fw-semibold);
 }
-.gold { color: var(--gold); }
+.gold { color: inherit; }
 .red  { color: var(--red); }
 .grn  { color: var(--green); }
 
@@ -834,7 +834,7 @@ select.form-inp option { background: var(--raised); }
   display: inline-flex; align-items: center; gap: var(--space-sm);
   background: var(--lift); border: 1px solid var(--line);
   padding: var(--space-xs) var(--space-lg); font-size: var(--fs-micro); letter-spacing: var(--ls-4);
-  text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-xl);
+  text-transform: uppercase; color: var(--sub); margin-bottom: var(--space-xl);
 }
 .react-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-lg); }
 .react-img {
@@ -1089,7 +1089,7 @@ body.edit .news-admin-row { display: flex; }
 }
 .gpa-write-block.red { border-left-color: var(--red); }
 .gpa-write-block.grn { border-left-color: var(--green); }
-.gpa-write-label { font-size: var(--fs-micro); letter-spacing: var(--ls-4); text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-sm); }
+.gpa-write-label { font-size: var(--fs-micro); letter-spacing: var(--ls-4); text-transform: uppercase; color: var(--sub); margin-bottom: var(--space-sm); }
 .gpa-write-label.red { color: var(--red); }
 .gpa-write-heading { font-family: var(--font-d); font-size: var(--fs-2xl); color: var(--white); margin-bottom: var(--space-lg); line-height: var(--lh-none); }
 .gpa-write-body {
@@ -1421,7 +1421,7 @@ body.edit .react-remove-btn { display: flex !important; }
   font-size: var(--fs-d2); text-transform: uppercase;
   letter-spacing: -0.02em; line-height: var(--lh-display);  /* POLISH §2.1 */
 }
-.gc-ph-title .gold { color: var(--gold); }
+.gc-ph-title .gold { color: inherit; }
 .gc-ph-lead {
   font-size: var(--fs-md); line-height: var(--lh-relaxed);
   letter-spacing: 0.006em;  /* POLISH §2.2 */
@@ -1532,7 +1532,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-eyebrow {
   display: inline-flex; align-items: center; gap: var(--space-sm);
   font-size: var(--fs-2xs); letter-spacing: var(--ls-4);
-  text-transform: uppercase; color: var(--gold);
+  text-transform: uppercase; color: var(--sub);
   margin-bottom: var(--space-md); padding-bottom: var(--space-xs);
   border-bottom: 2px solid var(--gold);
 }
@@ -1542,7 +1542,7 @@ body.edit .react-remove-btn { display: flex !important; }
   letter-spacing: -0.02em; line-height: var(--lh-display);  /* POLISH §2.1 */
 }
 .gc-h2.tight { margin-bottom: var(--space-xs); }
-.gc-h2 .gold { color: var(--gold); }
+.gc-h2 .gold { color: inherit; }
 
 /* ─── GPA PREVIEW — broadcast segment cards (B, Home §4) ─────
    Restyled gpa-cards as scoreboard segments: 3px flag top-bar + ghosted
@@ -1576,7 +1576,7 @@ body.edit .react-remove-btn { display: flex !important; }
 }
 .gc-seglbl {
   font-size: var(--fs-micro); letter-spacing: var(--ls-4);
-  text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-sm);
+  text-transform: uppercase; color: var(--sub); margin-bottom: var(--space-sm);
 }
 .gc-seglbl.r  { color: var(--red); }
 .gc-seglbl.gr { color: var(--green); }
@@ -1741,7 +1741,7 @@ body.edit .react-remove-btn { display: flex !important; }
   font-size: var(--fs-d3); color: var(--white); letter-spacing: -0.014em;  /* POLISH §2.1 */
   line-height: var(--lh-snug);
 }
-.gc-rule-l .gold { color: var(--gold); }
+.gc-rule-l .gold { color: inherit; }
 .gc-rule-r {
   font-size: var(--fs-micro); letter-spacing: var(--ls-4);
   text-transform: uppercase; color: var(--sub); white-space: nowrap;
@@ -1749,7 +1749,7 @@ body.edit .react-remove-btn { display: flex !important; }
 /* dateline eyebrow variant (GPA columns): a coloured kicker + meta */
 .gc-rule-eyebrow {
   font-family: var(--font-b); font-size: var(--fs-2xs); letter-spacing: var(--ls-5);
-  text-transform: uppercase; color: var(--gold);
+  text-transform: uppercase; color: var(--sub);
 }
 .gc-rule-eyebrow.r { color: var(--red); }
 .gc-rule-eyebrow.gr { color: var(--green); }
@@ -1765,7 +1765,7 @@ body.edit .react-remove-btn { display: flex !important; }
   line-height: var(--lh-snug); letter-spacing: -0.014em;  /* POLISH §2.1 */
   margin-bottom: var(--space-4xl);
 }
-.gc-col-head .gold { color: var(--gold); }
+.gc-col-head .gold { color: inherit; }
 .gc-col-split {
   display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-10xl);
   max-width: 1040px;
@@ -1781,7 +1781,7 @@ body.edit .react-remove-btn { display: flex !important; }
 }
 .gc-editorial.red-accent .gpa-write-block { border-top-color: var(--red); }
 .gc-editorial.green-accent .gpa-write-block { border-top-color: var(--green); }
-.gc-editorial .gpa-write-label { color: var(--gold); }
+.gc-editorial .gpa-write-label { color: var(--sub); }
 .gc-editorial.red-accent .gpa-write-label { color: var(--red); }
 .gc-editorial.green-accent .gpa-write-label { color: var(--green); }
 .gc-editorial .gpa-write-heading {
@@ -1796,7 +1796,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-editorial .gpa-write-body::first-letter {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
   font-size: var(--fs-4xl); float: left; line-height: 0.82;
-  padding: 6px var(--space-sm) 0 0; color: var(--gold);
+  padding: 6px var(--space-sm) 0 0; color: var(--white);
 }
 .gc-editorial.red-accent .gpa-write-body::first-letter { color: var(--red); }
 .gc-editorial.green-accent .gpa-write-body::first-letter { color: var(--green); }
@@ -1834,7 +1834,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-entry-meta s { margin: 0 var(--space-2xs); opacity: .35; text-decoration: none; }
 .gc-entry-lg {
   font-size: var(--fs-micro); letter-spacing: var(--ls-3);
-  text-transform: uppercase; color: var(--gold);
+  text-transform: uppercase; color: var(--sub);
   white-space: nowrap; align-self: center; opacity: .85;
   display: inline-flex; align-items: center; gap: var(--space-xs);
 }
@@ -1980,7 +1980,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-prose.first p:first-child::first-letter {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
   font-size: var(--fs-4xl); float: left; line-height: 0.82;
-  padding: 6px var(--space-sm) 0 0; color: var(--gold);
+  padding: 6px var(--space-sm) 0 0; color: var(--white);
 }
 
 /* ─── A-DISCIPLINE RESPONSIVE (reuse 820 / 768 / 640 stops) ── */
@@ -2053,7 +2053,7 @@ body.edit .react-remove-btn { display: flex !important; }
 }
 .gc-fix-lbl {
   font-size: var(--fs-micro); letter-spacing: var(--ls-4);
-  text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-sm);
+  text-transform: uppercase; color: var(--sub); margin-bottom: var(--space-sm);
 }
 .gc-fix-title {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
@@ -2334,7 +2334,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-vcard-cap { display: block; padding: var(--space-lg) var(--space-2xl) var(--space-2xl); }
 .gc-vcard-tag {
   display: block; font-size: var(--fs-micro); letter-spacing: var(--ls-4);
-  text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-2xs);
+  text-transform: uppercase; color: var(--sub); margin-bottom: var(--space-2xs);
 }
 .gc-vcard-title {
   display: block; font-family: var(--font-d); font-weight: var(--fw-semibold);
@@ -2461,7 +2461,7 @@ body.edit .react-remove-btn { display: flex !important; }
 }
 .gc-lightbox-caption a {
   font-size: var(--fs-xs); letter-spacing: var(--ls-1);
-  text-transform: uppercase; color: var(--gold); white-space: nowrap;
+  text-transform: uppercase; color: var(--sub); white-space: nowrap;
 }
 
 /* ─── 2.e — Social strip (corralled embeds) ──────────────────────────────── */
