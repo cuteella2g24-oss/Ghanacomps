@@ -54,7 +54,7 @@ export default function Home() {
       <section className="gc-hero gc-chevrons loud">
         <div className="gc-hero-glow" />
         <div className="gc-hero-grid">
-          <div>
+          <div className="reveal">
             <div className="gc-scorebug">
               <span className="live">Live</span>
               <Editable tag="span" eid="hero-eyebrow" className="meta">Ghana Comps — Ghanaian Football Archive</Editable>
@@ -79,7 +79,7 @@ export default function Home() {
           </div>
 
           {/* NEWS PANEL — broadcast feed */}
-          <div>
+          <div className="reveal delay">
             <div className="gc-feed">
               <div className="gc-feed-h"><span className="gc-feed-dot" />Latest News</div>
               {news.length === 0 && (

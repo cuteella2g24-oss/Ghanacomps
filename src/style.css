@@ -141,6 +141,32 @@
   --img-filter: none;                 /* photo treatment */
   --shadow: 0 12px 32px -8px rgba(0,0,0,.55), 0 4px 12px -4px rgba(0,0,0,.35);
   --shadow-sm: 0 8px 22px -10px rgba(0,0,0,.55);  /* card hover depth */
+
+  /* ── MATERIALS (additive — POLISH_SPEC §3) ───────────────────────────────
+     Frosted glass surface + refined layered shadow tiers. Glass bg rides the
+     neutral surface value at reduced alpha so it tints correctly per theme;
+     blur + saturate give the "vibrancy" without a new hue. Re-declared in
+     BOTH light blocks below (gentler shadows for paper). No new brand color. */
+  --glass-bg:       rgba(20,20,20,0.62);    /* ≈ --surface @ .62 (dark) */
+  --glass-border:   rgba(255,255,255,0.12); /* a hair brighter than --line */
+  --glass-blur:     16px;                   /* backdrop-filter blur radius */
+  --glass-saturate: 130%;                   /* vibrancy pop */
+  /* Three-tier soft shadow — depth by elevation, not by border. Tier 1 rests
+     on cards; tier 2 on hover-lift; tier 3 on floating glass panels. --shadow
+     / --shadow-sm stay for back-compat. */
+  --elev-1: 0 1px 2px rgba(0,0,0,.28), 0 2px 8px -2px rgba(0,0,0,.32);
+  --elev-2: 0 2px 6px -1px rgba(0,0,0,.34), 0 12px 28px -8px rgba(0,0,0,.5);
+  --elev-3: 0 8px 40px -8px rgba(0,0,0,.58), 0 2px 10px -2px rgba(0,0,0,.4);
+
+  /* ── MOTION (additive — POLISH_SPEC §4) ──────────────────────────────────
+     One spring-ish ease-out for interactive depth, one gentle ease for
+     entrances, plus standard durations. Every motion using these is disabled
+     under prefers-reduced-motion. */
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);   /* ease-out "settle" */
+  --ease-soft:   cubic-bezier(0.4, 0, 0.2, 1);     /* material standard */
+  --dur-fast:  180ms;   /* hovers, small state */
+  --dur-med:   280ms;   /* card lift, panel */
+  --dur-slow:  520ms;   /* entrance reveal */
 }
 
 /* ─── RESET (in @layer base so Tailwind utilities can override it) ──────── */
@@ -181,11 +207,24 @@ html.theme-transition *::after {
 .stripe s:nth-child(3) { background: var(--green); }
 
 /* ─── NAV ────────────────────────────────────────────────── */
+/* Refined frosted glass (POLISH_SPEC §7). Opaque --nav-bg is the fallback;
+   the blur + saturate only apply where supported so unsupported browsers stay
+   fully legible. The mobile menu stays a SIBLING of <nav> (see .nav-menu) so
+   `position: fixed` resolves against the viewport, NOT this blurred nav —
+   backdrop-filter makes an element the containing block for fixed descendants,
+   so we must never nest a fixed child inside the nav. */
 .nav {
   position: sticky; top: 0; z-index: 900;
   background: var(--nav-bg);
-  backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border-bottom-color: var(--glass-border);
+  }
 }
 .nav-inner {
   display: flex; align-items: center;
@@ -218,14 +257,15 @@ html.theme-transition *::after {
   padding: 0 var(--space-lg); font-size: var(--fs-2xs); font-weight: var(--fw-medium);
   letter-spacing: var(--ls-2); text-transform: uppercase;
   color: var(--sub); border-bottom: 2px solid transparent;
-  white-space: nowrap; transition: color .2s, border-color .2s;
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft);
 }
 .nav-links a:hover, .nav-links a.on { color: var(--gold); border-bottom-color: var(--gold); }
 .nav-actions { display: flex; gap: var(--space-sm); margin-left: auto; }
 .btn-xs {
   padding: var(--space-xs) var(--space-lg); font-size: var(--fs-2xs); font-weight: var(--fw-medium);
   letter-spacing: var(--ls-2); text-transform: uppercase; border-radius: var(--radius-sm);
-  transition: all .2s; white-space: nowrap;
+  transition: all var(--dur-fast) var(--ease-soft); white-space: nowrap;
 }
 .btn-xs.solid { background: var(--white); color: var(--bg); }
 .btn-xs.solid:hover { background: var(--gold); }
@@ -282,7 +322,7 @@ html.theme-transition *::after {
   text-transform: uppercase;
   color: var(--body);
   width: fit-content;
-  transition: color .2s ease, transform .2s ease;
+  transition: color var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-spring);
 }
 .nav-menu-links a:hover,
 .nav-menu-links a.on { color: var(--gold); transform: translateX(var(--space-xs)); }
@@ -309,7 +349,7 @@ html.theme-transition *::after {
   background: transparent;
   color: var(--body);
   cursor: pointer;
-  transition: color .2s, border-color .2s, background .2s;
+  transition: color var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft);
 }
 .theme-toggle:hover,
 .social-btn:hover { color: var(--gold); border-color: var(--gold); }
@@ -339,7 +379,8 @@ html.theme-transition *::after {
   background: var(--surface);
 }
 section {
-  padding: var(--space-10xl) 5vw;
+  /* POLISH §1.1: section rhythm 52→60 desktop (mobile 40 unchanged below) */
+  padding: var(--space-11xl) 5vw;
   border-bottom: 1px solid var(--line);
 }
 section.alt { background: var(--surface); }
@@ -403,6 +444,7 @@ section.alt { background: var(--surface); }
 
 .lead {
   font-size: var(--fs-md); line-height: var(--lh-relaxed);
+  letter-spacing: 0.006em;  /* POLISH §2.2 */
   color: var(--body); max-width: 600px;
 }
 .lead strong { color: var(--white); }
@@ -415,7 +457,9 @@ section.alt { background: var(--surface); }
   display: inline-block; padding: var(--space-sm) var(--space-4xl);
   font-size: var(--fs-2xs); font-weight: var(--fw-medium);
   letter-spacing: var(--ls-3); text-transform: uppercase;
-  border-radius: var(--radius-lg); transition: all .2s;
+  border-radius: var(--radius-lg);
+  transition: color var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft),
+              border-color var(--dur-fast) var(--ease-soft), transform var(--dur-med) var(--ease-spring);
 }
 .btn.primary { background: var(--gold); color: var(--on-gold); }
 .btn.primary:hover { background: var(--gold-hi); transform: translateY(-1px); }
@@ -438,7 +482,8 @@ section.alt { background: var(--surface); }
   border: 1px solid rgb(var(--gold-rgb) / .35);
   border-radius: var(--radius-full);
   color: var(--gold);
-  transition: background .2s, color .2s, border-color .2s, transform .2s;
+  transition: background var(--dur-fast) var(--ease-soft), color var(--dur-fast) var(--ease-soft),
+              border-color var(--dur-fast) var(--ease-soft), transform var(--dur-med) var(--ease-spring);
 }
 .hero-follow-x:hover { background: var(--gold); color: var(--on-gold); border-color: var(--gold); transform: translateY(-1px); }
 .hero-follow-x svg { width: 15px; height: 15px; }
@@ -569,14 +614,14 @@ section.alt { background: var(--surface); }
 .comp-row {
   display: flex; justify-content: space-between; align-items: center;
   padding: var(--space-sm) 0; border-bottom: 1px solid var(--line);
-  transition: padding-left .15s; cursor: pointer;
+  transition: padding-left var(--dur-fast) var(--ease-soft); cursor: pointer;
 }
 .comp-row:last-child { border-bottom: none; }
 .comp-row:hover { padding-left: var(--space-xs); }
-.comp-row-t { font-size: var(--fs-sm); color: var(--white); transition: color .15s; }
+.comp-row-t { font-size: var(--fs-sm); color: var(--white); transition: color var(--dur-fast) var(--ease-soft); }
 .comp-row:hover .comp-row-t { color: var(--gold); }
 .comp-row-s { font-size: var(--fs-2xs); color: var(--sub); margin-top: var(--space-3xs); }
-.comp-arrow { font-size: var(--fs-sm); color: var(--gold); opacity: 0; transition: opacity .15s; }
+.comp-arrow { font-size: var(--fs-sm); color: var(--gold); opacity: 0; transition: opacity var(--dur-fast) var(--ease-soft); }
 .comp-row:hover .comp-arrow { opacity: 1; }
 .lc-footer, .lc-quote { background: var(--lift); padding: var(--space-md) var(--space-3xl); border-top: 1px solid var(--line); font-size: var(--fs-sm); color: var(--body); font-family: var(--font-a); font-style: italic; }
 
@@ -617,7 +662,7 @@ section.alt { background: var(--surface); }
   background: var(--raised); border: 1px solid var(--line);
   color: var(--white); padding: var(--space-md) var(--space-lg);
   font-size: var(--fs-base); width: 100%; outline: none;
-  border-radius: var(--radius-sm); transition: border-color .2s;
+  border-radius: var(--radius-sm); transition: border-color var(--dur-fast) var(--ease-soft);
 }
 .form-inp:focus { border-color: rgb(var(--gold-rgb) /.4); }
 .form-inp::placeholder { color: var(--sub); }
@@ -635,7 +680,7 @@ select.form-inp option { background: var(--raised); }
   padding: var(--space-xs) var(--space-xl); font-size: var(--fs-2xs); font-weight: var(--fw-medium);
   letter-spacing: var(--ls-2); text-transform: uppercase;
   border: 1px solid var(--line); color: var(--sub); border-radius: var(--radius-sm);
-  background: transparent; transition: all .18s;
+  background: transparent; transition: all var(--dur-fast) var(--ease-soft);
 }
 .f-btn:hover { border-color: var(--gold); color: var(--gold); }
 .f-btn.on { background: var(--gold); color: var(--on-gold); border-color: var(--gold); }
@@ -665,7 +710,7 @@ select.form-inp option { background: var(--raised); }
   background: var(--raised); border: 1px solid var(--line);
   padding: var(--space-sm) var(--space-xl); color: var(--white); font-size: var(--fs-base);
   width: 100%; max-width: 320px; outline: none; border-radius: var(--radius-sm);
-  transition: border-color .2s;
+  transition: border-color var(--dur-fast) var(--ease-soft);
 }
 .search:focus { border-color: rgb(var(--gold-rgb) /.4); }
 .search::placeholder { color: var(--sub); }
@@ -678,10 +723,11 @@ select.form-inp option { background: var(--raised); }
 /* ─── SPECIAL MOMENT ─────────────────────────────────────── */
 .special-box {
   background: rgb(var(--gold-rgb) /.04); border: 1px solid rgb(var(--gold-rgb) /.18);
+  box-shadow: var(--elev-1);  /* POLISH §7 About — a touch of gravity */
   padding: var(--space-6xl) var(--space-5xl); margin-top: var(--space-8xl);
 }
 .special-screens { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl); margin-top: var(--space-3xl); }
-.special-screen { border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; }
+.special-screen { border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--elev-1); }  /* POLISH §5 (image radius) + §7 About */
 .special-screen img { width: 100%; }
 .screen-lbl { font-size: var(--fs-micro); letter-spacing: var(--ls-3); text-transform: uppercase; color: var(--sub); text-align: center; padding: var(--space-sm); background: var(--lift); }
 
@@ -719,7 +765,8 @@ select.form-inp option { background: var(--raised); }
 .react-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-md); }
 .react-img {
   width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--line);
-  display: block; transition: border-color .2s, transform .2s;
+  display: block;
+  transition: border-color var(--dur-fast) var(--ease-soft), transform var(--dur-med) var(--ease-spring);  /* POLISH §7 About */
 }
 .react-img:hover { border-color: rgb(var(--gold-rgb) /.38); transform: scale(1.015); }
 
@@ -764,18 +811,54 @@ footer { padding: var(--space-8xl) 5vw var(--space-5xl); background: var(--surfa
 .foot-links { display: flex; flex-direction: row; align-items: center; justify-content: flex-end; gap: var(--space-sm); }
 .foot-bottom { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding-top: var(--space-3xl); font-size: var(--fs-2xs); color: var(--sub); letter-spacing: var(--ls-1); }
 
-/* ─── CARD DEPTH ─────────────────────────────────────────────
-   Elegant lift on hover: a soft shadow + gold-tinted border. Applied
-   across the card family; overrides their border-only transitions. */
+/* ─── CARD DEPTH (POLISH §4 — unified spring lift) ───────────
+   One consistent motion across the whole card family: rest on --elev-1, and on
+   hover lift translateY(-2px) with a shadow bump to --elev-2 + a gold-tinted
+   border, all on --ease-spring / --dur-med. Large surfaces lift, never scale.
+   The .gc-* card variants (gc-segcard, gc-fixture) declare the same lift in
+   their own blocks so nothing reads on the old 0.2s ease. Frozen under
+   reduced-motion (see the block below). */
 .card, .post-card, .legend-card, .player-card,
 .archive-card, .performer-card, .fixture, .gpa-card {
-  transition: border-color .25s ease, box-shadow .25s ease;
+  box-shadow: var(--elev-1);
+  transition: border-color var(--dur-med) var(--ease-spring),
+              box-shadow var(--dur-med) var(--ease-spring),
+              transform var(--dur-med) var(--ease-spring);
 }
 .card:hover, .post-card:hover, .legend-card:hover, .player-card:hover,
 .archive-card:hover, .performer-card:hover,
 .fixture:hover, .gpa-card:hover {
   border-color: rgb(var(--gold-rgb) / .3);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--elev-2); transform: translateY(-2px);
+}
+
+/* shadcn <Card> (What We Do, Home §4) — joins the card family lift. Authored
+   outside @layer so it wins over the Tailwind utility hover/shadow/duration
+   set on the component, no markup change. */
+[data-slot="card"] {
+  box-shadow: var(--elev-1);
+  transition: border-color var(--dur-med) var(--ease-spring),
+              box-shadow var(--dur-med) var(--ease-spring),
+              transform var(--dur-med) var(--ease-spring);
+}
+[data-slot="card"]:hover {
+  border-color: rgb(var(--gold-rgb) / .3);
+  box-shadow: var(--elev-2); transform: translateY(-2px);
+}
+
+/* POLISH §4 reduced-motion: card lift transform + transition off; the
+   instantaneous gold border-color hover stays (it's feedback, not motion). */
+@media (prefers-reduced-motion: reduce) {
+  .card, .post-card, .legend-card, .player-card,
+  .archive-card, .performer-card, .fixture, .gpa-card,
+  .gc-segcard, .gc-fixture, [data-slot="card"] {
+    transition: border-color var(--dur-fast) var(--ease-soft),
+                box-shadow var(--dur-fast) var(--ease-soft);
+  }
+  .card:hover, .post-card:hover, .legend-card:hover, .player-card:hover,
+  .archive-card:hover, .performer-card:hover,
+  .fixture:hover, .gpa-card:hover,
+  .gc-segcard:hover, .gc-fixture:hover, [data-slot="card"]:hover { transform: none; }
 }
 
 /* ─── REVEAL ───────────────────────────────────────────────
@@ -792,13 +875,17 @@ footer { padding: var(--space-8xl) 5vw var(--space-5xl); background: var(--surfa
 @media (prefers-reduced-motion: no-preference) {
   html.reveal-ready .reveal {
     opacity: 0;
-    transform: translateY(12px);
-    transition: opacity .6s ease, transform .6s ease;
+    /* POLISH §4.1: rise 14px + settle on the spring, over --dur-slow */
+    transform: translateY(14px);
+    transition: opacity var(--dur-slow) var(--ease-spring),
+                transform var(--dur-slow) var(--ease-spring);
   }
   html.reveal-ready .reveal.in {
     opacity: 1;
     transform: none;
   }
+  /* Hero feed panel settles ~80ms after the headline column (staggered entrance). */
+  html.reveal-ready .reveal.delay { transition-delay: 80ms; }
 }
 
 /* ─── ADMIN ──────────────────────────────────────────────── */
@@ -1107,7 +1194,7 @@ body.edit .admin-only.flex { display: flex; }
 body.edit .add-comp-panel { display: flex; }
 
 /* ─── REACT IMG WRAP ──────────────────────────────────────── */
-.react-img-wrap { position: relative; display: block; }
+.react-img-wrap { position: relative; display: block; border-radius: var(--radius-lg); box-shadow: var(--elev-1); }  /* POLISH §7 About */
 .react-remove-btn {
   display: none;
   position: absolute;
@@ -1223,7 +1310,8 @@ body.edit .react-remove-btn { display: flex !important; }
    chevron field (add .gc-chevrons + intensity) under z-index:1 content. */
 .gc-pagehead {
   position: relative; overflow: hidden;
-  padding: var(--space-10xl) 5vw var(--space-9xl);
+  /* POLISH §1.1: page-header rhythm 52/40 → 60/52 desktop */
+  padding: var(--space-11xl) 5vw var(--space-10xl);
   background: var(--surface); border-bottom: 1px solid var(--line);
 }
 .gc-pagehead-inner { position: relative; z-index: 1; }
@@ -1234,11 +1322,12 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-ph-title {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
   font-size: var(--fs-d2); text-transform: uppercase;
-  letter-spacing: -0.015em; line-height: var(--lh-display);
+  letter-spacing: -0.02em; line-height: var(--lh-display);  /* POLISH §2.1 */
 }
 .gc-ph-title .gold { color: var(--gold); }
 .gc-ph-lead {
   font-size: var(--fs-md); line-height: var(--lh-relaxed);
+  letter-spacing: 0.006em;  /* POLISH §2.2 */
   color: var(--body); max-width: 64ch; margin-top: var(--space-lg);
 }
 
@@ -1256,7 +1345,9 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-hero-grid {
   position: relative; z-index: 1;
   display: grid; grid-template-columns: 1.15fr .85fr;
-  gap: var(--space-9xl); align-items: center; width: 100%;
+  /* POLISH §1.2: hero column gutter 40→52; align-items:center keeps the feed
+     panel vertically centred on the headline mass (§2.3, REVAMP §5 risk 1). */
+  gap: var(--space-10xl); align-items: center; width: 100%;
 }
 /* Headline → lead rhythm (§5 risk 1): score-bug margin-bottom is --space-4xl,
    the display headline sits flush, the lead hangs off a gold left-rule with a
@@ -1265,10 +1356,11 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-hero-title {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
   font-size: var(--fs-d1); line-height: var(--lh-display);
-  letter-spacing: -0.02em; text-transform: uppercase;
+  letter-spacing: -0.025em; text-transform: uppercase;  /* POLISH §2.1 */
 }
 .gc-hero-lead {
   font-size: var(--fs-md); line-height: var(--lh-relaxed); color: var(--body);
+  letter-spacing: 0.006em;  /* POLISH §2.2 — calm large-paragraph tracking */
   max-width: 44ch; margin-top: var(--space-5xl);
   border-left: 3px solid var(--gold); padding-left: var(--space-2xl);
 }
@@ -1281,7 +1373,26 @@ body.edit .react-remove-btn { display: flex !important; }
    The Latest News panel restyled as a live feed: framed card, header with a
    blinking dot, flag-colored tags, gold left-edge reveal on hover. Preserves
    the admin remove control + add panel wired in Home.tsx. */
-.gc-feed { border: 1px solid var(--line); background: var(--raised); }
+/* POLISH §3.1 + §5: the ONE floating glass panel on Home. Frosted over the
+   chevron field behind it. Opaque --raised is the fallback (fully legible on
+   no-blur browsers); the glass + blur only apply where supported. The panel
+   has NO position:fixed descendant, so the backdrop-filter containing-block
+   gotcha (see .nav) does not apply here. Promoted to --radius-xl + --elev-3
+   as a floating panel. Contrast guard: the neutral non-transparent --glass-bg
+   tint mutes the gold band before --white titles sit on it (§6, §8 risk 1). */
+.gc-feed {
+  border: 1px solid var(--line); background: var(--raised);
+  border-radius: var(--radius-xl); overflow: hidden;
+  box-shadow: var(--elev-3);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .gc-feed {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border-color: var(--glass-border);
+  }
+}
 .gc-feed-h {
   display: flex; align-items: center; gap: var(--space-sm);
   background: var(--lift); padding: var(--space-md) var(--space-2xl);
@@ -1297,7 +1408,8 @@ body.edit .react-remove-btn { display: flex !important; }
   display: flex; align-items: center; gap: var(--space-md);
   padding: var(--space-lg) var(--space-2xl);
   border-bottom: 1px solid var(--line); border-left: 3px solid transparent;
-  transition: background .2s, border-color .2s;
+  transition: background var(--dur-fast) var(--ease-soft),
+              border-color var(--dur-fast) var(--ease-soft);
 }
 .gc-feed-item:last-child { border-bottom: none; }
 .gc-feed-item:hover { background: var(--lift); border-left-color: var(--gold); }
@@ -1330,7 +1442,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-h2 {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
   font-size: var(--fs-d2); text-transform: uppercase;
-  letter-spacing: -0.015em; line-height: var(--lh-display);
+  letter-spacing: -0.02em; line-height: var(--lh-display);  /* POLISH §2.1 */
 }
 .gc-h2.tight { margin-bottom: var(--space-xs); }
 .gc-h2 .gold { color: var(--gold); }
@@ -1340,17 +1452,25 @@ body.edit .react-remove-btn { display: flex !important; }
    01/02/03 numeral. The card body stays the .editable gpa content. */
 .gc-segcards {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4xl);
-  margin: var(--space-6xl) 0 var(--space-5xl);
+  /* POLISH §1.2: segment-cards top margin 28→36 */
+  margin: var(--space-8xl) 0 var(--space-5xl);
 }
 .gc-segcard {
   background: var(--raised); border: 1px solid var(--line);
-  border-top: 3px solid var(--gold);
+  border-top: 3px solid var(--gold); border-radius: var(--radius-md);  /* POLISH §5 */
   padding: var(--space-5xl); position: relative; overflow: hidden;
-  transition: border-color .25s ease, box-shadow .25s ease;
+  /* POLISH §4: rest on --elev-1, spring lift on hover */
+  box-shadow: var(--elev-1);
+  transition: border-color var(--dur-med) var(--ease-spring),
+              box-shadow var(--dur-med) var(--ease-spring),
+              transform var(--dur-med) var(--ease-spring);
 }
 .gc-segcard.r  { border-top-color: var(--red); }
 .gc-segcard.gr { border-top-color: var(--green); }
-.gc-segcard:hover { border-color: rgb(var(--gold-rgb) / .3); box-shadow: var(--shadow-sm); }
+.gc-segcard:hover {
+  border-color: rgb(var(--gold-rgb) / .3);
+  box-shadow: var(--elev-2); transform: translateY(-2px);
+}
 .gc-segcard-n {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
   font-size: var(--fs-4xl); line-height: var(--lh-none);
@@ -1370,6 +1490,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-segbody {
   font-family: var(--font-a); font-style: italic;
   font-size: var(--fs-base); color: var(--body); line-height: var(--lh-body);
+  letter-spacing: 0.004em;  /* POLISH §2.2 — serif editorial body */
 }
 
 /* ─── FOUNDATION RESPONSIVE ──────────────────────────────────
@@ -1414,7 +1535,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-rule.grid-gap { margin-bottom: var(--space-8xl); }
 .gc-rule-l {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
-  font-size: var(--fs-d3); color: var(--white); letter-spacing: -0.01em;
+  font-size: var(--fs-d3); color: var(--white); letter-spacing: -0.014em;  /* POLISH §2.1 */
   line-height: var(--lh-snug);
 }
 .gc-rule-l .gold { color: var(--gold); }
@@ -1438,7 +1559,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-col-head {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
   font-size: var(--fs-d3); color: var(--white);
-  line-height: var(--lh-snug); letter-spacing: -0.01em;
+  line-height: var(--lh-snug); letter-spacing: -0.014em;  /* POLISH §2.1 */
   margin-bottom: var(--space-4xl);
 }
 .gc-col-head .gold { color: var(--gold); }
@@ -1467,6 +1588,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-editorial .gpa-write-body {
   font-family: var(--font-a); font-size: var(--fs-md);
   line-height: var(--lh-relaxed); color: var(--body);
+  letter-spacing: 0.004em;  /* POLISH §2.2 */
 }
 .gc-editorial .gpa-write-body::first-letter {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
@@ -1487,7 +1609,7 @@ body.edit .react-remove-btn { display: flex !important; }
   display: grid; grid-template-columns: auto 1fr auto;
   align-items: baseline; gap: var(--space-lg);
   padding: var(--space-lg) 0; border-bottom: 1px solid var(--line);
-  transition: padding-left .18s ease, background .18s ease;
+  transition: padding-left var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft);  /* POLISH §4.1 */
 }
 .gc-entry:hover {
   padding-left: var(--space-sm);
@@ -1498,7 +1620,8 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-entry-name {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
   font-size: var(--fs-xl); color: var(--white); line-height: var(--lh-none);
-  transition: color .18s ease;
+  letter-spacing: -0.005em;  /* POLISH §2.1 */
+  transition: color var(--dur-fast) var(--ease-soft);
 }
 .gc-entry:hover .gc-entry-name { color: var(--gold); }
 .gc-entry-meta {
@@ -1545,7 +1668,7 @@ body.edit .react-remove-btn { display: flex !important; }
   display: grid; grid-template-columns: auto 1fr auto;
   align-items: baseline; gap: var(--space-lg);
   padding: var(--space-4xl) 0; border-bottom: 1px solid var(--line);
-  transition: padding-left .18s ease, background .18s ease;
+  transition: padding-left var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft);  /* POLISH §4.1 */
 }
 .gc-lentry:hover {
   padding-left: var(--space-sm);
@@ -1559,7 +1682,8 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-lname {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
   font-size: var(--fs-2xl); color: var(--white); line-height: var(--lh-none);
-  transition: color .18s ease;
+  letter-spacing: -0.008em;  /* POLISH §2.1 */
+  transition: color var(--dur-fast) var(--ease-soft);
 }
 .gc-lentry:hover .gc-lname { color: var(--gold); }
 .gc-lmeta {
@@ -1569,6 +1693,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-lbio {
   font-family: var(--font-a); font-size: var(--fs-base);
   line-height: var(--lh-body); color: var(--body);
+  letter-spacing: 0.004em;  /* POLISH §2.2 */
   margin-top: var(--space-sm); max-width: 46ch; padding: 0;
 }
 .gc-lcomps { margin-top: var(--space-md); display: flex; flex-direction: column; gap: var(--space-2xs); }
@@ -1598,6 +1723,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-marquee-legend {
   border: 1px solid rgb(var(--gold-rgb) / .22);
   background: rgb(var(--gold-rgb) / .04);
+  box-shadow: var(--elev-1);  /* POLISH §7 Legends — a whisper of lift off the page */
   padding: var(--space-9xl) var(--space-8xl); margin-bottom: var(--space-8xl);
   position: relative; display: grid; grid-template-columns: 1fr;
   gap: var(--space-4xl); text-align: center; justify-items: center;
@@ -1644,6 +1770,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-prose {
   font-family: var(--font-a); font-size: var(--fs-md);
   line-height: var(--lh-relaxed); color: var(--body); max-width: 60ch;
+  letter-spacing: 0.004em;  /* POLISH §2.2 */
 }
 .gc-prose p + p { margin-top: var(--space-lg); }
 .gc-prose strong { color: var(--white); font-family: var(--font-b); font-weight: var(--fw-medium); }
@@ -1685,6 +1812,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-editor {
   background: var(--raised); border: 1px solid var(--line);
   border-left: 3px solid var(--gold);
+  box-shadow: var(--elev-1);  /* POLISH §7 Black Stars */
   padding: var(--space-6xl) var(--space-5xl); max-width: 760px;
 }
 .gc-editor .editor-heading {
@@ -1694,6 +1822,7 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-editor .editor-body {
   font-family: var(--font-a); font-style: italic;
   font-size: var(--fs-base); color: var(--body); line-height: var(--lh-relaxed);
+  letter-spacing: 0.004em;  /* POLISH §2.2 */
 }
 .gc-editor .editor-body p + p { margin-top: var(--space-lg); }
 
@@ -1702,15 +1831,23 @@ body.edit .react-remove-btn { display: flex !important; }
    Playfair title, ghost CTA. The stake write-up + shadcn ghost Button stay. */
 .gc-fixture {
   background: var(--raised); border: 1px solid var(--line);
+  border-radius: var(--radius-md);  /* POLISH §5 */
   padding: var(--space-5xl) var(--space-4xl);
   position: relative; overflow: hidden;
-  transition: border-color .25s ease, box-shadow .25s ease;
+  /* POLISH §4: unified card-family lift */
+  box-shadow: var(--elev-1);
+  transition: border-color var(--dur-med) var(--ease-spring),
+              box-shadow var(--dur-med) var(--ease-spring),
+              transform var(--dur-med) var(--ease-spring);
 }
 .gc-fixture::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
   background: var(--gold);
 }
-.gc-fixture:hover { border-color: rgb(var(--gold-rgb) / .3); box-shadow: var(--shadow-sm); }
+.gc-fixture:hover {
+  border-color: rgb(var(--gold-rgb) / .3);
+  box-shadow: var(--elev-2); transform: translateY(-2px);
+}
 .gc-fix-lbl {
   font-size: var(--fs-micro); letter-spacing: var(--ls-4);
   text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-sm);
@@ -1737,11 +1874,15 @@ body.edit .react-remove-btn { display: flex !important; }
 }
 .gc-md-cell {
   background: var(--raised); padding: var(--space-4xl) var(--space-3xl);
-  position: relative; overflow: hidden; transition: background .2s ease;
+  position: relative; overflow: hidden;
+  /* POLISH §4: re-time to tokens. Seam-grid cell — background hover only, no
+     transform (a lift would break the hairline seam), keeping scoreboard identity. */
+  transition: background var(--dur-fast) var(--ease-soft);
 }
 .gc-md-cell::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: var(--gold); opacity: 0; transition: opacity .2s ease;
+  background: var(--gold); opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-soft);
 }
 .gc-md-cell:hover { background: var(--lift); }
 .gc-md-cell:hover::before { opacity: 1; }
@@ -1769,7 +1910,9 @@ body.edit .react-remove-btn { display: flex !important; }
 }
 .gc-arc {
   background: var(--raised); padding: var(--space-3xl);
-  position: relative; overflow: hidden; transition: background .2s ease;
+  position: relative; overflow: hidden;
+  /* POLISH §4: re-time; seam-grid library cell — background hover only. */
+  transition: background var(--dur-fast) var(--ease-soft);
 }
 .gc-arc::before {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
@@ -1821,6 +1964,16 @@ body.edit .react-remove-btn { display: flex !important; }
   --nav-bg: rgba(240,236,230,0.97);
   --img-filter: brightness(0.95);
   --shadow: 0 12px 32px -8px rgba(0,0,0,.18), 0 4px 12px -4px rgba(0,0,0,.1);
+  --shadow-sm: 0 8px 22px -10px rgba(0,0,0,.16);
+  /* ── MATERIALS re-declared for paper (POLISH_SPEC §3, §6) ──
+     Glass tint rides the light nav-bg family; blur + saturate identical.
+     Shadow tiers are gentle (.06–.16) so cards on paper get a soft realistic
+     drop, never a muddy dark halo. */
+  --glass-bg:     rgba(240,236,230,0.68);  /* ≈ --nav-bg family (light) */
+  --glass-border: rgba(0,0,0,0.10);
+  --elev-1: 0 1px 2px rgba(0,0,0,.06), 0 2px 8px -2px rgba(0,0,0,.10);
+  --elev-2: 0 2px 6px -1px rgba(0,0,0,.10), 0 12px 28px -8px rgba(0,0,0,.16);
+  --elev-3: 0 8px 40px -8px rgba(0,0,0,.16), 0 2px 10px -2px rgba(0,0,0,.10);
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
@@ -1842,5 +1995,13 @@ body.edit .react-remove-btn { display: flex !important; }
     --img-filter: brightness(0.95);
     --shadow: 0 12px 32px -8px rgba(0,0,0,.18), 0 4px 12px -4px rgba(0,0,0,.1);
     --shadow-sm: 0 8px 22px -10px rgba(0,0,0,.16);
+    /* ── MATERIALS re-declared for paper (POLISH_SPEC §3, §6) — see the
+       [data-theme="light"] block above; duplicated intentionally so the
+       system-preference path never inherits dark shadows/glass. */
+    --glass-bg:     rgba(240,236,230,0.68);
+    --glass-border: rgba(0,0,0,0.10);
+    --elev-1: 0 1px 2px rgba(0,0,0,.06), 0 2px 8px -2px rgba(0,0,0,.10);
+    --elev-2: 0 2px 6px -1px rgba(0,0,0,.10), 0 12px 28px -8px rgba(0,0,0,.16);
+    --elev-3: 0 8px 40px -8px rgba(0,0,0,.16), 0 2px 10px -2px rgba(0,0,0,.10);
   }
 }
