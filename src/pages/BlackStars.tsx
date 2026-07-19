@@ -1,57 +1,18 @@
-import { useState } from 'react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import SportyIcon from '../components/SportyIcon';
-import { useAdmin } from '../contexts/AdminContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Button } from '@/components/ui/button';
 import HighlightsSection from '../components/HighlightsSection';
 import { type Clip, DEFAULT_BS_HIGHLIGHTS } from '../data/clips';
 
-interface ArchiveItem { player: string; match: string; comp: string; url: string; }
 
 export default function BlackStars() {
-  const { isAdmin } = useAdmin();
-  const [archive, setArchive] = useLocalStorage<ArchiveItem[]>('gc_archive', []);
   const [bsHighlights, setBsHighlights] = useLocalStorage<Clip[]>('gc_bs_highlights', DEFAULT_BS_HIGHLIGHTS);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showAddPanel, setShowAddPanel] = useState(false);
-  const [arcPlayer, setArcPlayer] = useState('');
-  const [arcMatch, setArcMatch] = useState('');
-  const [arcComp, setArcComp] = useState('');
-  const [arcUrl, setArcUrl] = useState('');
 
-  function addArchiveCard() {
-    if (!arcPlayer.trim() || !arcMatch.trim() || !arcUrl.trim()) { alert('Please fill in player, match and URL at minimum.'); return; }
-    setArchive([...archive, { player: arcPlayer.trim(), match: arcMatch.trim(), comp: arcComp.trim(), url: arcUrl.trim() }]);
-    setArcPlayer(''); setArcMatch(''); setArcComp(''); setArcUrl('');
-    setShowAddPanel(false);
-  }
 
-  function removeArchive(i: number) {
-    if (!confirm('Remove this card?')) return;
-    const updated = [...archive];
-    updated.splice(i, 1);
-    setArchive(updated);
-  }
-
-  function editArchiveCard(i: number) {
-    const item = archive[i];
-    const player = prompt('Player name:', item.player);
-    if (player === null) return;
-    const match = prompt('Match:', item.match);
-    if (match === null) return;
-    const comp = prompt('Competition / date / stats:', item.comp);
-    const url = prompt('X or TikTok URL:', item.url);
-    if (url === null) return;
-    const updated = [...archive];
-    updated[i] = { player: player || item.player, match: match || item.match, comp: comp || '', url: url || item.url };
-    setArchive(updated);
-  }
-
-  const sq = searchQuery.toLowerCase().trim();
 
   return (
     <>
@@ -125,104 +86,6 @@ export default function BlackStars() {
         </div>
       </section>
 
-      {/* ARCHIVE */}
-      <section className="alt reveal">
-        <div className="gc-eyebrow">Black Stars Standouts Archive</div>
-        <h2 className="gc-h2 tight">Player <span className="gold">Archive.</span></h2>
-        <p className="lead" style={{ marginBottom: 'var(--space-4xl)', fontSize: 'var(--fs-base)' }}>Every current Black Stars player we have covered. Updated every time Ghana plays or a new comp drops. When players retire they move to the Legends section.</p>
-
-        <input type="text" className="search archive-search" placeholder="Search by player name..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
-
-        <div className="gc-lib">
-          {/* Thomas Partey */}
-          <div className="gc-arc archive-card" data-player="thomas partey" style={{ display: !sq || 'thomas partey'.includes(sq) ? '' : 'none' }}>
-            <Editable tag="div" eid="a-partey-name" className="archive-player">Thomas Partey</Editable>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xs)', marginBottom: 'var(--space-md)' }}>
-              <div style={{ borderLeft: '2px solid rgb(var(--gold-rgb) / .3)', paddingLeft: 'var(--space-sm)' }}>
-                <Editable tag="div" eid="a-partey-m1" className="archive-match">vs Nigeria — 2022 World Cup Playoff</Editable>
-                <Editable tag="div" eid="a-partey-c1" className="archive-comp">Home and Away · March 2022</Editable>
-                <a href="https://x.com/Ghanacomps/status/2029157648499966060" target="_blank" rel="noopener" className="archive-watch" style={{ marginTop: 'var(--space-2xs)', display: 'inline-flex' }}>▶ Watch on X</a>
-              </div>
-            </div>
-            {isAdmin && <div className="card-actions"><button className="btn-edit-card" onClick={() => alert('Click directly on any text in this card to edit it.')}>✏ Edit</button></div>}
-          </div>
-
-          {/* Mohammed Kudus */}
-          <div className="gc-arc archive-card" data-player="mohammed kudus" style={{ display: !sq || 'mohammed kudus'.includes(sq) ? '' : 'none' }}>
-            <Editable tag="div" eid="a-kudus-name" className="archive-player">Mohammed Kudus</Editable>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
-              <div style={{ borderLeft: '2px solid rgb(var(--gold-rgb) / .3)', paddingLeft: 'var(--space-sm)' }}>
-                <Editable tag="div" eid="a-kudus-m1" className="archive-match">vs South Korea — 2022 FIFA World Cup</Editable>
-                <Editable tag="div" eid="a-kudus-c1" className="archive-comp">Group Stage · November 2022</Editable>
-                <a href="https://x.com/Ghanacomps/status/2027431816550879268" target="_blank" rel="noopener" className="archive-watch" style={{ marginTop: 'var(--space-2xs)', display: 'inline-flex' }}>▶ Watch on X</a>
-              </div>
-              <div style={{ borderLeft: '2px solid rgb(var(--gold-rgb) / .3)', paddingLeft: 'var(--space-sm)' }}>
-                <Editable tag="div" eid="a-kudus-m2" className="archive-match">vs Portugal — 2022 FIFA World Cup</Editable>
-                <Editable tag="div" eid="a-kudus-c2" className="archive-comp">Group Stage · November 2022 · 9.6K Views · 457 Likes</Editable>
-                <a href="https://x.com/Ghanacomps/status/2023876020798173561" target="_blank" rel="noopener" className="archive-watch" style={{ marginTop: 'var(--space-2xs)', display: 'inline-flex' }}>▶ Watch on X</a>
-              </div>
-              <div style={{ borderLeft: '2px solid rgb(var(--gold-rgb) / .3)', paddingLeft: 'var(--space-sm)' }}>
-                <Editable tag="div" eid="a-kudus-m3" className="archive-match">vs Brazil — 2022 Friendly</Editable>
-                <Editable tag="div" eid="a-kudus-c3" className="archive-comp">Pre World Cup · September 2022 · 13K Views · 398 Likes</Editable>
-                <a href="https://x.com/Ghanacomps/status/2034949768678424742" target="_blank" rel="noopener" className="archive-watch" style={{ marginTop: 'var(--space-2xs)', display: 'inline-flex' }}>▶ Watch on X</a>
-              </div>
-            </div>
-            {isAdmin && <div className="card-actions"><button className="btn-edit-card" onClick={() => alert('Edit Kudus comps — click directly on the text above to edit it in admin mode.')}>✏ Edit</button></div>}
-          </div>
-
-          {/* Daniel Kofi Kyereh */}
-          <div className="gc-arc archive-card" data-player="daniel kofi kyereh" style={{ display: !sq || 'daniel kofi kyereh'.includes(sq) ? '' : 'none' }}>
-            <Editable tag="div" eid="a-kyereh-name" className="archive-player">Daniel Kofi Kyereh</Editable>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xs)', marginBottom: 'var(--space-md)' }}>
-              <div style={{ borderLeft: '2px solid rgb(var(--gold-rgb) / .3)', paddingLeft: 'var(--space-sm)' }}>
-                <Editable tag="div" eid="a-kyereh-m1" className="archive-match">vs Comoros — 2021 AFCON</Editable>
-                <Editable tag="div" eid="a-kyereh-c1" className="archive-comp">Group Stage · January 2022 · 38K Views · 521 Likes</Editable>
-                <a href="https://x.com/Ghanacomps/status/2030726896866992425" target="_blank" rel="noopener" className="archive-watch" style={{ marginTop: 'var(--space-2xs)', display: 'inline-flex' }}>▶ Watch on X</a>
-              </div>
-            </div>
-            {isAdmin && <div className="card-actions"><button className="btn-edit-card" onClick={() => alert('Click directly on the text above to edit it in admin mode.')}>✏ Edit</button></div>}
-          </div>
-
-          {/* Dynamic archive cards */}
-          {archive.filter(item => !sq || item.player.toLowerCase().includes(sq)).map((item, i) => (
-            <div key={i} className="gc-arc archive-card" data-player={item.player.toLowerCase()}>
-              <div className="archive-player">{item.player}</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xs)', marginBottom: 'var(--space-md)' }}>
-                <div style={{ borderLeft: '2px solid rgb(var(--gold-rgb) / .3)', paddingLeft: 'var(--space-sm)' }}>
-                  <div className="archive-match">{item.match}</div>
-                  <div className="archive-comp">{item.comp}</div>
-                  <a href={item.url} target="_blank" rel="noopener" className="archive-watch" style={{ marginTop: 'var(--space-2xs)', display: 'inline-flex' }}>▶ Watch on X</a>
-                </div>
-              </div>
-              {isAdmin && (
-                <div className="card-actions">
-                  <button className="btn-edit-card" onClick={() => editArchiveCard(i)}>✏ Edit</button>
-                  <button className="btn-remove-card" onClick={() => removeArchive(i)}>✕ Remove</button>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div style={{ marginTop: 'var(--space-2xl)', display: 'flex', gap: 'var(--space-md)', flexWrap: 'wrap', alignItems: 'center' }}>
-          <button className="add-archive-btn" onClick={() => setShowAddPanel(s => !s)}>+ Add to Archive</button>
-        </div>
-
-        {isAdmin && showAddPanel && (
-          <div style={{ marginTop: 'var(--space-xl)', padding: 'var(--space-3xl)', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
-            <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-md)' }}>Add New Archive Card</div>
-            <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap' }}>
-              <input type="text" placeholder="Player name..." value={arcPlayer} onChange={e => setArcPlayer(e.target.value)} style={{ flex: 1, minWidth: '140px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
-              <input type="text" placeholder="Match (e.g. vs Nigeria — 2022 WC Playoff)..." value={arcMatch} onChange={e => setArcMatch(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
-              <input type="text" placeholder="Competition, date, stats..." value={arcComp} onChange={e => setArcComp(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
-              <input type="url" placeholder="X or TikTok URL..." value={arcUrl} onChange={e => setArcUrl(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
-              <Button size="sm" onClick={addArchiveCard}>Add</Button>
-              <Button variant="outline" size="sm" onClick={() => setShowAddPanel(false)}>Cancel</Button>
-            </div>
-            <p style={{ fontSize: 'var(--fs-xs)', color: 'var(--sub)', marginTop: 'var(--space-sm)', fontStyle: 'italic' }}>To add multiple comps to one player — add the card first, then use the Edit button to update it.</p>
-          </div>
-        )}
-      </section>
 
       <Footer />
       <Stripe />
