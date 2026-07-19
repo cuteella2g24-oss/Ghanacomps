@@ -16,6 +16,19 @@ const leagueLabels: Record<string, string> = {
   bl: 'Bundesliga', ch: 'Championship', ot: 'Other Leagues'
 };
 
+// Filter bar: [code, label, badge?]. Named leagues show an official crest on a
+// neutral chip above the title; All/Other stay text-only.
+const leagueFilters: [string, string, string?][] = [
+  ['all', 'All'],
+  ['pl', 'Premier League', '/assets/leagues/pl.svg'],
+  ['l1', 'Ligue 1', '/assets/leagues/l1.svg'],
+  ['ll', 'La Liga', '/assets/leagues/ll.svg'],
+  ['sa', 'Serie A', '/assets/leagues/sa.svg'],
+  ['bl', 'Bundesliga', '/assets/leagues/bl.svg'],
+  ['ch', 'Championship', '/assets/leagues/ch.svg'],
+  ['ot', 'Other'],
+];
+
 const staticPlayers = [
   { eid: 'p1', lg: 'pl', league: 'Premier League', name: 'Mohammed Kudus', meta: 'Tottenham<s>·</s>MF' },
   { eid: 'p2', lg: 'pl', league: 'Premier League', name: 'Antoine Semenyo', meta: 'Manchester City<s>·</s>FW' },
@@ -127,8 +140,19 @@ export default function Players() {
           <h1 className="gc-ph-title">Current <span className="gold">Players.</span></h1>
           <p className="gc-ph-lead">Click any weekend performer card to watch the comp on X or TikTok.</p>
           <div className="filters" style={{ marginTop: 'var(--space-4xl)', marginBottom: 0 }}>
-            {[['all','All'],['pl','Premier League'],['l1','Ligue 1'],['ll','La Liga'],['sa','Serie A'],['bl','Bundesliga'],['ch','Championship'],['ot','Other']].map(([lg, label]) => (
-              <button key={lg} className={`f-btn${activeLeague === lg ? ' on' : ''}`} onClick={() => setActiveLeague(lg)}>{label}</button>
+            {leagueFilters.map(([lg, label, badge]) => (
+              <button
+                key={lg}
+                className={`f-btn${badge ? ' f-btn-badge' : ''}${activeLeague === lg ? ' on' : ''}`}
+                onClick={() => setActiveLeague(lg)}
+              >
+                {badge && (
+                  <span className="f-btn-crest">
+                    <img src={badge} alt="" aria-hidden="true" />
+                  </span>
+                )}
+                <span className="f-btn-label">{label}</span>
+              </button>
             ))}
           </div>
         </div>

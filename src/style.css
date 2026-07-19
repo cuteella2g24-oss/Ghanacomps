@@ -640,6 +640,26 @@ select.form-inp option { background: var(--raised); }
 .f-btn:hover { border-color: var(--gold); color: var(--gold); }
 .f-btn.on { background: var(--gold); color: var(--on-gold); border-color: var(--gold); }
 
+/* Named-league filters: crest chip stacked above the title. All/Other stay
+   plain text and are matched to the taller badge buttons' height. */
+.f-btn-badge {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--space-xs); padding: var(--space-sm) var(--space-lg) var(--space-xs);
+}
+/* Neutral near-white chip so dark/monochrome and light crests read on both
+   themes. Fixed neutral (FE-owned geometry) — no token fits this need. */
+.f-btn-crest {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 34px; min-width: 34px; padding: 0 var(--space-xs);
+  background: #f4f2ec; border-radius: var(--radius-lg);
+}
+.f-btn-crest img { display: block; height: 26px; width: auto; max-width: 64px; object-fit: contain; }
+.f-btn-label { display: block; line-height: 1; }
+/* Keep the plain text buttons (All/Other) vertically centered against the
+   taller badge buttons so the row stays balanced. */
+.filters { align-items: stretch; }
+.f-btn:not(.f-btn-badge) { display: inline-flex; align-items: center; }
+
 /* ─── SEARCH ─────────────────────────────────────────────── */
 .search {
   background: var(--raised); border: 1px solid var(--line);
