@@ -7,9 +7,8 @@ import Editable from '../components/Editable';
 import SportyIcon from '../components/SportyIcon';
 import { useAdmin } from '../contexts/AdminContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
 import HeroVideo from '../components/HeroVideo';
 import HighlightsSection from '../components/HighlightsSection';
 import SocialStrip from '../components/SocialStrip';
@@ -221,15 +220,15 @@ export default function Home() {
         <div className="g-seam">
           <a href="https://x.com/Ghanacomps/status/2021318754206933129" target="_blank" rel="noopener" className="post-card">
             <div className="post-thumb"><img src="/assets/x_fatawu.jpg" alt="Fatawu vs Southampton" /><div className="post-badge">X</div><div className="post-overlay"><div className="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></div></div></div>
-            <div className="post-body"><div className="post-tag" style={{ color: 'var(--red)' }}>★ Biggest Post — 1.3M Views</div><div className="post-title">Fatawu Issahaku — Stunning Goal vs Southampton</div><p className="post-desc">The clip that put Ghana Comps on the map.</p><span className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'mt-2.5')}>Watch on X</span></div>
+            <div className="post-body"><div className="post-tag" style={{ color: 'var(--red)' }}>★ Biggest Post — 1.3M Views</div><div className="post-title">Fatawu Issahaku — Stunning Goal vs Southampton</div><p className="post-desc">The clip that put Ghana Comps on the map.</p><span className="post-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></span></div>
           </a>
           <a href="https://x.com/Ghanacomps/status/2028823927577817257" target="_blank" rel="noopener" className="post-card">
             <div className="post-thumb"><img src="/assets/x_essien.jpg" alt="Essien vs Italy 2006" /><div className="post-badge">X</div><div className="post-overlay"><div className="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></div></div></div>
-            <div className="post-body"><div className="post-tag">Legend</div><div className="post-title">Michael Essien vs Italy — 2006 World Cup</div><p className="post-desc">Essien saw this and reposted it on his TikTok and Facebook. Two months in and the legends were watching.</p><span className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'mt-2.5')}>Watch on X</span></div>
+            <div className="post-body"><div className="post-tag">Legend</div><div className="post-title">Michael Essien vs Italy — 2006 World Cup</div><p className="post-desc">Essien saw this and reposted it on his TikTok and Facebook. Two months in and the legends were watching.</p><span className="post-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></span></div>
           </a>
           <a href="https://x.com/Ghanacomps/status/2029905846784655770" target="_blank" rel="noopener" className="post-card">
             <div className="post-thumb"><img src="/assets/x_abedi.jpg" alt="Abedi Pele vs Nigeria 1992" /><div className="post-badge">X</div><div className="post-overlay"><div className="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></div></div></div>
-            <div className="post-body"><div className="post-tag">Legend</div><div className="post-title">Abedi Pele vs Nigeria — 1992 AFCON</div><div className="post-stats">18K Views · 806 Likes</div><p className="post-desc">Ghana's greatest ever. The archive doing what it does.</p><span className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'mt-2.5')}>Watch on X</span></div>
+            <div className="post-body"><div className="post-tag">Legend</div><div className="post-title">Abedi Pele vs Nigeria — 1992 AFCON</div><div className="post-stats">18K Views · 806 Likes</div><p className="post-desc">Ghana's greatest ever. The archive doing what it does.</p><span className="post-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg></span></div>
           </a>
         </div>
         <div className="row-btns" style={{ marginTop: 'var(--space-4xl)' }}>

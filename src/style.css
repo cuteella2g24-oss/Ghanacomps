@@ -273,17 +273,19 @@ html.theme-transition *::after {
   margin-top: var(--space-3xs);
 }
 .nav-links {
-  display: flex; align-items: center; gap: 0; flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: var(--space-3xs); flex: 1;
 }
 .nav-links a {
-  display: flex; align-items: center; height: 56px;
-  padding: 0 var(--space-lg); font-size: var(--fs-2xs); font-weight: var(--fw-medium);
+  display: flex; align-items: center;
+  padding: var(--space-2xs) var(--space-lg); font-size: var(--fs-2xs); font-weight: var(--fw-medium);
   letter-spacing: var(--ls-2); text-transform: uppercase;
-  color: var(--sub); border-bottom: 2px solid transparent;
+  color: var(--sub); border-radius: var(--radius-pill);
   white-space: nowrap;
-  transition: color var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft);
+  transition: color var(--dur-fast) var(--ease-soft), background var(--dur-med) var(--ease-soft);
 }
-.nav-links a:hover, .nav-links a.on { color: var(--gold); border-bottom-color: var(--gold); }
+/* Calm pill hover: a soft gold wash fades in; active pill sits a touch stronger. */
+.nav-links a:hover { color: var(--body); background: rgb(var(--gold-rgb) / .08); }
+.nav-links a.on { color: var(--gold); background: rgb(var(--gold-rgb) / .14); }
 .nav-actions { display: flex; gap: var(--space-sm); margin-left: auto; }
 .btn-xs {
   padding: var(--space-xs) var(--space-lg); font-size: var(--fs-2xs); font-weight: var(--fw-medium);
@@ -613,6 +615,16 @@ section.alt { background: var(--surface); }
 }
 .post-card:hover .play-btn { opacity: 1; transform: scale(1); }
 .play-btn svg { fill: var(--bg); width: 14px; height: 14px; margin-left: var(--space-3xs); }
+/* Post-card CTA: a play button in place of the old "Watch on X" text */
+.post-play {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; margin-top: var(--space-md);
+  border-radius: var(--radius-full); border: 1px solid rgb(var(--gold-rgb) / .4);
+  color: var(--gold);
+  transition: background var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft);
+}
+.post-card:hover .post-play { background: rgb(var(--gold-rgb) / .14); border-color: rgb(var(--gold-rgb) / .6); }
+.post-play svg { width: 15px; height: 15px; fill: currentColor; margin-left: 2px; }
 .post-body { padding: var(--space-xl) var(--space-2xl); }
 .post-tag { font-size: var(--fs-micro); letter-spacing: var(--ls-4); text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-xs); }
 .post-title { font-family: var(--font-d); font-size: var(--fs-lg); line-height: var(--lh-snug); color: var(--white); margin-bottom: var(--space-xs); }
@@ -998,13 +1010,13 @@ body.edit [contenteditable] { outline: 1px dashed rgb(var(--gold-rgb) /.45); min
 
 /* ─── RESPONSIVE ─────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .nav-links a { padding: 0 var(--space-sm); font-size: var(--fs-2xs); }
+  .nav-links a { padding: var(--space-2xs) var(--space-sm); font-size: var(--fs-2xs); }
   .g3 { grid-template-columns: 1fr 1fr; }
   .gpa-grid { grid-template-columns: 1fr 1fr; }
   .matchday-grid { grid-template-columns: repeat(2,1fr); }
 }
 @media (max-width: 768px) {
-  .nav-links, .nav-actions .btn-xs { display: none; }
+  .nav-links, .nav-actions { display: none; }
   .nav-ham { display: flex; margin-left: auto; }
   .nav-menu { display: block; }
   section { padding: var(--space-9xl) 5vw; }
