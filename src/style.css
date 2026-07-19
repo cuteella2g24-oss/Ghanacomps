@@ -83,9 +83,9 @@
   --fs-2xl:   1.3rem;   /* section subtitles, small display */
   --fs-3xl:   1.7rem;   /* large display names */
   --fs-4xl:   2.1rem;   /* stat numbers */
-  --fs-d1:    clamp(2.2rem, 5.5vw, 4.8rem);  /* hero display */
-  --fs-d2:    clamp(1.8rem, 4.5vw, 3.5rem);  /* page-header display */
-  --fs-d3:    clamp(1.3rem, 3vw, 2rem);      /* section display */
+  --fs-d1:    clamp(2rem, 4.6vw, 3.8rem);    /* hero display (toned down) */
+  --fs-d2:    clamp(1.5rem, 3.6vw, 2.7rem);  /* page-header display (toned down) */
+  --fs-d3:    clamp(1.15rem, 2.4vw, 1.6rem); /* section display (toned down) */
 
   /* ── Type: weights ── */
   --fw-medium:   500;
