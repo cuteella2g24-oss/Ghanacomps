@@ -1510,8 +1510,21 @@ body.edit .react-remove-btn { display: flex !important; }
   font-size: var(--fs-micro); letter-spacing: var(--ls-3);
   text-transform: uppercase; color: var(--gold);
   white-space: nowrap; align-self: center; opacity: .85;
+  display: inline-flex; align-items: center; gap: var(--space-xs);
 }
-.gc-entry-lg::before { content: '●'; font-size: 6px; vertical-align: middle; margin-right: var(--space-xs); }
+/* Color-coded bullet cue for leagues with no crest (Other Leagues). Rows that
+   render a .gc-entry-crest suppress it — the crest becomes the league signal. */
+.gc-entry-lg::before { content: '●'; font-size: 6px; vertical-align: middle; }
+.gc-entry-lg:has(.gc-entry-crest)::before { content: none; }
+/* Small neutral chip behind the row crest — same visual language as the
+   filter-bar chip (#f4f2ec) so dark/monochrome and light crests read on both
+   themes, scaled down and fixed-width so mixed logo shapes stay aligned. */
+.gc-entry-crest {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 34px; width: 46px; flex: none;
+  background: #f4f2ec; border-radius: var(--radius-md);
+}
+.gc-entry-crest img { display: block; height: 26px; width: auto; max-width: 40px; object-fit: contain; }
 .gc-entry-lg.pl { color: var(--gold); } .gc-entry-lg.ch { color: var(--gold); }
 .gc-entry-lg.l1 { color: var(--green); } .gc-entry-lg.sa { color: var(--green); }
 .gc-entry-lg.ll { color: var(--red); } .gc-entry-lg.bl { color: var(--red); }

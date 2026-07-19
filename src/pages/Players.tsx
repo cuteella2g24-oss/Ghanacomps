@@ -16,16 +16,28 @@ const leagueLabels: Record<string, string> = {
   bl: 'Bundesliga', ch: 'Championship', ot: 'Other Leagues'
 };
 
-// Filter bar: [code, label, badge?]. Named leagues show an official crest on a
-// neutral chip above the title; All/Other stay text-only.
-const leagueFilters: [string, string, string?][] = [
+// Single source of truth for the six named-league crests. Reused by both the
+// filter-bar chips and the per-row ledger tags so the path strings live once.
+// 'ot' has no crest and is intentionally absent.
+const leagueBadges: Record<string, string> = {
+  pl: '/assets/leagues/pl.svg',
+  l1: '/assets/leagues/l1.svg',
+  ll: '/assets/leagues/ll.svg',
+  sa: '/assets/leagues/sa.svg',
+  bl: '/assets/leagues/bl.svg',
+  ch: '/assets/leagues/ch.svg',
+};
+
+// Filter bar: [code, label]. Named leagues show an official crest on a neutral
+// chip above the title (looked up in leagueBadges); All/Other stay text-only.
+const leagueFilters: [string, string][] = [
   ['all', 'All'],
-  ['pl', 'Premier League', '/assets/leagues/pl.svg'],
-  ['l1', 'Ligue 1', '/assets/leagues/l1.svg'],
-  ['ll', 'La Liga', '/assets/leagues/ll.svg'],
-  ['sa', 'Serie A', '/assets/leagues/sa.svg'],
-  ['bl', 'Bundesliga', '/assets/leagues/bl.svg'],
-  ['ch', 'Championship', '/assets/leagues/ch.svg'],
+  ['pl', 'Premier League'],
+  ['l1', 'Ligue 1'],
+  ['ll', 'La Liga'],
+  ['sa', 'Serie A'],
+  ['bl', 'Bundesliga'],
+  ['ch', 'Championship'],
   ['ot', 'Other'],
 ];
 
@@ -140,20 +152,23 @@ export default function Players() {
           <h1 className="gc-ph-title">Current <span className="gold">Players.</span></h1>
           <p className="gc-ph-lead">Click any weekend performer card to watch the comp on X or TikTok.</p>
           <div className="filters" style={{ marginTop: 'var(--space-4xl)', marginBottom: 0 }}>
-            {leagueFilters.map(([lg, label, badge]) => (
-              <button
-                key={lg}
-                className={`f-btn${badge ? ' f-btn-badge' : ''}${activeLeague === lg ? ' on' : ''}`}
-                onClick={() => setActiveLeague(lg)}
-              >
-                {badge && (
-                  <span className="f-btn-crest">
-                    <img src={badge} alt="" aria-hidden="true" />
-                  </span>
-                )}
-                <span className="f-btn-label">{label}</span>
-              </button>
-            ))}
+            {leagueFilters.map(([lg, label]) => {
+              const badge = leagueBadges[lg];
+              return (
+                <button
+                  key={lg}
+                  className={`f-btn${badge ? ' f-btn-badge' : ''}${activeLeague === lg ? ' on' : ''}`}
+                  onClick={() => setActiveLeague(lg)}
+                >
+                  {badge && (
+                    <span className="f-btn-crest">
+                      <img src={badge} alt="" aria-hidden="true" />
+                    </span>
+                  )}
+                  <span className="f-btn-label">{label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -218,7 +233,15 @@ export default function Players() {
                   <Editable tag="span" eid={`${p.eid}n`} className="gc-entry-name">{p.name}</Editable>
                   <div className="gc-entry-meta" dangerouslySetInnerHTML={{ __html: p.meta }} />
                 </span>
-                <span className={`gc-entry-lg ${p.lg}`}>{p.league}</span>
+                <span className={`gc-entry-lg ${p.lg}`}>
+                  {leagueBadges[p.lg] ? (
+                    <span className="gc-entry-crest">
+                      <img src={leagueBadges[p.lg]} alt={p.league} title={p.league} />
+                    </span>
+                  ) : (
+                    p.league
+                  )}
+                </span>
               </div>
             );
           })}
@@ -233,7 +256,15 @@ export default function Players() {
                   <div className="gc-entry-meta">{p.club}</div>
                   {isAdmin && <button className="gc-entry-remove" onClick={() => removeExtra(i)}>Remove</button>}
                 </span>
-                <span className={`gc-entry-lg ${p.league}`}>{p.label}</span>
+                <span className={`gc-entry-lg ${p.league}`}>
+                  {leagueBadges[p.league] ? (
+                    <span className="gc-entry-crest">
+                      <img src={leagueBadges[p.league]} alt={p.label} title={p.label} />
+                    </span>
+                  ) : (
+                    p.label
+                  )}
+                </span>
               </div>
             );
           })}
