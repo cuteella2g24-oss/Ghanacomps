@@ -758,10 +758,28 @@ footer { padding: var(--space-8xl) 5vw var(--space-5xl); background: var(--surfa
   box-shadow: var(--shadow-sm);
 }
 
-/* ─── REVEAL ─────────────────────────────────────────────── */
+/* ─── REVEAL ───────────────────────────────────────────────
+   Scroll-reveal entrance for section/block-level content. Safe by
+   construction: the hidden initial state applies ONLY when JS has run
+   (html.reveal-ready, added by ScrollReveal) AND the user allows motion
+   (prefers-reduced-motion: no-preference). No-JS / reduced-motion / JS
+   failure → content stays fully visible at its resting state below.
+   The .animate legacy modifier is preserved as a no-op alias. */
 .reveal { opacity: 1; transform: none; }
 .reveal.animate { opacity: 1; transform: none; }
 .reveal.animate.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-ready .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  html.reveal-ready .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+}
 
 /* ─── ADMIN ──────────────────────────────────────────────── */
 .admin-lock {
@@ -1088,6 +1106,662 @@ body.edit .add-comp-panel { display: flex; }
   justify-content: center;
 }
 body.edit .react-remove-btn { display: flex !important; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REVAMP FOUNDATION — "Matchday Broadcast + Broadsheet" (B + A hybrid)
+   Authored OUTSIDE @layer (like the rest of the site classes) so they win over
+   the layered reset/base and Tailwind utilities. Every value references a
+   :root token or an rgb(var(--*-rgb) / <alpha>) transparency — no raw hex/px.
+   This is the SHARED system reused site-wide (page-header/hero, score-bug,
+   ticker, flag chevrons, section headers, motion) plus the Home broadcast
+   segment cards. Page-specific pieces (ledgers, boards, plates) land later.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ─── SHARED MOTION ──────────────────────────────────────────
+   The broadcast "on air" blink. Label text always carries the meaning; the
+   dot is decorative reinforcement (frozen under reduced-motion, §6). */
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .2; } }
+
+/* ─── TICKER (B, §1.3) — Home only ───────────────────────────
+   The promoted marquee as a broadcast lower-third: gold bar, a pinned red LIVE
+   bug, and the player-name list scrolling with ◆ dividers. Reuses the existing
+   marquee keyframe pattern (translateX 0 → -50% over a duplicated list).
+   Motion freezes under reduced-motion; overflow:hidden truncates the list. */
+.gc-ticker {
+  position: relative; overflow: hidden;
+  background: var(--gold); padding: var(--space-sm) 0;
+}
+.gc-ticker::before {
+  content: 'Live'; position: absolute; left: 0; top: 0; bottom: 0; z-index: 2;
+  display: flex; align-items: center; padding: 0 var(--space-2xl);
+  background: var(--red); color: var(--on-brand);
+  font-weight: var(--fw-semibold); font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-3); text-transform: uppercase;
+}
+.gc-ticker-track {
+  display: inline-flex; white-space: nowrap; padding-left: 64px;
+  animation: marquee 38s linear infinite;
+}
+.gc-ticker-track span {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm); letter-spacing: var(--ls-3);
+  color: var(--on-gold); padding: 0 var(--space-lg);
+}
+.gc-ticker-track .dot { opacity: .3; }
+
+/* ─── FLAG-CHEVRON MOTIF (B, §1.4) ───────────────────────────
+   Angled broadcast keylines on a decorative ::before at z-index 0. Gold is the
+   widest/strongest band; red + green are hairlines. Three intensity registers
+   (loud / medium / quiet) pick how many bands show. Alphas stay ≤ .14 (gold) /
+   ≤ .10 (flag hues) so light-paper foreground contrast is never muddied. */
+.gc-chevrons { position: relative; overflow: hidden; }
+.gc-chevrons::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+}
+/* Loud — full 3-line red/gold/green field (Home hero, Black Stars) */
+.gc-chevrons.loud::before {
+  background:
+    linear-gradient(115deg, transparent 0 62%, rgb(var(--red-rgb) / .10) 62% 63%, transparent 63%),
+    linear-gradient(115deg, transparent 0 66%, rgb(var(--gold-rgb) / .14) 66% 68%, transparent 68%),
+    linear-gradient(115deg, transparent 0 71%, rgb(var(--green-rgb) / .10) 71% 72%, transparent 72%);
+}
+/* Medium — gold + one flag hue (GPA, Players) */
+.gc-chevrons.medium::before {
+  background:
+    linear-gradient(115deg, transparent 0 66%, rgb(var(--gold-rgb) / .14) 66% 68%, transparent 68%),
+    linear-gradient(115deg, transparent 0 71%, rgb(var(--green-rgb) / .10) 71% 72%, transparent 72%);
+}
+/* Quiet — a single faint gold rake (Legends, About, Contact) */
+.gc-chevrons.quiet::before {
+  background:
+    linear-gradient(115deg, transparent 0 68%, rgb(var(--gold-rgb) / .10) 68% 70%, transparent 70%);
+}
+
+/* ─── STATUS / LIVE SCORE-BUG (B, §1.2) ──────────────────────
+   Broadcast lower-third mark. No radius. First segment is the LIVE fill (red
+   + on-brand text + blinking dot); remaining segments are quiet meta. */
+.gc-scorebug {
+  display: inline-flex; align-items: stretch;
+  border: 1px solid var(--line); margin-bottom: var(--space-4xl);
+}
+.gc-scorebug span {
+  display: flex; align-items: center; gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-lg);
+  font-size: var(--fs-micro); letter-spacing: var(--ls-4);
+  text-transform: uppercase; text-decoration: none; white-space: nowrap;
+}
+.gc-scorebug span.live { background: var(--red); color: var(--on-brand); font-weight: var(--fw-semibold); }
+.gc-scorebug span.live::before {
+  content: ''; width: 6px; height: 6px; border-radius: var(--radius-full);
+  background: var(--on-brand); animation: blink 1.4s infinite;
+}
+.gc-scorebug span.meta { color: var(--sub); }
+
+/* ─── PAGE-HEADER / HERO SYSTEM (B, §1.1) ────────────────────
+   gc-pagehead is the page-header register used on every non-Home route in
+   place of .page-header; gc-hero is the Home-only full register. Both layer a
+   chevron field (add .gc-chevrons + intensity) under z-index:1 content. */
+.gc-pagehead {
+  position: relative; overflow: hidden;
+  padding: var(--space-10xl) 5vw var(--space-9xl);
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.gc-pagehead-inner { position: relative; z-index: 1; }
+.gc-ph-kicker {
+  font-family: var(--font-a); font-style: italic;
+  font-size: var(--fs-md); color: var(--sub); margin-bottom: var(--space-md);
+}
+.gc-ph-title {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-d2); text-transform: uppercase;
+  letter-spacing: -0.015em; line-height: var(--lh-display);
+}
+.gc-ph-title .gold { color: var(--gold); }
+.gc-ph-lead {
+  font-size: var(--fs-md); line-height: var(--lh-relaxed);
+  color: var(--body); max-width: 64ch; margin-top: var(--space-lg);
+}
+
+/* Hero (Home) — the one full broadcast title card. */
+.gc-hero {
+  position: relative; overflow: hidden;
+  padding: var(--space-11xl) 5vw;
+  border-bottom: 1px solid var(--line);
+}
+.gc-hero-glow {
+  position: absolute; top: 40%; right: 6%; transform: translateY(-50%);
+  width: 420px; height: 420px; z-index: 0; pointer-events: none;
+  background: radial-gradient(circle, rgb(var(--gold-rgb) / .08), transparent 70%);
+}
+.gc-hero-grid {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1.15fr .85fr;
+  gap: var(--space-9xl); align-items: center; width: 100%;
+}
+/* Headline → lead rhythm (§5 risk 1): score-bug margin-bottom is --space-4xl,
+   the display headline sits flush, the lead hangs off a gold left-rule with a
+   --space-lg top gap. align-items:center keeps the feed vertically centred on
+   the headline block, matching concept-b.html. */
+.gc-hero-title {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-d1); line-height: var(--lh-display);
+  letter-spacing: -0.02em; text-transform: uppercase;
+}
+.gc-hero-lead {
+  font-size: var(--fs-md); line-height: var(--lh-relaxed); color: var(--body);
+  max-width: 44ch; margin-top: var(--space-5xl);
+  border-left: 3px solid var(--gold); padding-left: var(--space-2xl);
+}
+.gc-hero-actions {
+  display: flex; align-items: center; gap: var(--space-lg);
+  margin-top: var(--space-6xl); flex-wrap: wrap;
+}
+
+/* ─── BROADCAST FEED (B) — Home news panel (§ concept-b.html b-feed) ─────────
+   The Latest News panel restyled as a live feed: framed card, header with a
+   blinking dot, flag-colored tags, gold left-edge reveal on hover. Preserves
+   the admin remove control + add panel wired in Home.tsx. */
+.gc-feed { border: 1px solid var(--line); background: var(--raised); }
+.gc-feed-h {
+  display: flex; align-items: center; gap: var(--space-sm);
+  background: var(--lift); padding: var(--space-md) var(--space-2xl);
+  font-size: var(--fs-micro); letter-spacing: var(--ls-4);
+  text-transform: uppercase; color: var(--sub);
+  border-bottom: 1px solid var(--line);
+}
+.gc-feed-dot {
+  width: 7px; height: 7px; border-radius: var(--radius-full);
+  background: var(--red); flex-shrink: 0; animation: blink 1.6s infinite;
+}
+.gc-feed-item {
+  display: flex; align-items: center; gap: var(--space-md);
+  padding: var(--space-lg) var(--space-2xl);
+  border-bottom: 1px solid var(--line); border-left: 3px solid transparent;
+  transition: background .2s, border-color .2s;
+}
+.gc-feed-item:last-child { border-bottom: none; }
+.gc-feed-item:hover { background: var(--lift); border-left-color: var(--gold); }
+.gc-feed-tag {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-2);
+  text-transform: uppercase; font-weight: var(--fw-semibold);
+  padding: var(--space-3xs) var(--space-sm); border-radius: var(--radius-sm);
+  flex: 0 0 auto;
+}
+.gc-feed-tag.transfer { background: rgb(var(--gold-rgb) / .14); color: var(--gold); }
+.gc-feed-tag.injury   { background: rgb(var(--red-rgb) / .15); color: var(--red); }
+.gc-feed-tag.general  { background: rgb(var(--green-rgb) / .14); color: var(--green); }
+.gc-feed-t { font-size: var(--fs-base); color: var(--white); line-height: var(--lh-heading); }
+.gc-feed-empty {
+  padding: var(--space-5xl) var(--space-2xl); font-size: var(--fs-sm);
+  color: var(--sub); font-style: italic;
+}
+
+/* ─── SECTION HEADER — B variant (eyebrow + rule, §1.5) ──────
+   Broadcast register for Home sub-sections + Black Stars. gc-eyebrow is the
+   existing eyebrow recomposed with a 2px gold underline tick; gc-h2 is the
+   uppercase Playfair section head. */
+.gc-eyebrow {
+  display: inline-flex; align-items: center; gap: var(--space-sm);
+  font-size: var(--fs-2xs); letter-spacing: var(--ls-4);
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: var(--space-md); padding-bottom: var(--space-xs);
+  border-bottom: 2px solid var(--gold);
+}
+.gc-h2 {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-d2); text-transform: uppercase;
+  letter-spacing: -0.015em; line-height: var(--lh-display);
+}
+.gc-h2.tight { margin-bottom: var(--space-xs); }
+.gc-h2 .gold { color: var(--gold); }
+
+/* ─── GPA PREVIEW — broadcast segment cards (B, Home §4) ─────
+   Restyled gpa-cards as scoreboard segments: 3px flag top-bar + ghosted
+   01/02/03 numeral. The card body stays the .editable gpa content. */
+.gc-segcards {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4xl);
+  margin: var(--space-6xl) 0 var(--space-5xl);
+}
+.gc-segcard {
+  background: var(--raised); border: 1px solid var(--line);
+  border-top: 3px solid var(--gold);
+  padding: var(--space-5xl); position: relative; overflow: hidden;
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+.gc-segcard.r  { border-top-color: var(--red); }
+.gc-segcard.gr { border-top-color: var(--green); }
+.gc-segcard:hover { border-color: rgb(var(--gold-rgb) / .3); box-shadow: var(--shadow-sm); }
+.gc-segcard-n {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-4xl); line-height: var(--lh-none);
+  color: rgb(var(--gold-rgb) / .18);
+  position: absolute; top: var(--space-lg); right: var(--space-xl);
+}
+.gc-seglbl {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-4);
+  text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-sm);
+}
+.gc-seglbl.r  { color: var(--red); }
+.gc-seglbl.gr { color: var(--green); }
+.gc-segname {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-2xl); color: var(--white); margin-bottom: var(--space-xs);
+}
+.gc-segbody {
+  font-family: var(--font-a); font-style: italic;
+  font-size: var(--fs-base); color: var(--body); line-height: var(--lh-body);
+}
+
+/* ─── FOUNDATION RESPONSIVE ──────────────────────────────────
+   Reuse the existing 900 / 768 stops (no new breakpoints). */
+@media (max-width: 900px) {
+  .gc-hero { padding: var(--space-10xl) 5vw; }
+  .gc-hero-grid { grid-template-columns: 1fr; gap: var(--space-7xl); }
+  .gc-hero-glow { display: none; }
+  .gc-segcards { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .gc-pagehead { padding: var(--space-9xl) 5vw var(--space-7xl); }
+}
+
+/* ─── FOUNDATION REDUCED-MOTION (§3) ─────────────────────────
+   Freeze every broadcast motion; the LIVE label word still carries meaning. */
+@media (prefers-reduced-motion: reduce) {
+  .gc-scorebug span.live::before,
+  .gc-feed-dot { animation: none; }
+  .gc-ticker-track { animation: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REVAMP — CONCEPT A DISCIPLINE (Broadsheet) — page-specific pieces
+   Authored OUTSIDE @layer, same convention as the foundation block above.
+   The ledger/index, the editorial column system, and the single C reverence
+   plate used by Players / GPA / Legends. Every value references a :root token
+   or an rgb(var(--*-rgb) / <alpha>) transparency; the only raw px are FE-owned
+   geometry with no token equivalent (hairline widths, the 6px dot, 20px
+   corner brackets) — matching how the foundation authored its dots/lines.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ─── A-RULE SECTION HEADER (A variant, §1.5) ────────────────
+   The broadsheet gazette header: Playfair title left, uppercase meta right,
+   sitting on a 2px baseline rule. Shared by GPA / Players / Legends. */
+.gc-rule {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--space-2xl); flex-wrap: wrap;
+  border-bottom: 2px solid var(--line);
+  padding-bottom: var(--space-sm); margin-bottom: var(--space-7xl);
+}
+.gc-rule.grid-gap { margin-bottom: var(--space-8xl); }
+.gc-rule-l {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-d3); color: var(--white); letter-spacing: -0.01em;
+  line-height: var(--lh-snug);
+}
+.gc-rule-l .gold { color: var(--gold); }
+.gc-rule-r {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-4);
+  text-transform: uppercase; color: var(--sub); white-space: nowrap;
+}
+/* dateline eyebrow variant (GPA columns): a coloured kicker + meta */
+.gc-rule-eyebrow {
+  font-family: var(--font-b); font-size: var(--fs-2xs); letter-spacing: var(--ls-5);
+  text-transform: uppercase; color: var(--gold);
+}
+.gc-rule-eyebrow.r { color: var(--red); }
+.gc-rule-eyebrow.gr { color: var(--green); }
+
+/* ─── EDITORIAL COLUMN SYSTEM (A, §1.8) — GPA ────────────────
+   Playfair headline hangs above a ruled measure (gold/red/green top-rule),
+   constrained to a reading measure, with an EB-Garamond drop-cap body. The
+   body remains the .editable .gpa-write-body so admin edit + the empty prompt
+   are untouched — these rules only re-skin its container. */
+.gc-col-head {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-d3); color: var(--white);
+  line-height: var(--lh-snug); letter-spacing: -0.01em;
+  margin-bottom: var(--space-4xl);
+}
+.gc-col-head .gold { color: var(--gold); }
+.gc-col-split {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-10xl);
+  max-width: 1040px;
+}
+.gc-col-split .gc-col-head { font-size: var(--fs-2xl); }
+/* The ruled measure re-skins .gpa-write-block: drop the card chrome for a
+   top-rule + reading column; the drop-cap rides the first paragraph. */
+.gc-editorial .gpa-write-block {
+  background: transparent; border: none;
+  border-top: 1px solid var(--gold); border-left: none;
+  padding: var(--space-4xl) 0 0; margin-bottom: 0;
+  max-width: 62ch;
+}
+.gc-editorial.red-accent .gpa-write-block { border-top-color: var(--red); }
+.gc-editorial.green-accent .gpa-write-block { border-top-color: var(--green); }
+.gc-editorial .gpa-write-label { color: var(--gold); }
+.gc-editorial.red-accent .gpa-write-label { color: var(--red); }
+.gc-editorial.green-accent .gpa-write-label { color: var(--green); }
+.gc-editorial .gpa-write-heading {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-xl); color: var(--white); margin-bottom: var(--space-lg);
+}
+.gc-editorial .gpa-write-body {
+  font-family: var(--font-a); font-size: var(--fs-md);
+  line-height: var(--lh-relaxed); color: var(--body);
+}
+.gc-editorial .gpa-write-body::first-letter {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-4xl); float: left; line-height: 0.82;
+  padding: 6px var(--space-sm) 0 0; color: var(--gold);
+}
+.gc-editorial.red-accent .gpa-write-body::first-letter { color: var(--red); }
+.gc-editorial.green-accent .gpa-write-body::first-letter { color: var(--green); }
+/* The Goal + Assist split shares one section: two measures side by side. */
+.gc-col-split .gpa-write-block:not(:first-child) { margin-top: 0; }
+
+/* ─── LEDGER / INDEX (A, §1.6) — Players directory ───────────
+   Two-column ruled index; each row is index numeral + name/meta + a hanging
+   league label with a coloured dot (wayfinding, always paired with the text
+   label). Collapses to one column ≤ 820px (existing stop-adjacent). */
+.gc-ledger { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-10xl); }
+.gc-entry {
+  display: grid; grid-template-columns: auto 1fr auto;
+  align-items: baseline; gap: var(--space-lg);
+  padding: var(--space-lg) 0; border-bottom: 1px solid var(--line);
+  transition: padding-left .18s ease, background .18s ease;
+}
+.gc-entry:hover {
+  padding-left: var(--space-sm);
+  background: linear-gradient(90deg, rgb(var(--gold-rgb) / .05), transparent 60%);
+}
+.gc-idx { font-family: var(--font-d); font-size: var(--fs-sm); color: var(--dim); min-width: 2.2ch; }
+.gc-entry-main { min-width: 0; }
+.gc-entry-name {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-xl); color: var(--white); line-height: var(--lh-none);
+  transition: color .18s ease;
+}
+.gc-entry:hover .gc-entry-name { color: var(--gold); }
+.gc-entry-meta {
+  font-size: var(--fs-2xs); color: var(--sub);
+  margin-top: var(--space-3xs); letter-spacing: var(--ls-1);
+}
+.gc-entry-meta s { margin: 0 var(--space-2xs); opacity: .35; text-decoration: none; }
+.gc-entry-lg {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-3);
+  text-transform: uppercase; color: var(--gold);
+  white-space: nowrap; align-self: center; opacity: .85;
+}
+.gc-entry-lg::before { content: '●'; font-size: 6px; vertical-align: middle; margin-right: var(--space-xs); }
+.gc-entry-lg.pl { color: var(--gold); } .gc-entry-lg.ch { color: var(--gold); }
+.gc-entry-lg.l1 { color: var(--green); } .gc-entry-lg.sa { color: var(--green); }
+.gc-entry-lg.ll { color: var(--red); } .gc-entry-lg.bl { color: var(--red); }
+.gc-entry-lg.ot { color: var(--sub); }
+/* inline admin remove for dynamically-added ledger rows */
+.gc-entry-remove {
+  background: var(--red); color: var(--white); border: none;
+  font-size: var(--fs-2xs); padding: var(--space-2xs) var(--space-sm);
+  cursor: pointer; border-radius: var(--radius-sm); margin-top: var(--space-xs);
+}
+
+/* ─── LEGENDS INDEX (A, §1.6) — richer rows ──────────────────
+   The ruled ledger for legends: index + name/meta/bio/comps/quote block +
+   hanging era dot. The comp rows reuse the existing .comp-row-link chrome; the
+   era dot reuses the g/r/gr flag modifiers. Row = re-skinned .legend-card. */
+.gc-legger { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-10xl); }
+.gc-lentry {
+  display: grid; grid-template-columns: auto 1fr auto;
+  align-items: baseline; gap: var(--space-lg);
+  padding: var(--space-4xl) 0; border-bottom: 1px solid var(--line);
+  transition: padding-left .18s ease, background .18s ease;
+}
+.gc-lentry:hover {
+  padding-left: var(--space-sm);
+  background: linear-gradient(90deg, rgb(var(--gold-rgb) / .05), transparent 60%);
+}
+.gc-lidx {
+  font-family: var(--font-d); font-size: var(--fs-sm); color: var(--dim);
+  min-width: 2.4ch; align-self: start; padding-top: var(--space-2xs);
+}
+.gc-lmain { min-width: 0; }
+.gc-lname {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-2xl); color: var(--white); line-height: var(--lh-none);
+  transition: color .18s ease;
+}
+.gc-lentry:hover .gc-lname { color: var(--gold); }
+.gc-lmeta {
+  font-size: var(--fs-2xs); letter-spacing: var(--ls-1);
+  color: var(--sub); margin-top: var(--space-2xs); text-transform: uppercase;
+}
+.gc-lbio {
+  font-family: var(--font-a); font-size: var(--fs-base);
+  line-height: var(--lh-body); color: var(--body);
+  margin-top: var(--space-sm); max-width: 46ch; padding: 0;
+}
+.gc-lcomps { margin-top: var(--space-md); display: flex; flex-direction: column; gap: var(--space-2xs); }
+.gc-lcomps .lc-comps-lbl { margin-bottom: var(--space-xs); }
+.gc-lquote {
+  font-family: var(--font-a); font-style: italic; font-size: var(--fs-sm);
+  color: var(--body); margin-top: var(--space-md);
+}
+.gc-lera {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-3);
+  text-transform: uppercase; white-space: nowrap;
+  align-self: start; padding-top: var(--space-xs);
+}
+.gc-lera.g { color: var(--gold); } .gc-lera.r { color: var(--red); } .gc-lera.gr { color: var(--green); }
+.gc-lera::before { content: '●'; font-size: 6px; vertical-align: middle; margin-right: var(--space-xs); }
+/* card-actions (dynamic legends) sits at row end */
+.gc-lentry .card-actions {
+  grid-column: 1 / -1; padding: var(--space-md) 0 0;
+  background: transparent; border-top: none;
+}
+
+/* ─── C REVERENCE PLATE (§1.9) — Legends marquee (Essien) ────
+   The single honoured plate: centred, framed in low-alpha gold with four
+   gold-leaf corner brackets. The badge/comps reuse the on-page structure.
+   Corner brackets are the lowest-contrast element — the .45 alpha holds on
+   dark; light re-channels the gold so they stay a visible whisper (§5.3). */
+.gc-marquee-legend {
+  border: 1px solid rgb(var(--gold-rgb) / .22);
+  background: rgb(var(--gold-rgb) / .04);
+  padding: var(--space-9xl) var(--space-8xl); margin-bottom: var(--space-8xl);
+  position: relative; display: grid; grid-template-columns: 1fr;
+  gap: var(--space-4xl); text-align: center; justify-items: center;
+}
+.gc-corner { position: absolute; width: 20px; height: 20px; border: 1px solid rgb(var(--gold-rgb) / .45); }
+.gc-corner.tl { top: var(--space-lg); left: var(--space-lg); border-right: 0; border-bottom: 0; }
+.gc-corner.tr { top: var(--space-lg); right: var(--space-lg); border-left: 0; border-bottom: 0; }
+.gc-corner.bl { bottom: var(--space-lg); left: var(--space-lg); border-right: 0; border-top: 0; }
+.gc-corner.br { bottom: var(--space-lg); right: var(--space-lg); border-left: 0; border-top: 0; }
+.gc-ml-era {
+  display: inline-block; padding: var(--space-3xs) var(--space-md);
+  font-size: var(--fs-micro); letter-spacing: var(--ls-4); text-transform: uppercase;
+  font-weight: var(--fw-medium); border-radius: var(--radius-sm);
+  background: var(--gold); color: var(--on-gold);
+}
+.gc-ml-name {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-d2); color: var(--white); line-height: var(--lh-display);
+}
+.gc-ml-name em { font-style: italic; color: var(--gold); }
+.gc-ml-pos { font-size: var(--fs-2xs); letter-spacing: var(--ls-4); text-transform: uppercase; color: var(--sub); }
+.gc-ml-divider { width: 56px; height: 1px; background: var(--gold); }
+.gc-ml-bio {
+  font-family: var(--font-a); font-size: var(--fs-lg);
+  line-height: var(--lh-body); color: var(--body); max-width: 56ch;
+  padding: 0; margin: 0;
+}
+.gc-ml-comps { display: flex; flex-wrap: wrap; gap: var(--space-sm); justify-content: center; width: 100%; }
+.gc-ml-quote {
+  font-family: var(--font-a); font-style: italic; font-size: var(--fs-lg);
+  color: var(--white); max-width: 48ch;
+}
+/* the badge sits centred in the plate; reuse the existing .lc-badge look */
+.gc-marquee-legend .lc-badge { margin: 0; }
+/* the plate's comp uses the existing comp-row-link but centred + inline */
+.gc-marquee-legend .lc-comps { border-top: none; padding: 0; width: 100%; max-width: 56ch; }
+.gc-marquee-legend .lc-comps-lbl { text-align: center; }
+.gc-marquee-legend .card-actions { justify-content: center; }
+
+/* ─── QUIET EDITORIAL PROSE (A, §7) — About / Contact ────────
+   EB-Garamond reading column with an optional Playfair gold drop-cap on the
+   first paragraph (.first). Used inside the existing g2 two-column layouts on
+   About; the sibling stack/quote-stack/special-box are reused as-is. */
+.gc-prose {
+  font-family: var(--font-a); font-size: var(--fs-md);
+  line-height: var(--lh-relaxed); color: var(--body); max-width: 60ch;
+}
+.gc-prose p + p { margin-top: var(--space-lg); }
+.gc-prose strong { color: var(--white); font-family: var(--font-b); font-weight: var(--fw-medium); }
+.gc-prose.first p:first-child::first-letter {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-4xl); float: left; line-height: 0.82;
+  padding: 6px var(--space-sm) 0 0; color: var(--gold);
+}
+
+/* ─── A-DISCIPLINE RESPONSIVE (reuse 820 / 768 / 640 stops) ── */
+@media (max-width: 820px) {
+  .gc-ledger, .gc-legger { grid-template-columns: 1fr; }
+  .gc-col-split { grid-template-columns: 1fr; gap: var(--space-8xl); }
+}
+@media (max-width: 640px) {
+  .gc-marquee-legend { padding: var(--space-7xl) var(--space-4xl); }
+}
+
+/* ─── A-DISCIPLINE REDUCED-MOTION (§3) ───────────────────────
+   Freeze the ledger row-hover shift; hover colour still signals. */
+@media (prefers-reduced-motion: reduce) {
+  .gc-entry, .gc-lentry { transition: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REVAMP — CONCEPT B BROADCAST — Black Stars page-specific pieces
+   Authored OUTSIDE @layer, same convention as the blocks above. The matchday
+   editorial block, fixture scoreboard cards, the seam-grid coverage board, and
+   the scoreboard archive library. Every value references a :root token or an
+   rgb(var(--*-rgb) / <alpha>) transparency; the only raw px are FE-owned
+   geometry with no token equivalent (hairline bars, the seam widths), matching
+   how the foundation authored its dots/lines.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ─── LATEST UPDATE — broadcast-framed editorial block (B, §1.8-style) ───────
+   The bs-* editor block re-skinned: a raised card with a gold left-rule and an
+   EB-Garamond italic reading body. The body stays the .editable bs-body so
+   admin inline-edit is untouched; these rules only re-skin its container. */
+.gc-editor {
+  background: var(--raised); border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  padding: var(--space-6xl) var(--space-5xl); max-width: 760px;
+}
+.gc-editor .editor-heading {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-2xl); color: var(--white); margin-bottom: var(--space-lg);
+}
+.gc-editor .editor-body {
+  font-family: var(--font-a); font-style: italic;
+  font-size: var(--fs-base); color: var(--body); line-height: var(--lh-relaxed);
+}
+.gc-editor .editor-body p + p { margin-top: var(--space-lg); }
+
+/* ─── FIXTURES — scoreboard cards with gold top-bar (B, §1.7) ────────────────
+   The .fixture re-skinned as a broadcast card: gold top-bar, uppercase
+   Playfair title, ghost CTA. The stake write-up + shadcn ghost Button stay. */
+.gc-fixture {
+  background: var(--raised); border: 1px solid var(--line);
+  padding: var(--space-5xl) var(--space-4xl);
+  position: relative; overflow: hidden;
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+.gc-fixture::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--gold);
+}
+.gc-fixture:hover { border-color: rgb(var(--gold-rgb) / .3); box-shadow: var(--shadow-sm); }
+.gc-fix-lbl {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-4);
+  text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-sm);
+}
+.gc-fix-title {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-2xl); text-transform: uppercase; color: var(--white);
+  line-height: var(--lh-none); letter-spacing: -0.005em; margin-bottom: var(--space-2xs);
+}
+.gc-fix-det { font-size: var(--fs-sm); color: var(--sub); margin-bottom: var(--space-2xl); }
+.gc-fix-stake {
+  font-size: var(--fs-sm); color: var(--body);
+  line-height: var(--lh-body); margin-bottom: var(--space-4xl);
+}
+
+/* ─── MATCHDAY COVERAGE — seam grid of scoreboard cells (B, §1.7) ────────────
+   Reuses the existing seam-grid pattern (gap = --space-3xs on a --line bg so
+   the gaps read as hairline seams). Each md* cell gets a ghosted Playfair
+   segment numeral + a gold top-bar that reveals on hover. The md*-t / md*-b
+   .editable content is preserved. */
+.gc-board {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3xs); background: var(--line); margin-top: var(--space-5xl);
+}
+.gc-md-cell {
+  background: var(--raised); padding: var(--space-4xl) var(--space-3xl);
+  position: relative; overflow: hidden; transition: background .2s ease;
+}
+.gc-md-cell::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--gold); opacity: 0; transition: opacity .2s ease;
+}
+.gc-md-cell:hover { background: var(--lift); }
+.gc-md-cell:hover::before { opacity: 1; }
+.gc-md-num {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-4xl); line-height: var(--lh-none);
+  color: rgb(var(--gold-rgb) / .16);
+  position: absolute; top: var(--space-md); right: var(--space-lg);
+}
+.gc-md-icon { font-size: var(--fs-xl); margin-bottom: var(--space-sm); }
+.gc-md-cell .md-title {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-lg); color: var(--white); margin-bottom: var(--space-xs);
+}
+.gc-md-cell .md-body { font-size: var(--fs-sm); color: var(--sub); line-height: var(--lh-normal); }
+
+/* ─── ARCHIVE — scoreboard library cells (B, §1.7) ───────────────────────────
+   The .archive-card re-skinned as a seam-grid library cell with a gold
+   left-edge. Uppercase Playfair name; each match keeps the existing gold
+   left-rule sub-block. The card IS the re-skinned admin card — .card-actions
+   moves to the cell end. Long uppercase names use lh-snug + min-width safe. */
+.gc-lib {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-3xs); background: var(--line); border: 1px solid var(--line);
+}
+.gc-arc {
+  background: var(--raised); padding: var(--space-3xl);
+  position: relative; overflow: hidden; transition: background .2s ease;
+}
+.gc-arc::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--gold);
+}
+.gc-arc:hover { background: var(--lift); }
+.gc-arc .archive-player {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-xl); text-transform: uppercase; color: var(--white);
+  line-height: var(--lh-snug); letter-spacing: -0.005em; margin-bottom: var(--space-md);
+}
+.gc-arc .archive-match { font-size: var(--fs-base); color: var(--body); }
+.gc-arc .archive-comp { font-size: var(--fs-xs); color: var(--sub); }
+.gc-arc .card-actions { margin-top: var(--space-md); }
+
+/* ─── B-BROADCAST RESPONSIVE (reuse 900 / 520 stops) ── */
+@media (max-width: 900px) { .gc-board { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .gc-board { grid-template-columns: 1fr; } }
+
+/* ─── B-BROADCAST REDUCED-MOTION (§3) ────────────────────────
+   Freeze the matchday cell's gold top-bar reveal; hover background still
+   signals. Matches the blink/ticker/ledger-shift freezes above. */
+@media (prefers-reduced-motion: reduce) {
+  .gc-md-cell:hover::before { transition: none; }
+}
 
 /* ─── LIGHT MODE ─────────────────────────────────────────── */
 /* ─── THEME: light ────────────────────────────────────────────────────────

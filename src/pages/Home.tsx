@@ -42,21 +42,32 @@ export default function Home() {
       <Stripe />
       <Nav />
 
-      {/* HERO */}
-      <section className="hero">
-        <div className="hero-glow" />
-        <div className="hero-grid">
+      {/* TICKER — promoted marquee lower-third */}
+      <div className="gc-ticker" aria-hidden="true">
+        <div className="gc-ticker-track">
+          <span>Thomas Partey</span><span className="dot">◆</span><span>Mohammed Kudus</span><span className="dot">◆</span><span>Fatawu Issahaku</span><span className="dot">◆</span><span>Antoine Semenyo</span><span className="dot">◆</span><span>Jordan Ayew</span><span className="dot">◆</span><span>Ibrahim Sulemana</span><span className="dot">◆</span><span>Ernest Nuamah</span><span className="dot">◆</span><span>Kamaldeen Sulemana</span><span className="dot">◆</span><span>Inaki Williams</span><span className="dot">◆</span>
+          <span>Thomas Partey</span><span className="dot">◆</span><span>Mohammed Kudus</span><span className="dot">◆</span><span>Fatawu Issahaku</span><span className="dot">◆</span><span>Antoine Semenyo</span><span className="dot">◆</span><span>Jordan Ayew</span><span className="dot">◆</span><span>Ibrahim Sulemana</span><span className="dot">◆</span><span>Ernest Nuamah</span><span className="dot">◆</span><span>Kamaldeen Sulemana</span><span className="dot">◆</span><span>Inaki Williams</span><span className="dot">◆</span>
+        </div>
+      </div>
+
+      {/* HERO — broadcast title card */}
+      <section className="gc-hero gc-chevrons loud">
+        <div className="gc-hero-glow" />
+        <div className="gc-hero-grid">
           <div>
-            <Editable tag="div" eid="hero-eyebrow" className="eyebrow">Ghana Comps — Ghanaian Football Archive</Editable>
-            <h1 className="d1" style={{ marginBottom: 'var(--space-4xl)' }}>
+            <div className="gc-scorebug">
+              <span className="live">Live</span>
+              <Editable tag="span" eid="hero-eyebrow" className="meta">Ghana Comps — Ghanaian Football Archive</Editable>
+            </div>
+            <h1 className="gc-hero-title">
               <Editable tag="span" eid="hero-l1">Ghanaian</Editable><br />
               <Editable tag="span" eid="hero-l2" className="gold">Players</Editable><br />
               <Editable tag="span" eid="hero-l3" style={{ color: 'var(--green)' }}>Celebrated.</Editable>
             </h1>
-            <Editable tag="p" eid="hero-para" className="lead" style={{ maxWidth: '480px', marginBottom: 'var(--space-5xl)' }}>
+            <Editable tag="p" eid="hero-para" className="gc-hero-lead">
               Goals. Assists. Saves. The ones everybody saw and the ones nobody talked about. Every Ghanaian. Every weekend. And when the weekend is done we go back to the legends.
             </Editable>
-            <div className="row-btns">
+            <div className="gc-hero-actions">
               <span className="hero-follow">
                 Follow us on
                 <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" className="hero-follow-x" aria-label="Follow us on X">
@@ -67,18 +78,18 @@ export default function Home() {
             </div>
           </div>
 
-          {/* NEWS PANEL */}
+          {/* NEWS PANEL — broadcast feed */}
           <div>
-            <div className="news-panel">
-              <div className="news-panel-header"><span className="news-dot" />Latest News</div>
+            <div className="gc-feed">
+              <div className="gc-feed-h"><span className="gc-feed-dot" />Latest News</div>
               {news.length === 0 && (
-                <p className="news-empty">No news yet. Add headlines via the admin panel.</p>
+                <p className="gc-feed-empty">No news yet. Add headlines via the admin panel.</p>
               )}
               {news.map((item, i) => {
                 const inner = (
                   <>
-                    <span className={`news-item-tag ${item.tag}`}>{item.tag}</span>
-                    <span className="news-item-title">{item.title}</span>
+                    <span className={`gc-feed-tag ${item.tag}`}>{item.tag}</span>
+                    <span className="gc-feed-t">{item.title}</span>
                     {isAdmin && (
                       <button
                         onClick={e => { e.preventDefault(); e.stopPropagation(); removeNews(i); }}
@@ -88,9 +99,9 @@ export default function Home() {
                   </>
                 );
                 return item.url ? (
-                  <a key={i} href={item.url} target="_blank" rel="noopener" className="news-item">{inner}</a>
+                  <a key={i} href={item.url} target="_blank" rel="noopener" className="gc-feed-item">{inner}</a>
                 ) : (
-                  <div key={i} className="news-item">{inner}</div>
+                  <div key={i} className="gc-feed-item">{inner}</div>
                 );
               })}
             </div>
@@ -130,26 +141,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* GPA PREVIEW */}
+      {/* GPA PREVIEW — broadcast segment cards */}
       <section className="alt reveal">
-        <Editable tag="div" eid="gpa-preview-eyebrow" className="eyebrow">This Week on Ghanaian Players Abroad (GPA)</Editable>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-xs)' }}>The Weekly <span className="gold">Breakdown.</span></h2>
+        <Editable tag="div" eid="gpa-preview-eyebrow" className="gc-eyebrow">This Week on Ghanaian Players Abroad (GPA)</Editable>
+        <h2 className="gc-h2 tight">The Weekly <span className="gold">Breakdown.</span></h2>
         <p className="lead" style={{ marginBottom: 0, fontSize: 'var(--fs-base)' }}>Updated every Monday.</p>
-        <div className="gpa-grid">
-          <div className="gpa-card">
-            <div className="gpa-lbl">Matchweek Review</div>
-            <Editable tag="div" eid="h-mwr-n" className="gpa-name">Matchweek Review</Editable>
-            <Editable tag="p" eid="h-mwr-b" className="gpa-body">Our weekly breakdown of everything that happened in Ghanaian football. Updated every Monday.</Editable>
+        <div className="gc-segcards">
+          <div className="gc-segcard">
+            <span className="gc-segcard-n">01</span>
+            <div className="gc-seglbl">Matchweek Review</div>
+            <Editable tag="div" eid="h-mwr-n" className="gc-segname">Matchweek Review</Editable>
+            <Editable tag="p" eid="h-mwr-b" className="gc-segbody">Our weekly breakdown of everything that happened in Ghanaian football. Updated every Monday.</Editable>
           </div>
-          <div className="gpa-card">
-            <div className="gpa-lbl">Player of the Week</div>
-            <Editable tag="div" eid="h-potw-n" className="gpa-name">Updated Monday</Editable>
-            <Editable tag="p" eid="h-potw-b" className="gpa-body">We watch every match and pick the one Ghanaian who stood tallest that week.</Editable>
+          <div className="gc-segcard r">
+            <span className="gc-segcard-n">02</span>
+            <div className="gc-seglbl r">Player of the Week</div>
+            <Editable tag="div" eid="h-potw-n" className="gc-segname">Updated Monday</Editable>
+            <Editable tag="p" eid="h-potw-b" className="gc-segbody">We watch every match and pick the one Ghanaian who stood tallest that week.</Editable>
           </div>
-          <div className="gpa-card">
-            <div className="gpa-lbl">Goal and Assist of the Week</div>
-            <Editable tag="div" eid="h-gatw-n" className="gpa-name">Coming Monday</Editable>
-            <Editable tag="p" eid="h-gatw-b" className="gpa-body">Every week we pick the best Ghanaian goal and the most important assist.</Editable>
+          <div className="gc-segcard gr">
+            <span className="gc-segcard-n">03</span>
+            <div className="gc-seglbl gr">Goal and Assist of the Week</div>
+            <Editable tag="div" eid="h-gatw-n" className="gc-segname">Coming Monday</Editable>
+            <Editable tag="p" eid="h-gatw-b" className="gc-segbody">Every week we pick the best Ghanaian goal and the most important assist.</Editable>
           </div>
         </div>
         <Button asChild variant="ghost"><Link to="/gpa">Read Full GPA Weekly</Link></Button>

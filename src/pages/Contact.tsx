@@ -25,16 +25,22 @@ export default function Contact() {
       <Stripe />
       <Nav />
 
-      <div className="page-header reveal">
-        <div className="eyebrow">Get In Touch</div>
-        <h1 className="d2">Talk to <span className="gold">Ghana Comps.</span></h1>
-        <p className="lead" style={{ marginTop: 'var(--space-md)' }}>Want to suggest a player or a game? Have feedback? Or just want to connect? We read everything.</p>
+      <div className="gc-pagehead gc-chevrons quiet reveal">
+        <div className="gc-pagehead-inner">
+          <div className="gc-scorebug">
+            <span className="live">Get In Touch</span>
+          </div>
+          <h1 className="gc-ph-title">Talk to <span className="gold">Ghana Comps.</span></h1>
+          <p className="gc-ph-lead">Want to suggest a player or a game? Have feedback? Or just want to connect? We read everything.</p>
+        </div>
       </div>
 
       <section className="reveal">
         <div className="g2">
           <div>
-            <div className="eyebrow plain">Send a Message</div>
+            <div className="gc-rule" style={{ marginBottom: 'var(--space-5xl)' }}>
+              <h2 className="gc-rule-l">Send a Message</h2>
+            </div>
             <p className="lead" style={{ marginBottom: 'var(--space-4xl)', fontSize: 'var(--fs-base)' }}>Fill in the form and click Send Message. Your email app will open with everything pre-filled. Just hit send.</p>
             <form onSubmit={handleSubmit} noValidate>
               <div className="form-row">
@@ -109,8 +115,8 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="alt" style={{ textAlign: 'center' }}>
-        <p className="italic reveal" style={{ fontSize: 'var(--fs-lg)', color: 'var(--body)', lineHeight: 'var(--lh-relaxed)', maxWidth: '580px', margin: '0 auto' }}>
+      <section className="alt reveal" style={{ textAlign: 'center' }}>
+        <p className="italic" style={{ fontSize: 'var(--fs-lg)', color: 'var(--body)', lineHeight: 'var(--lh-relaxed)', maxWidth: '580px', margin: '0 auto' }}>
           Ghana Comps has big plans ahead. Brand partnerships, deeper coverage and a platform that helps young Ghanaian talent get discovered. <strong style={{ color: 'var(--white)' }}>Watch this space.</strong>
         </p>
       </section>

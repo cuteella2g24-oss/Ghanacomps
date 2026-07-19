@@ -119,21 +119,25 @@ export default function Players() {
       <Stripe />
       <Nav />
 
-      <div className="page-header">
-        <div className="eyebrow">Updated Every Weekend</div>
-        <h1 className="d2">Current <span className="gold">Players.</span></h1>
-        <p className="lead" style={{ marginTop: 'var(--space-md)' }}>Click any weekend performer card to watch the comp on X or TikTok.</p>
-        <div className="filters" style={{ marginTop: 'var(--space-4xl)', marginBottom: 0 }}>
-          {[['all','All'],['pl','Premier League'],['l1','Ligue 1'],['ll','La Liga'],['sa','Serie A'],['bl','Bundesliga'],['ch','Championship'],['ot','Other']].map(([lg, label]) => (
-            <button key={lg} className={`f-btn${activeLeague === lg ? ' on' : ''}`} onClick={() => setActiveLeague(lg)}>{label}</button>
-          ))}
+      <div className="gc-pagehead gc-chevrons medium reveal">
+        <div className="gc-pagehead-inner">
+          <div className="gc-scorebug">
+            <span className="live">Updated Every Weekend</span>
+          </div>
+          <h1 className="gc-ph-title">Current <span className="gold">Players.</span></h1>
+          <p className="gc-ph-lead">Click any weekend performer card to watch the comp on X or TikTok.</p>
+          <div className="filters" style={{ marginTop: 'var(--space-4xl)', marginBottom: 0 }}>
+            {[['all','All'],['pl','Premier League'],['l1','Ligue 1'],['ll','La Liga'],['sa','Serie A'],['bl','Bundesliga'],['ch','Championship'],['ot','Other']].map(([lg, label]) => (
+              <button key={lg} className={`f-btn${activeLeague === lg ? ' on' : ''}`} onClick={() => setActiveLeague(lg)}>{label}</button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* WEEKEND PERFORMERS */}
-      <section>
-        <div className="eyebrow">This Weekend</div>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-2xl)' }}>Weekend <span className="gold">Performers.</span></h2>
+      <section className="reveal">
+        <div className="gc-eyebrow">This Weekend</div>
+        <h2 className="gc-h2" style={{ marginBottom: 'var(--space-2xl)' }}>Weekend <span className="gold">Performers.</span></h2>
 
         {performers.length > 0 ? (
           <div className="performers-grid">
@@ -169,23 +173,28 @@ export default function Players() {
         )}
       </section>
 
-      {/* FULL SQUAD DIRECTORY */}
-      <section className="alt">
-        <div className="eyebrow">Full Squad Directory</div>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-sm)' }}>Ghanaians <span className="gold">Playing Abroad.</span></h2>
+      {/* FULL SQUAD DIRECTORY — A ruled two-column ledger index */}
+      <section className="alt reveal">
+        <div className="gc-rule">
+          <h2 className="gc-rule-l">Ghanaians <span className="gold">Playing Abroad.</span></h2>
+          <span className="gc-rule-r">Full Squad Directory</span>
+        </div>
         <p className="lead" style={{ marginBottom: 'var(--space-2xl)', fontSize: 'var(--fs-base)' }}>We track as many Ghanaians playing abroad as we can. If we are missing someone or a club is wrong, <Link to="/contact" style={{ color: 'var(--gold)' }}>contact us</Link> and we will update it.</p>
 
         <input type="text" className="search player-search" placeholder="Search player by name..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} style={{ marginBottom: 'var(--space-4xl)' }} />
 
-        <div className="g-auto">
-          {staticPlayers.map(p => {
+        <div className="gc-ledger">
+          {staticPlayers.map((p, i) => {
             const matchesLeague = activeLeague === 'all' || p.lg === activeLeague;
             const matchesSearch = !sq || p.name.toLowerCase().includes(sq);
             return (
-              <div key={p.eid} className="player-card" data-lg={p.lg} style={{ display: matchesLeague && matchesSearch ? '' : 'none' }}>
-                <div className="player-lg">{p.league}</div>
-                <Editable tag="div" eid={`${p.eid}n`} className="player-name">{p.name}</Editable>
-                <div className="player-meta" dangerouslySetInnerHTML={{ __html: p.meta }} />
+              <div key={p.eid} className="gc-entry" data-lg={p.lg} style={{ display: matchesLeague && matchesSearch ? '' : 'none' }}>
+                <span className="gc-idx">{String(i + 1).padStart(2, '0')}</span>
+                <span className="gc-entry-main">
+                  <Editable tag="span" eid={`${p.eid}n`} className="gc-entry-name">{p.name}</Editable>
+                  <div className="gc-entry-meta" dangerouslySetInnerHTML={{ __html: p.meta }} />
+                </span>
+                <span className={`gc-entry-lg ${p.lg}`}>{p.league}</span>
               </div>
             );
           })}
@@ -193,11 +202,14 @@ export default function Players() {
             const matchesLeague = activeLeague === 'all' || p.league === activeLeague;
             const matchesSearch = !sq || p.name.toLowerCase().includes(sq);
             return (
-              <div key={p.id} className="player-card" data-lg={p.league} style={{ display: matchesLeague && matchesSearch ? '' : 'none' }}>
-                <div className="player-lg">{p.label}</div>
-                <div className="player-name">{p.name}</div>
-                <div className="player-meta">{p.club}</div>
-                {isAdmin && <button onClick={() => removeExtra(i)} style={{ marginTop: 'var(--space-xs)', background: 'var(--red)', color: '#fff', border: 'none', fontSize: 'var(--fs-2xs)', padding: 'var(--space-2xs) var(--space-sm)', cursor: 'pointer', borderRadius: 'var(--radius-sm)' }}>Remove</button>}
+              <div key={p.id} className="gc-entry" data-lg={p.league} style={{ display: matchesLeague && matchesSearch ? '' : 'none' }}>
+                <span className="gc-idx">{String(staticPlayers.length + i + 1).padStart(2, '0')}</span>
+                <span className="gc-entry-main">
+                  <span className="gc-entry-name">{p.name}</span>
+                  <div className="gc-entry-meta">{p.club}</div>
+                  {isAdmin && <button className="gc-entry-remove" onClick={() => removeExtra(i)}>Remove</button>}
+                </span>
+                <span className={`gc-entry-lg ${p.league}`}>{p.label}</span>
               </div>
             );
           })}

@@ -41,21 +41,27 @@ export default function About() {
       <Stripe />
       <Nav />
 
-      <div className="page-header reveal">
-        <div className="eyebrow">Our Story</div>
-        <h1 className="d2">About <span className="gold">Ghana Comps.</span></h1>
-        <p className="lead italic" style={{ marginTop: 'var(--space-md)' }}>We started this because we love Ghanaian football and felt it was not getting the attention it deserved. So we decided to change that.</p>
+      <div className="gc-pagehead gc-chevrons quiet reveal">
+        <div className="gc-pagehead-inner">
+          <div className="gc-scorebug">
+            <span className="live">Our Story</span>
+          </div>
+          <h1 className="gc-ph-title">About <span className="gold">Ghana Comps.</span></h1>
+          <p className="gc-ph-lead italic">We started this because we love Ghanaian football and felt it was not getting the attention it deserved. So we decided to change that.</p>
+        </div>
       </div>
 
       {/* WHAT WE DO */}
       <section className="reveal">
+        <div className="gc-rule">
+          <h2 className="gc-rule-l">We Cover Every <span className="gold">Ghanaian.</span></h2>
+          <span className="gc-rule-r">What We Do</span>
+        </div>
         <div className="g2">
-          <div>
-            <div className="eyebrow">What We Do</div>
-            <h2 className="d2" style={{ marginBottom: 'var(--space-xl)' }}>We Cover Every <span className="gold">Ghanaian.</span></h2>
-            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}>Every weekend we go through the matches and put together compilations of the Ghanaians who stood out. Goals, assists, saves and performances worth talking about. We do not cover every single player every week. We focus on the ones who had something worth showing.</p>
-            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}>We have to be honest about one thing. Not every game is available to us. Some footage is copyrighted and we simply cannot access it. We work with what we can get and we make the most of every clip we have.</p>
-            <p className="lead">We also take requests. <strong>Drop a player or a game in our X comments and we will get to every game we can access.</strong> Find us at <strong>@Ghanacomps ✓</strong> on X and <strong>@ghanacompss</strong> on TikTok.</p>
+          <div className="gc-prose first">
+            <p>Every weekend we go through the matches and put together compilations of the Ghanaians who stood out. Goals, assists, saves and performances worth talking about. We do not cover every single player every week. We focus on the ones who had something worth showing.</p>
+            <p>We have to be honest about one thing. Not every game is available to us. Some footage is copyrighted and we simply cannot access it. We work with what we can get and we make the most of every clip we have.</p>
+            <p>We also take requests. <strong>Drop a player or a game in our X comments and we will get to every game we can access.</strong> Find us at <strong>@Ghanacomps ✓</strong> on X and <strong>@ghanacompss</strong> on TikTok.</p>
           </div>
           <div className="stack">
             <div className="stack-item"><div className="stack-icon">⚽</div><div><div className="stack-t">Weekend Highlights</div><div className="stack-b">Goals, assists, saves and standout performances from Ghanaians playing abroad. Every weekend.</div></div></div>
@@ -68,13 +74,15 @@ export default function About() {
 
       {/* OUR STORY */}
       <section className="alt reveal">
+        <div className="gc-rule">
+          <h2 className="gc-rule-l">Started <span className="gold">January 2026.</span></h2>
+          <span className="gc-rule-r">Our Story</span>
+        </div>
         <div className="g2">
-          <div>
-            <div className="eyebrow">Our Story</div>
-            <h2 className="d2" style={{ marginBottom: 'var(--space-xl)' }}>Started <span className="gold">January 2026.</span></h2>
-            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}>Ghana Comps launched in January 2026 with one goal. Make sure Ghanaian football gets the attention it deserves. We post every weekend. We cover the players who stood out. And we bring back the legends.</p>
-            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}><strong>Very early on Michael Essien saw our compilation and reposted it on both his personal TikTok and his Facebook page.</strong> That meant everything. Two months in and we were already reaching the legends themselves.</p>
-            <p className="lead">Fans have been incredible too. People telling us they never knew certain players were that good. People saying we are keeping the legacy of Ghanaian legends alive. That is exactly why we do this.</p>
+          <div className="gc-prose first">
+            <p>Ghana Comps launched in January 2026 with one goal. Make sure Ghanaian football gets the attention it deserves. We post every weekend. We cover the players who stood out. And we bring back the legends.</p>
+            <p><strong>Very early on Michael Essien saw our compilation and reposted it on both his personal TikTok and his Facebook page.</strong> That meant everything. Two months in and we were already reaching the legends themselves.</p>
+            <p>Fans have been incredible too. People telling us they never knew certain players were that good. People saying we are keeping the legacy of Ghanaian legends alive. That is exactly why we do this.</p>
           </div>
           <div className="quote-stack">
             <div className="quote-block"><p className="quote-txt">"Keeping the Ghanaian midfielders legacy alive."</p><p className="quote-src">Fan reaction on X</p></div>
@@ -90,13 +98,15 @@ export default function About() {
 
       {/* OUR VISION */}
       <section className="reveal">
+        <div className="gc-rule">
+          <h2 className="gc-rule-l">This Is Just <span className="gold">the Start.</span></h2>
+          <span className="gc-rule-r">Our Vision</span>
+        </div>
         <div className="g2" style={{ alignItems: 'start' }}>
-          <div>
-            <div className="eyebrow">Our Vision</div>
-            <h2 className="d2" style={{ marginBottom: 'var(--space-xl)' }}>This Is Just <span className="gold">the Start.</span></h2>
-            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}>We want Ghana Comps to be the place people come to when they want Ghanaian football. Not just highlights but the full story. Attribute compilations showing what made certain legends so special.</p>
-            <p className="lead" style={{ marginBottom: 'var(--space-lg)' }}>Think something like Asamoah Gyan — The Goal Machine. Or Ghanaian legends at their biggest stages. Abedi Pele at Marseille. Essien at Chelsea. Appiah at Juventus. Moments that defined careers and carried the Ghana flag at the very highest level.</p>
-            <p className="lead">As the platform grows we want to use it to shine a light on young Ghanaian talent. Players who deserve to be seen but have not had that chance yet.</p>
+          <div className="gc-prose first">
+            <p>We want Ghana Comps to be the place people come to when they want Ghanaian football. Not just highlights but the full story. Attribute compilations showing what made certain legends so special.</p>
+            <p>Think something like Asamoah Gyan — The Goal Machine. Or Ghanaian legends at their biggest stages. Abedi Pele at Marseille. Essien at Chelsea. Appiah at Juventus. Moments that defined careers and carried the Ghana flag at the very highest level.</p>
+            <p>As the platform grows we want to use it to shine a light on young Ghanaian talent. Players who deserve to be seen but have not had that chance yet.</p>
           </div>
           <div style={{ border: '1px dashed rgb(var(--gold-rgb) / .25)', padding: 'var(--space-6xl) var(--space-5xl)', position: 'relative' }}>
             <span style={{ position: 'absolute', top: '-10px', left: '18px', background: 'var(--bg)', padding: 'var(--space-3xs) var(--space-md)', fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)' }}>Coming Soon</span>
@@ -109,8 +119,10 @@ export default function About() {
 
       {/* FAN REACTIONS GALLERY */}
       <section className="alt reveal">
-        <div className="eyebrow">The People</div>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-sm)' }}>What Ghana Football Fans Are <span className="gold">Saying.</span></h2>
+        <div className="gc-rule">
+          <h2 className="gc-rule-l">What Ghana Football Fans Are <span className="gold">Saying.</span></h2>
+          <span className="gc-rule-r">The People</span>
+        </div>
         <p className="lead" style={{ marginBottom: 'var(--space-7xl)', fontSize: 'var(--fs-base)' }}>We post. They react. And the conversation never stops.</p>
 
         {reactionGroups.map(group => (
@@ -132,8 +144,10 @@ export default function About() {
 
       {/* REQUESTS */}
       <section className="reveal">
-        <div className="eyebrow">The Requests</div>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-sm)' }}>They Ask. <span className="gold">We Deliver.</span></h2>
+        <div className="gc-rule">
+          <h2 className="gc-rule-l">They Ask. <span className="gold">We Deliver.</span></h2>
+          <span className="gc-rule-r">The Requests</span>
+        </div>
         <p className="lead" style={{ marginBottom: 'var(--space-6xl)', fontSize: 'var(--fs-base)' }}>Every request goes into the list. Some footage is copyrighted and not always available but when we can do it we do it fast.</p>
 
         <div style={{ marginBottom: 'var(--space-7xl)' }}>
@@ -167,8 +181,10 @@ export default function About() {
 
       {/* ESSIEN SPECIAL MOMENT */}
       <section className="alt reveal">
-        <div className="eyebrow">Special Moment</div>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-sm)' }}>When <span className="gold">Essien Watched.</span></h2>
+        <div className="gc-rule">
+          <h2 className="gc-rule-l">When <span className="gold">Essien Watched.</span></h2>
+          <span className="gc-rule-r">Special Moment</span>
+        </div>
         <p className="lead" style={{ marginBottom: 'var(--space-5xl)', fontSize: 'var(--fs-base)' }}>Two months in and we were already reaching the legends. Michael Essien saw our compilation and acknowledged it on both his TikTok and his Facebook.</p>
         <div className="special-box">
           <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-xl)' }}>★ Special Moment</div>

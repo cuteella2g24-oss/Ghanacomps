@@ -89,111 +89,121 @@ export default function GPA() {
       <Stripe />
       <Nav />
 
-      <div className="page-header">
-        <div className="eyebrow">Updated Every Week</div>
-        <h1 className="d2"><span className="gold">GPA</span> Weekly.</h1>
-        <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--sub)', marginTop: 'var(--space-2xs)' }}>Ghanaian Players Abroad</p>
-        <p className="lead" style={{ marginTop: 'var(--space-md)' }}>Every week we break down what happened, what stood out and what deserved more attention.</p>
+      <div className="gc-pagehead gc-chevrons medium reveal">
+        <div className="gc-pagehead-inner">
+          <div className="gc-scorebug">
+            <span className="live">Updated Every Week</span>
+            <span className="meta">Ghanaian Players Abroad</span>
+          </div>
+          <h1 className="gc-ph-title"><span className="gold">GPA</span> Weekly.</h1>
+          <p className="gc-ph-lead">Every week we break down what happened, what stood out and what deserved more attention.</p>
+        </div>
       </div>
 
-      {/* 1. MATCHWEEK REVIEW */}
-      <section>
-        <div className="eyebrow">Matchweek Review</div>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-4xl)' }}><Editable tag="span" eid="mwr-heading" className="gold">Matchweek 34 Review.</Editable></h2>
-        <div style={{ maxWidth: '760px' }}>
-          <GpaBlock
-            id="mwr"
-            label="This Week's Breakdown"
-            nameEid=""
-            nameDef=""
-            bodyEid="mwr-body"
-            bodyDef="Write your matchweek review here. Talk about the week in Ghanaian football — what impressed you, what disappointed, the conversation that needs to happen. This is your column, written in your voice."
-            linkDefault="Watch: Kudus vs Man City — Matchday 38"
-            links={links}
-            onSaveLink={saveLink}
-            onClearLink={clearLink}
-            isAdmin={isAdmin}
-          />
+      {/* 1. MATCHWEEK REVIEW — editorial column */}
+      <section className="gc-editorial reveal">
+        <div className="gc-rule">
+          <span className="gc-rule-eyebrow">Matchweek Review</span>
+        </div>
+        <h2 className="gc-col-head"><Editable tag="span" eid="mwr-heading">Matchweek 34 Review.</Editable></h2>
+        <GpaBlock
+          id="mwr"
+          label="This Week's Breakdown"
+          nameEid=""
+          nameDef=""
+          bodyEid="mwr-body"
+          bodyDef="Write your matchweek review here. Talk about the week in Ghanaian football — what impressed you, what disappointed, the conversation that needs to happen. This is your column, written in your voice."
+          linkDefault="Watch: Kudus vs Man City — Matchday 38"
+          links={links}
+          onSaveLink={saveLink}
+          onClearLink={clearLink}
+          isAdmin={isAdmin}
+        />
+      </section>
+
+      {/* 2. PLAYER OF THE WEEK (red accent) */}
+      <section className="gc-editorial alt red-accent reveal">
+        <div className="gc-rule">
+          <span className="gc-rule-eyebrow r">Player of the Week</span>
+        </div>
+        <h2 className="gc-col-head">Who <span className="gold">Stood Out.</span></h2>
+        <GpaBlock
+          id="potw"
+          sectionClass="red"
+          labelClass="red"
+          label="Player of the Week"
+          nameEid="potw-name"
+          nameDef="Updated Every Monday"
+          bodyEid="potw-body"
+          bodyDef="Write about the player of the week here. What did he do, which game, what made the performance stand out. Talk about the details — the numbers, the moments, the context. This is a written breakdown, not just a caption."
+          linkDefault="Watch: Kudus vs Man City — Matchday 38"
+          links={links}
+          onSaveLink={saveLink}
+          onClearLink={clearLink}
+          isAdmin={isAdmin}
+        />
+      </section>
+
+      {/* 3. GOAL AND ASSIST (two-block split) */}
+      <section className="gc-editorial reveal">
+        <div className="gc-rule">
+          <span className="gc-rule-eyebrow">Goal and Assist of the Week</span>
+        </div>
+        <h2 className="gc-col-head">The Moments <span className="gold">Worth Watching.</span></h2>
+        <div className="gc-col-split">
+          <div>
+            <GpaBlock
+              id="goal"
+              label="Goal of the Week"
+              nameEid="goal-name"
+              nameDef="Coming Monday"
+              bodyEid="goal-body"
+              bodyDef="Write about the goal here. Which player, which game, what made it special. Not every goal is equal — explain why this one deserved to be picked."
+              linkDefault="Link caption..."
+              links={links}
+              onSaveLink={saveLink}
+              onClearLink={clearLink}
+              isAdmin={isAdmin}
+            />
+          </div>
+          <div>
+            <GpaBlock
+              id="assist"
+              label="Assist of the Week"
+              nameEid="assist-name"
+              nameDef="Coming Monday"
+              bodyEid="assist-body"
+              bodyDef="Write about the assist here. The pass that made everything possible. The one nobody talked about."
+              linkDefault="Link caption..."
+              links={links}
+              onSaveLink={saveLink}
+              onClearLink={clearLink}
+              isAdmin={isAdmin}
+            />
+          </div>
         </div>
       </section>
 
-      {/* 2. PLAYER OF THE WEEK */}
-      <section className="alt">
-        <div className="eyebrow">Player of the Week</div>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-4xl)' }}>Who <span className="gold">Stood Out.</span></h2>
-        <div style={{ maxWidth: '760px' }}>
-          <GpaBlock
-            id="potw"
-            sectionClass="red"
-            labelClass="red"
-            label="Player of the Week"
-            nameEid="potw-name"
-            nameDef="Updated Every Monday"
-            bodyEid="potw-body"
-            bodyDef="Write about the player of the week here. What did he do, which game, what made the performance stand out. Talk about the details — the numbers, the moments, the context. This is a written breakdown, not just a caption."
-            linkDefault="Watch: Kudus vs Man City — Matchday 38"
-            links={links}
-            onSaveLink={saveLink}
-            onClearLink={clearLink}
-            isAdmin={isAdmin}
-          />
+      {/* 4. UNDERRATED (green accent) */}
+      <section className="gc-editorial alt green-accent reveal">
+        <div className="gc-rule">
+          <span className="gc-rule-eyebrow gr">Underrated Performance of the Week</span>
         </div>
-      </section>
-
-      {/* 3. GOAL AND ASSIST */}
-      <section>
-        <div className="eyebrow">Goal and Assist of the Week</div>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-4xl)' }}>The Moments <span className="gold">Worth Watching.</span></h2>
-        <div style={{ maxWidth: '760px' }}>
-          <GpaBlock
-            id="goal"
-            label="Goal of the Week"
-            nameEid="goal-name"
-            nameDef="Coming Monday"
-            bodyEid="goal-body"
-            bodyDef="Write about the goal here. Which player, which game, what made it special. Not every goal is equal — explain why this one deserved to be picked."
-            linkDefault="Link caption..."
-            links={links}
-            onSaveLink={saveLink}
-            onClearLink={clearLink}
-            isAdmin={isAdmin}
-          />
-          <GpaBlock
-            id="assist"
-            label="Assist of the Week"
-            nameEid="assist-name"
-            nameDef="Coming Monday"
-            bodyEid="assist-body"
-            bodyDef="Write about the assist here. The pass that made everything possible. The one nobody talked about."
-            linkDefault="Link caption..."
-            links={links}
-            onSaveLink={saveLink}
-            onClearLink={clearLink}
-            isAdmin={isAdmin}
-          />
-        </div>
-      </section>
-
-      {/* 4. UNDERRATED */}
-      <section className="alt">
-        <div className="eyebrow">Underrated Performance of the Week</div>
-        <h2 className="d2" style={{ marginBottom: 'var(--space-xl)' }}>The One <span className="gold">Everybody Missed.</span></h2>
-        <div style={{ maxWidth: '760px' }}>
-          <GpaBlock
-            id="up"
-            sectionClass="grn"
-            label="Underrated Performance"
-            nameEid="up-name"
-            nameDef="Updated Every Week"
-            bodyEid="up-body"
-            bodyDef="Write about the performance that deserved more noise. The player who did their job brilliantly and got no credit. Every week someone has a brilliant game and the world moves on without noticing. Find them. Write about them. Make sure they are seen."
-            linkDefault="Link caption..."
-            links={links}
-            onSaveLink={saveLink}
-            onClearLink={clearLink}
-            isAdmin={isAdmin}
-          />
-        </div>
+        <h2 className="gc-col-head">The One <span className="gold">Everybody Missed.</span></h2>
+        <GpaBlock
+          id="up"
+          sectionClass="grn"
+          label="Underrated Performance"
+          nameEid="up-name"
+          nameDef="Updated Every Week"
+          bodyEid="up-body"
+          bodyDef="Write about the performance that deserved more noise. The player who did their job brilliantly and got no credit. Every week someone has a brilliant game and the world moves on without noticing. Find them. Write about them. Make sure they are seen."
+          linkDefault="Link caption..."
+          links={links}
+          onSaveLink={saveLink}
+          onClearLink={clearLink}
+          isAdmin={isAdmin}
+        />
       </section>
 
       <Footer />

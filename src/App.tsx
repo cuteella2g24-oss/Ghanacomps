@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AdminProvider } from './contexts/AdminContext';
 import AdminUI from './components/AdminUI';
+import ScrollReveal from './components/ScrollReveal';
 import Home from './pages/Home';
 import Players from './pages/Players';
 import Legends from './pages/Legends';
@@ -13,6 +14,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AdminProvider>
+        <ScrollReveal />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/gpa" element={<GPA />} />
