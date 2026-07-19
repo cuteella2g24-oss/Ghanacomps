@@ -2474,17 +2474,9 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-social-strip::-webkit-scrollbar { display: none; }
 .gc-social-cell {
   flex: 0 0 auto; width: 320px; min-height: 420px; scroll-snap-align: start;
-  position: relative; background: var(--raised); border: 1px solid var(--line);
-  border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--elev-1);
+  position: relative; overflow: hidden;
 }
 .gc-social-cell.tiktok { width: 325px; }
-.gc-social-badge {
-  position: absolute; z-index: 2; top: var(--space-sm); left: var(--space-sm);
-  padding: var(--space-3xs) var(--space-sm); font-size: var(--fs-micro);
-  letter-spacing: var(--ls-3); text-transform: uppercase; font-weight: var(--fw-semibold);
-  color: var(--gold); background: rgb(var(--gold-rgb) / .12); border-radius: var(--radius-sm);
-  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
-}
 .gc-social-note {
   font-size: var(--fs-sm); color: var(--sub); margin-top: var(--space-md);
   font-style: italic; font-family: var(--font-a);

@@ -92,7 +92,7 @@ export default function SocialStrip() {
   }, []);
 
   return (
-    <section className="gc-social alt reveal" ref={sectionRef}>
+    <section className="gc-social reveal" ref={sectionRef}>
       <div className="gc-eyebrow">From the Timeline</div>
       <h2 className="gc-h2">
         Latest on <span className="gold">X / TikTok.</span>
@@ -108,9 +108,6 @@ export default function SocialStrip() {
             key={i}
             className={`gc-social-cell${post.platform === 'tiktok' ? ' tiktok' : ''}`}
           >
-            <span className="gc-social-badge">
-              {post.platform === 'x' ? 'On X' : 'On TikTok'}
-            </span>
             {scriptsMounted && post.platform === 'x' ? (
               <blockquote className="twitter-tweet" data-theme={embedTheme} data-dnt="true">
                 <a href={post.url}>{post.caption}</a>
