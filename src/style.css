@@ -2282,6 +2282,14 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-hero.gc-chevrons:has(.gc-hvideo)::before,
 .gc-pagehead.gc-chevrons:has(.gc-hvideo)::before { z-index: 1; }
 
+/* Hero content sits over a dark film in BOTH themes, so the adaptive
+   --white/--body/--sub tokens (which flip to dark on paper) go invisible.
+   Force light text whenever the hero actually holds a video layer. */
+.gc-hero:has(.gc-hvideo) .gc-hero-title { color: var(--on-brand); }
+.gc-hero:has(.gc-hvideo) .gc-hero-lead { color: rgb(255 255 255 / .82); }
+.gc-hero:has(.gc-hvideo) .gc-scorebug span.meta { color: rgb(255 255 255 / .72); }
+.gc-hero:has(.gc-hvideo) .hero-follow { color: rgb(255 255 255 / .82); }
+
 /* ─── 2.b — Video card ───────────────────────────────────────────────────── */
 .gc-vcard {
   display: block; width: 100%; text-align: left; cursor: pointer;
