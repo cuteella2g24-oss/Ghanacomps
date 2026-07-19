@@ -7,6 +7,8 @@ import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Button } from '@/components/ui/button';
+import VideoCard from '../components/VideoCard';
+import { type Clip, DEFAULT_PERFORMER_CLIPS } from '../data/clips';
 
 interface Performer { caption: string; url: string; }
 interface ExtraPlayer { id: string; name: string; club: string; league: string; label: string; }
@@ -180,13 +182,22 @@ export default function Players() {
 
         {performers.length > 0 ? (
           <div className="performers-grid">
-            {performers.map((item, i) => (
-              <div key={i} className="performer-card">
-                <div className="performer-caption">{item.caption}</div>
-                <a href={item.url} target="_blank" rel="noopener" className="performer-link">▶ Watch Now</a>
-                {isAdmin && <button className="performer-remove" onClick={() => removePerformer(i)}>×</button>}
-              </div>
-            ))}
+            {performers.map((item, i) => {
+              // Phone-shot vertical clip per card (§3 Players). Placeholder clips
+              // cycle the default pool; the lightbox caption + attribution use
+              // the performer's own caption/url. Drop a real MP4 at the clip's
+              // slug path to swap it in (see the video README).
+              const base = DEFAULT_PERFORMER_CLIPS[i % DEFAULT_PERFORMER_CLIPS.length];
+              const clip: Clip = { ...base, title: item.caption, originalUrl: item.url };
+              return (
+                <div key={i} className="performer-card">
+                  <VideoCard clip={clip} size="sm" showCaption={false} />
+                  <div className="performer-caption" style={{ marginTop: 'var(--space-md)' }}>{item.caption}</div>
+                  <a href={item.url} target="_blank" rel="noopener" className="performer-link">▶ Watch Now</a>
+                  {isAdmin && <button className="performer-remove" onClick={() => removePerformer(i)}>×</button>}
+                </div>
+              );
+            })}
           </div>
         ) : (
           <div style={{ border: '1px dashed rgb(var(--gold-rgb) / .2)', padding: 'var(--space-6xl) var(--space-4xl)', textAlign: 'center' }}>

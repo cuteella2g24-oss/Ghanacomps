@@ -167,6 +167,29 @@
   --dur-fast:  180ms;   /* hovers, small state */
   --dur-med:   280ms;   /* card lift, panel */
   --dur-slow:  520ms;   /* entrance reveal */
+
+  /* ── VIDEO (additive — VIDEO_DESIGN_SPEC §1) ──────────────────────────────
+     Only what existing tokens genuinely can't express: two legibility scrims,
+     the lightbox backdrop dim, and the frosted play-glyph disc. No new brand
+     hue — pure black/neutral alpha ramps that guarantee AA over arbitrary video
+     frames. Re-declared in BOTH light blocks below (they carry color). */
+
+  /* Hero legibility scrim — left-weighted dark wash under the headline column
+     so the Playfair hero title stays AA over ANY frame; fades to near-clear
+     over the video's right side, plus a bottom grounding gradient. */
+  --video-scrim-hero:
+    linear-gradient(90deg,
+      rgba(0,0,0,.72) 0%, rgba(0,0,0,.58) 34%,
+      rgba(0,0,0,.28) 62%, rgba(0,0,0,.08) 100%),
+    linear-gradient(0deg, rgba(0,0,0,.45) 0%, transparent 42%);
+  /* Card poster scrim — bottom-up so a caption/tag/glyph reads over a bright
+     poster frame. Used on gc-vcard + card-clip. */
+  --video-scrim-card:
+    linear-gradient(0deg, rgba(0,0,0,.62) 0%, rgba(0,0,0,.12) 46%, transparent 72%);
+  /* Lightbox backdrop dim — pairs with --glass-blur on the overlay. */
+  --video-backdrop: rgba(0,0,0,.78);
+  /* Play-glyph disc surface — frosted white disc, Apple's single control. */
+  --video-glyph-bg: rgba(255,255,255,.16);
 }
 
 /* ─── RESET (in @layer base so Tailwind utilities can override it) ──────── */
@@ -851,14 +874,17 @@ footer { padding: var(--space-8xl) 5vw var(--space-5xl); background: var(--surfa
 @media (prefers-reduced-motion: reduce) {
   .card, .post-card, .legend-card, .player-card,
   .archive-card, .performer-card, .fixture, .gpa-card,
-  .gc-segcard, .gc-fixture, [data-slot="card"] {
+  .gc-segcard, .gc-fixture, .gc-vcard, [data-slot="card"] {
     transition: border-color var(--dur-fast) var(--ease-soft),
                 box-shadow var(--dur-fast) var(--ease-soft);
   }
   .card:hover, .post-card:hover, .legend-card:hover, .player-card:hover,
   .archive-card:hover, .performer-card:hover,
   .fixture:hover, .gpa-card:hover,
-  .gc-segcard:hover, .gc-fixture:hover, [data-slot="card"]:hover { transform: none; }
+  .gc-segcard:hover, .gc-fixture:hover, .gc-vcard:hover, [data-slot="card"]:hover { transform: none; }
+  /* Video-card internals: freeze poster/glyph scale under reduced-motion. */
+  .gc-vcard:hover .gc-vcard-poster,
+  .gc-vcard:hover .gc-vcard-glyph { transform: none; }
 }
 
 /* ─── REVEAL ───────────────────────────────────────────────
@@ -1974,6 +2000,20 @@ body.edit .react-remove-btn { display: flex !important; }
   --elev-1: 0 1px 2px rgba(0,0,0,.06), 0 2px 8px -2px rgba(0,0,0,.10);
   --elev-2: 0 2px 6px -1px rgba(0,0,0,.10), 0 12px 28px -8px rgba(0,0,0,.16);
   --elev-3: 0 8px 40px -8px rgba(0,0,0,.16), 0 2px 10px -2px rgba(0,0,0,.10);
+  /* ── VIDEO re-declared for paper (VIDEO_DESIGN_SPEC §1) ──
+     Scrims stay dark: the hero video is dark-cinematic in BOTH themes (video is
+     imagery, not a themed surface) and the hero title is --white on video, so
+     the dark scrim keeps AA on paper too. Backdrop lightens to a warm dim so
+     paper mode isn't a black void while still focusing the player. */
+  --video-scrim-hero:
+    linear-gradient(90deg,
+      rgba(0,0,0,.70) 0%, rgba(0,0,0,.54) 34%,
+      rgba(0,0,0,.26) 62%, rgba(0,0,0,.06) 100%),
+    linear-gradient(0deg, rgba(0,0,0,.42) 0%, transparent 42%);
+  --video-scrim-card:
+    linear-gradient(0deg, rgba(0,0,0,.58) 0%, rgba(0,0,0,.10) 46%, transparent 72%);
+  --video-backdrop: rgba(20,18,14,.72);
+  --video-glyph-bg: rgba(255,255,255,.20);
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
@@ -2003,5 +2043,276 @@ body.edit .react-remove-btn { display: flex !important; }
     --elev-1: 0 1px 2px rgba(0,0,0,.06), 0 2px 8px -2px rgba(0,0,0,.10);
     --elev-2: 0 2px 6px -1px rgba(0,0,0,.10), 0 12px 28px -8px rgba(0,0,0,.16);
     --elev-3: 0 8px 40px -8px rgba(0,0,0,.16), 0 2px 10px -2px rgba(0,0,0,.10);
+    /* ── VIDEO re-declared for paper — see the [data-theme="light"] block
+       above; duplicated intentionally so the system-preference path never
+       inherits dark-theme scrims/backdrop (POLISH §risk-5 gotcha). */
+    --video-scrim-hero:
+      linear-gradient(90deg,
+        rgba(0,0,0,.70) 0%, rgba(0,0,0,.54) 34%,
+        rgba(0,0,0,.26) 62%, rgba(0,0,0,.06) 100%),
+      linear-gradient(0deg, rgba(0,0,0,.42) 0%, transparent 42%);
+    --video-scrim-card:
+      linear-gradient(0deg, rgba(0,0,0,.58) 0%, rgba(0,0,0,.10) 46%, transparent 72%);
+    --video-backdrop: rgba(20,18,14,.72);
+    --video-glyph-bg: rgba(255,255,255,.20);
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VIDEO SYSTEM (VIDEO_DESIGN_SPEC §2)
+   Authored OUTSIDE @layer, same convention as the revamp/polish classes above,
+   so these win over Tailwind utilities without !important. Every value traces
+   to a :root token; the only additive tokens are the four --video-* scrims.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── 2.a — Ambient hero video layer ─────────────────────────────────────── */
+.gc-hvideo {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden;
+  background: var(--surface); /* base color before the poster paints */
+}
+.gc-hvideo-poster, .gc-hvideo-el {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+}
+/* Poster-first, then cross-fade to video (Research A2). */
+.gc-hvideo-el { opacity: 0; transition: opacity var(--dur-slow) var(--ease-soft); }
+.gc-hvideo.is-playing .gc-hvideo-el { opacity: 1; }
+.gc-hvideo.is-playing .gc-hvideo-poster {
+  opacity: 0; transition: opacity var(--dur-slow) var(--ease-soft);
+}
+.gc-hvideo-scrim {
+  position: absolute; inset: 0; z-index: 1;
+  background: var(--video-scrim-hero); pointer-events: none;
+}
+/* Raise the chevron keylines OVER the scrim (still below the z-index:1
+   content) so the broadcast identity reads as an overlay on the footage
+   (§2.a). Scoped with :has() to ONLY heroes/pageheads that actually hold a
+   video layer — pages without video keep their chevrons at z-index 0. The
+   chevron ::before still sits at z-index 1 alongside content, but it is
+   pointer-events:none and paints before the content DOM node, so content
+   stays visually on top. */
+.gc-hero.gc-chevrons:has(.gc-hvideo)::before,
+.gc-pagehead.gc-chevrons:has(.gc-hvideo)::before { z-index: 1; }
+
+/* ─── 2.b — Video card ───────────────────────────────────────────────────── */
+.gc-vcard {
+  display: block; width: 100%; text-align: left; cursor: pointer;
+  background: var(--raised); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--elev-1);
+  font-family: inherit; color: inherit; padding: 0;
+  transition: border-color var(--dur-med) var(--ease-spring),
+              box-shadow var(--dur-med) var(--ease-spring),
+              transform var(--dur-med) var(--ease-spring);
+}
+.gc-vcard:hover {
+  border-color: rgb(var(--gold-rgb) / .3);
+  box-shadow: var(--elev-2); transform: translateY(-2px);
+}
+.gc-vcard:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.gc-vcard:active { transform: translateY(-1px); }
+
+.gc-vcard-media {
+  position: relative; display: block; aspect-ratio: 16/9;
+  overflow: hidden; background: var(--surface);
+}
+.gc-vcard.r9x16 .gc-vcard-media { aspect-ratio: 9/16; }
+.gc-vcard.r4x5  .gc-vcard-media { aspect-ratio: 4/5; }
+.gc-vcard-poster {
+  width: 100%; height: 100%; object-fit: cover; filter: var(--img-filter);
+  transition: transform var(--dur-med) var(--ease-spring);
+}
+.gc-vcard:hover .gc-vcard-poster { transform: scale(1.03); }
+/* Missing-poster fallback — reads as "clip unavailable", never a broken box. */
+.gc-vcard-noposter {
+  position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; color: var(--sub); font-size: var(--fs-2xl);
+}
+.gc-vcard-scrim {
+  position: absolute; inset: 0; background: var(--video-scrim-card);
+  pointer-events: none;
+}
+/* The single Apple play glyph — frosted disc, centered, ≥44px hit area. */
+.gc-vcard-glyph {
+  position: absolute; inset: 0; margin: auto;
+  width: 56px; height: 56px; border-radius: var(--radius-full);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--video-glyph-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid rgba(255,255,255,.28);
+  transition: transform var(--dur-med) var(--ease-spring),
+              background var(--dur-fast) var(--ease-soft);
+}
+.gc-vcard:hover .gc-vcard-glyph { transform: scale(1.08); background: rgba(255,255,255,.24); }
+.gc-vcard-glyph svg { width: 20px; height: 20px; fill: #fff; margin-left: 2px; }
+.gc-vcard.sm .gc-vcard-glyph { width: 44px; height: 44px; }
+.gc-vcard.sm .gc-vcard-glyph svg { width: 16px; height: 16px; }
+.gc-vcard-dur {
+  position: absolute; top: var(--space-sm); right: var(--space-sm);
+  padding: var(--space-3xs) var(--space-xs);
+  font-size: var(--fs-micro); letter-spacing: var(--ls-1); font-weight: var(--fw-medium);
+  color: #fff; background: rgba(0,0,0,.55); border-radius: var(--radius-sm);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+.gc-vcard-cap { display: block; padding: var(--space-lg) var(--space-2xl) var(--space-2xl); }
+.gc-vcard-tag {
+  display: block; font-size: var(--fs-micro); letter-spacing: var(--ls-4);
+  text-transform: uppercase; color: var(--gold); margin-bottom: var(--space-2xs);
+}
+.gc-vcard-title {
+  display: block; font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-lg); line-height: var(--lh-snug);
+  letter-spacing: -0.005em; color: var(--white);
+}
+
+/* ─── 2.c — Highlights section ───────────────────────────────────────────── */
+.gc-highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-4xl);
+  margin-top: var(--space-8xl);
+}
+.gc-highlights-item { display: flex; flex-direction: column; }
+.gc-highlights-item .card-actions { margin-top: var(--space-sm); }
+@media (max-width: 768px) {
+  .gc-highlights-grid {
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: 82%;          /* peek the next card = the swipe affordance */
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    scroll-padding: 0 5vw; gap: var(--space-2xl);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .gc-highlights-grid::-webkit-scrollbar { display: none; }
+  .gc-highlights-grid > .gc-highlights-item { scroll-snap-align: start; }
+}
+
+/* ─── 2.d — Immersive lightbox ───────────────────────────────────────────── */
+.gc-lightbox {
+  position: fixed; inset: 0; z-index: 9997;
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(var(--space-5xl), 4vw, var(--space-11xl));
+}
+.gc-lightbox-backdrop {
+  position: absolute; inset: 0; background: var(--video-backdrop);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  opacity: 0; transition: opacity var(--dur-med) var(--ease-soft);
+}
+.gc-lightbox.is-open .gc-lightbox-backdrop { opacity: 1; }
+
+.gc-lightbox-stage {
+  position: relative; z-index: 1; width: min(100%, 1100px);
+  transform: scale(.92); opacity: 0;
+  transition: transform var(--dur-med) var(--ease-spring),
+              opacity var(--dur-med) var(--ease-soft);
+}
+.gc-lightbox.is-open .gc-lightbox-stage { transform: none; opacity: 1; }
+/* Reduced-motion: appear instantly, no scale/spring (governs UI only). */
+.gc-lightbox.no-motion .gc-lightbox-backdrop,
+.gc-lightbox.no-motion .gc-lightbox-stage { transition: none; }
+.gc-lightbox.no-motion .gc-lightbox-stage { transform: none; }
+/* Close: slightly faster ease-in (Research A6). */
+.gc-lightbox.is-closing .gc-lightbox-backdrop { opacity: 0; }
+.gc-lightbox.is-closing .gc-lightbox-stage {
+  transform: scale(.96); opacity: 0;
+  transition: transform var(--dur-fast) var(--ease-soft),
+              opacity var(--dur-fast) var(--ease-soft);
+}
+.gc-lightbox.r9x16 .gc-lightbox-stage { width: min(100%, 420px); }
+
+.gc-lightbox-frame {
+  position: relative; width: 100%; aspect-ratio: 16/9;
+  background: #000; border-radius: var(--radius-xl);
+  overflow: hidden; box-shadow: var(--elev-3);
+}
+.gc-lightbox.r9x16 .gc-lightbox-frame { aspect-ratio: 9/16; }
+.gc-lightbox-poster, .gc-lightbox-el {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+}
+.gc-lightbox-el {
+  opacity: 0; transition: opacity var(--dur-med) var(--ease-soft);
+  background: #000;
+}
+.gc-lightbox.is-ready .gc-lightbox-el { opacity: 1; }
+.gc-lightbox-fallback {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--space-lg); padding: var(--space-5xl); text-align: center;
+}
+.gc-lightbox-fallback p { color: var(--body); font-size: var(--fs-sm); }
+.gc-lightbox-fallback a {
+  font-size: var(--fs-xs); letter-spacing: var(--ls-1); text-transform: uppercase;
+  color: var(--gold);
+}
+.gc-lightbox-close {
+  position: absolute; top: calc(-1 * var(--space-9xl)); right: 0;
+  width: 44px; height: 44px; border-radius: var(--radius-full);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--video-glyph-bg); color: #fff;
+  -webkit-backdrop-filter: blur(var(--glass-blur)); backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255,255,255,.28);
+  transition: background var(--dur-fast) var(--ease-soft),
+              transform var(--dur-fast) var(--ease-spring);
+}
+.gc-lightbox-close:hover { background: rgba(255,255,255,.24); transform: scale(1.06); }
+.gc-lightbox-close:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.gc-lightbox-close svg { width: 16px; height: 16px; stroke: #fff; stroke-width: 2; fill: none; }
+.gc-lightbox-caption {
+  margin-top: var(--space-lg); display: flex; justify-content: space-between;
+  align-items: baseline; gap: var(--space-lg); color: var(--body);
+}
+.gc-lightbox-caption .t {
+  font-family: var(--font-d); font-weight: var(--fw-semibold);
+  font-size: var(--fs-lg); color: #fff; letter-spacing: -0.005em;
+}
+.gc-lightbox-caption a {
+  font-size: var(--fs-xs); letter-spacing: var(--ls-1);
+  text-transform: uppercase; color: var(--gold); white-space: nowrap;
+}
+
+/* ─── 2.e — Social strip (corralled embeds) ──────────────────────────────── */
+.gc-social-strip {
+  display: flex; gap: var(--space-2xl); overflow-x: auto;
+  scroll-snap-type: x proximity; padding-bottom: var(--space-md);
+  margin-top: var(--space-8xl);
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.gc-social-strip::-webkit-scrollbar { display: none; }
+.gc-social-cell {
+  flex: 0 0 auto; width: 320px; min-height: 420px; scroll-snap-align: start;
+  position: relative; background: var(--raised); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--elev-1);
+}
+.gc-social-cell.tiktok { width: 325px; }
+.gc-social-badge {
+  position: absolute; z-index: 2; top: var(--space-sm); left: var(--space-sm);
+  padding: var(--space-3xs) var(--space-sm); font-size: var(--fs-micro);
+  letter-spacing: var(--ls-3); text-transform: uppercase; font-weight: var(--fw-semibold);
+  color: var(--gold); background: rgb(var(--gold-rgb) / .12); border-radius: var(--radius-sm);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+.gc-social-note {
+  font-size: var(--fs-sm); color: var(--sub); margin-top: var(--space-md);
+  font-style: italic; font-family: var(--font-a);
+}
+/* Graceful pre-load / failed-script fallback inside the corral. */
+.gc-social-fallback {
+  padding: var(--space-9xl) var(--space-3xl) var(--space-3xl);
+  display: flex; flex-direction: column; gap: var(--space-md); height: 100%;
+}
+.gc-social-fallback-handle { font-size: var(--fs-xs); color: var(--white); }
+.gc-social-fallback-cap {
+  font-size: var(--fs-sm); color: var(--body); line-height: var(--lh-body); flex: 1;
+}
+.gc-social-fallback-link {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-2); text-transform: uppercase;
+  color: var(--gold); align-self: flex-start;
+}
+
+/* Reduced-motion: freeze the hero cross-fade (poster is the static end state);
+   the lightbox open/close is handled by the .no-motion class in JS. */
+@media (prefers-reduced-motion: reduce) {
+  .gc-hvideo-el, .gc-hvideo-poster { transition: none; }
 }

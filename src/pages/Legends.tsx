@@ -5,6 +5,8 @@ import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import VideoCard from '../components/VideoCard';
+import { ESSIEN_CLIP } from '../data/clips';
 
 interface ExtraComp { title: string; url: string; stats: string; }
 interface ExtraLegend { name: string; era: string; pos: string; pos_display: string; bio: string; comps: ExtraComp[]; quote: string; }
@@ -100,6 +102,11 @@ export default function Legends() {
           <div className="gc-ml-divider" aria-hidden="true" />
           <div className="lc-badge">★ Acknowledged on TikTok and Facebook</div>
           <Editable tag="p" eid="l2-bio" className="gc-ml-bio">The Bison. One of the most complete midfielders in the world at his peak. Box to box, physical, technical and always in the right place.</Editable>
+          {/* One moving-footage moment inside the gallery frame (§3 Legends).
+              Reverence register: no autoplay, poster + glyph, tap → lightbox. */}
+          <div className="gc-ml-clip" style={{ maxWidth: '230px', margin: '0 auto var(--space-6xl)' }}>
+            <VideoCard clip={ESSIEN_CLIP} size="sm" showCaption={false} />
+          </div>
           <div className="lc-comps gc-ml-comps">
             <a href="https://x.com/Ghanacomps/status/2028823927577817257" target="_blank" rel="noopener" className="comp-row-link">
               <div><Editable tag="div" eid="l2-c1" className="comp-row-t">vs Italy — 2006 FIFA World Cup</Editable><Editable tag="div" eid="l2-c1s" className="comp-row-s">265K Views · 3.7K Likes</Editable></div>

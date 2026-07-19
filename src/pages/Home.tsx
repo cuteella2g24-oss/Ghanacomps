@@ -9,6 +9,10 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import HeroVideo from '../components/HeroVideo';
+import HighlightsSection from '../components/HighlightsSection';
+import SocialStrip from '../components/SocialStrip';
+import { type Clip, HOME_HERO_VIDEO, DEFAULT_HOME_HIGHLIGHTS } from '../data/clips';
 
 interface NewsItem {
   title: string;
@@ -19,6 +23,7 @@ interface NewsItem {
 export default function Home() {
   const { isAdmin } = useAdmin();
   const [news, setNews] = useLocalStorage<NewsItem[]>('gc_news', []);
+  const [highlights, setHighlights] = useLocalStorage<Clip[]>('gc_highlights', DEFAULT_HOME_HIGHLIGHTS);
   const [newsTag, setNewsTag] = useState<'general' | 'injury' | 'transfer'>('general');
   const [newsHeadline, setNewsHeadline] = useState('');
   const [newsUrl, setNewsUrl] = useState('');
@@ -52,6 +57,7 @@ export default function Home() {
 
       {/* HERO — broadcast title card */}
       <section className="gc-hero gc-chevrons loud">
+        <HeroVideo video={HOME_HERO_VIDEO} />
         <div className="gc-hero-glow" />
         <div className="gc-hero-grid">
           <div className="reveal">
@@ -235,6 +241,18 @@ export default function Home() {
           <Button asChild variant="ghost"><Link to="/players">Current Players</Link></Button>
         </div>
       </section>
+
+      {/* HIGHLIGHTS — self-hosted video tiles (VIDEO_DESIGN_SPEC §3 Home 2) */}
+      <HighlightsSection
+        eyebrow="Highlights"
+        headingLead="The Best of the"
+        headingGold="Weekend."
+        clips={highlights}
+        onChange={setHighlights}
+      />
+
+      {/* SOCIAL — the only place raw X/TikTok embeds live (§3 Home 3) */}
+      <SocialStrip />
 
       <Footer />
       <Stripe />

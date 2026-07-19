@@ -6,12 +6,15 @@ import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Button } from '@/components/ui/button';
+import HighlightsSection from '../components/HighlightsSection';
+import { type Clip, DEFAULT_BS_HIGHLIGHTS } from '../data/clips';
 
 interface ArchiveItem { player: string; match: string; comp: string; url: string; }
 
 export default function BlackStars() {
   const { isAdmin } = useAdmin();
   const [archive, setArchive] = useLocalStorage<ArchiveItem[]>('gc_archive', []);
+  const [bsHighlights, setBsHighlights] = useLocalStorage<Clip[]>('gc_bs_highlights', DEFAULT_BS_HIGHLIGHTS);
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddPanel, setShowAddPanel] = useState(false);
   const [arcPlayer, setArcPlayer] = useState('');
@@ -75,6 +78,15 @@ export default function BlackStars() {
           </Editable>
         </div>
       </section>
+
+      {/* MATCHDAY HIGHLIGHTS — self-hosted video (VIDEO_DESIGN_SPEC §3 Black Stars) */}
+      <HighlightsSection
+        eyebrow="Matchday"
+        headingLead="Matchday"
+        headingGold="Highlights."
+        clips={bsHighlights}
+        onChange={setBsHighlights}
+      />
 
       {/* FIXTURES */}
       <section className="alt reveal">
