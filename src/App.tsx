@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ContentProvider } from './contexts/ContentContext';
 import { AdminProvider } from './contexts/AdminContext';
-import AdminUI from './components/AdminUI';
 import ScrollReveal from './components/ScrollReveal';
 import Home from './pages/Home';
 import Players from './pages/Players';
@@ -10,6 +9,7 @@ import BlackStars from './pages/BlackStars';
 import GPA from './pages/GPA';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Admin from './pages/Admin';
 
 export default function App() {
   return (
@@ -25,8 +25,8 @@ export default function App() {
           <Route path="/blackstars" element={<BlackStars />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
-        <AdminUI />
       </AdminProvider>
       </ContentProvider>
     </BrowserRouter>

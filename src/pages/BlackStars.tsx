@@ -5,17 +5,43 @@ import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import SportyIcon from '../components/SportyIcon';
 import { useAdmin } from '../contexts/AdminContext';
-import { useContentList } from '../contexts/ContentContext';
+import { useContentList, useContent } from '../contexts/ContentContext';
 import { Button } from '@/components/ui/button';
 import HighlightsSection from '../components/HighlightsSection';
 import TweetEmbed from '../components/TweetEmbed';
-import { EditableCountdown } from '../components/Countdown';
+import { Countdown } from '../components/Countdown';
 import { type Clip, DEFAULT_BS_HIGHLIGHTS } from '../data/clips';
 
 interface PostEmbed { url: string; caption: string; }
 
+export const FIXTURE_DEFAULTS = {
+  f1: {
+    label: 'Next Fixture — Pre World Cup Friendly',
+    title: 'Ghana vs Mexico',
+    det: 'Friday May 22 2026 · Venue in Mexico TBC · 17:00 GMT',
+    iso: '2026-05-22T17:00:00Z',
+    stake: 'The final major World Cup warm-up. Mexico are a co-host nation and one of CONCACAF\'s strongest sides. Ghana lost 2-0 to them in 2023. Whoever takes the Ghana job will use this game to assess the squad before naming the World Cup 26-man roster. A big test under a new technical direction.',
+  },
+  f2: {
+    label: 'Final Warm-Up — Pre World Cup Friendly',
+    title: 'Wales vs Ghana',
+    det: 'Tuesday June 2 2026 · Cardiff City Stadium · KO Time TBC',
+    iso: '',
+    stake: 'The last game before the World Cup. Wales did not qualify — they were knocked out on penalties by Bosnia and Herzegovina in the play-offs — but this historic first ever meeting between the two nations goes ahead. Ghana face Panama 15 days after this. The last chance for fringe players to make their case.',
+  },
+};
+
+export const BS_UPDATE_DEFAULTS = {
+  'bs:eyebrow': 'Latest Update',
+  'bs:title': 'Otto Addo Sacked. New Chapter Begins.',
+  'bs:heading': '72 Days to the World Cup — Ghana Without a Coach',
+  'bs:body':
+    'The GFA sacked Otto Addo on March 31 2026, hours after a 2-1 defeat to Germany in Stuttgart. That result came just four days after a humiliating 5-1 loss to Austria in Vienna — Ghana\'s heaviest defeat in nearly two decades. Five consecutive losses, no AFCON qualification, a fractured dressing room. The GFA pulled the trigger with 72 days to go before the World Cup.\n\nWalid Regragui, who took Morocco to the 2022 World Cup semi-finals, has been reported as a target. The new coach will have weeks to prepare for a group that includes Panama, England and Croatia. Follow us on X for every update as it happens.',
+};
+
 export default function BlackStars() {
   const { isAdmin } = useAdmin();
+  const { getField } = useContent();
   const [bsHighlights, setBsHighlights] = useContentList<Clip[]>('gc_bs_highlights', DEFAULT_BS_HIGHLIGHTS);
   const [bsEmbeds, setBsEmbeds] = useContentList<PostEmbed[]>('gc_bs_embeds', []);
   const [embUrl, setEmbUrl] = useState('');
@@ -49,15 +75,17 @@ export default function BlackStars() {
         </div>
       </div>
 
-      {/* EDITOR SECTION */}
+      {/* LATEST UPDATE — editorial news, edited from /admin */}
       <section className="reveal">
-        <Editable tag="div" eid="bs-eyebrow" className="gc-eyebrow">Latest Update</Editable>
-        <h2 className="gc-h2" style={{ marginBottom: 'var(--space-4xl)' }}><Editable tag="span" eid="bs-title" className="gold">Otto Addo Sacked. New Chapter Begins.</Editable></h2>
+        <div className="gc-eyebrow">{getField('bs:eyebrow', BS_UPDATE_DEFAULTS['bs:eyebrow'])}</div>
+        <h2 className="gc-h2" style={{ marginBottom: 'var(--space-4xl)' }}><span className="gold">{getField('bs:title', BS_UPDATE_DEFAULTS['bs:title'])}</span></h2>
         <div className="gc-editor">
-          <Editable tag="div" eid="bs-heading" className="editor-heading">72 Days to the World Cup — Ghana Without a Coach</Editable>
-          <Editable tag="div" eid="bs-body" className="editor-body">
-            {'<p>The GFA sacked Otto Addo on March 31 2026, hours after a 2-1 defeat to Germany in Stuttgart. That result came just four days after a humiliating 5-1 loss to Austria in Vienna — Ghana\'s heaviest defeat in nearly two decades. Five consecutive losses, no AFCON qualification, a fractured dressing room. The GFA pulled the trigger with 72 days to go before the World Cup.</p><p>Walid Regragui, who took Morocco to the 2022 World Cup semi-finals, has been reported as a target. The new coach will have weeks to prepare for a group that includes Panama, England and Croatia. Follow us on X for every update as it happens.</p>'}
-          </Editable>
+          <div className="editor-heading">{getField('bs:heading', BS_UPDATE_DEFAULTS['bs:heading'])}</div>
+          <div className="editor-body">
+            {getField('bs:body', BS_UPDATE_DEFAULTS['bs:body']).split(/\n\n+/).map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -109,22 +137,21 @@ export default function BlackStars() {
         <div className="gc-eyebrow">Coming Up</div>
         <h2 className="gc-h2" style={{ marginBottom: 'var(--space-5xl)' }}>Next <span className="gold">Fixtures.</span></h2>
         <div className="g2">
-          <div className="gc-fixture">
-            <Editable tag="div" eid="f1l" className="gc-fix-lbl">Next Fixture — Pre World Cup Friendly</Editable>
-            <Editable tag="div" eid="f1t" className="gc-fix-title">Ghana vs Mexico</Editable>
-            <Editable tag="div" eid="f1d" className="gc-fix-det">Friday May 22 2026 · Venue in Mexico TBC · 17:00 GMT</Editable>
-            <EditableCountdown fieldKey="fixture:f1" defaultIso="2026-05-22T17:00:00Z" />
-            <Editable tag="p" eid="f1-stake" className="gc-fix-stake">The final major World Cup warm-up. Mexico are a co-host nation and one of CONCACAF's strongest sides. Ghana lost 2-0 to them in 2023. Whoever takes the Ghana job will use this game to assess the squad before naming the World Cup 26-man roster. A big test under a new technical direction.</Editable>
-            <Button asChild variant="ghost"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Follow for Updates</a></Button>
-          </div>
-          <div className="gc-fixture">
-            <Editable tag="div" eid="f2l" className="gc-fix-lbl">Final Warm-Up — Pre World Cup Friendly</Editable>
-            <Editable tag="div" eid="f2t" className="gc-fix-title">Wales vs Ghana</Editable>
-            <Editable tag="div" eid="f2d" className="gc-fix-det">Tuesday June 2 2026 · Cardiff City Stadium · KO Time TBC</Editable>
-            <EditableCountdown fieldKey="fixture:f2" defaultIso="" />
-            <Editable tag="p" eid="f2-stake" className="gc-fix-stake">The last game before the World Cup. Wales did not qualify — they were knocked out on penalties by Bosnia and Herzegovina in the play-offs — but this historic first ever meeting between the two nations goes ahead. Ghana face Panama 15 days after this. The last chance for fringe players to make their case.</Editable>
-            <Button asChild variant="ghost"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Stay Updated</a></Button>
-          </div>
+          {(['f1', 'f2'] as const).map(fx => {
+            const d = FIXTURE_DEFAULTS[fx];
+            const title = getField(`bs:${fx}-title`, d.title);
+            if (!title.trim()) return null; // cleared title = hide the fixture card
+            return (
+              <div key={fx} className="gc-fixture">
+                <div className="gc-fix-lbl">{getField(`bs:${fx}-label`, d.label)}</div>
+                <div className="gc-fix-title">{title}</div>
+                <div className="gc-fix-det">{getField(`bs:${fx}-det`, d.det)}</div>
+                <Countdown target={getField(`fixture:${fx}`, d.iso)} />
+                <p className="gc-fix-stake">{getField(`bs:${fx}-stake`, d.stake)}</p>
+                <Button asChild variant="ghost"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Follow for Updates</a></Button>
+              </div>
+            );
+          })}
         </div>
       </section>
 

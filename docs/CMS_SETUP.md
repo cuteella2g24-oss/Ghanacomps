@@ -60,33 +60,47 @@ npm run build
 npx wrangler deploy
 ```
 
-That's it. Visit the site, click the 🔒 button (bottom corner), enter the
-`ADMIN_SECRET` password, edit anything, and press **Save Changes**. Changes go
-live for everyone.
+That's it. Go to **`/admin`** on the site (e.g.
+`https://ghanacomps.cuteella2g24.workers.dev/admin`), log in with the
+`ADMIN_SECRET` password, edit the info in the forms, and press **Save Changes**.
+Changes go live for everyone.
 
 ---
 
 ## How editing works now
 
-| Where | What you can edit |
-|-------|-------------------|
-| Any page | Click the 🔒 lock, type the password → **edit mode**. Click any text to edit it. |
-| **Home** | Latest News feed (add/remove headlines). |
-| **Players** | Each player's **club/position** (click it in edit mode); **Transfers & Updates** news; Weekend Performers. |
-| **Legends / Cult Heroes** | Every "Watch on X" **comp link is editable** — click the small **✎ link** button on a row to point it at a player's archive instead of one post. Add/remove legends. |
-| **Legends → Essien** | **✎ Embed an X post** — paste a tweet URL and the post (with video) plays right on the page. Leave empty to show nothing. |
-| **Black Stars** | **Goals & Moments** — paste X post URLs to embed goals that play on the site. **Fixture countdowns** — set each kickoff date/time. Matchday Highlights. |
+All editing happens on one page: **`/admin`** (it's unlisted — reach it by
+typing the URL). Log in with your `ADMIN_SECRET`, and you get a dashboard of
+forms. Fill them in and press **Save Changes** once to publish everything.
 
-Press **Save Changes** to publish. **Reset Page** discards unsaved changes and
-reloads the last published version.
+The dashboard manages the site's *information* (the public pages themselves are
+no longer click-to-edit — the old padlock is gone):
+
+| Dashboard section | What it controls |
+|-------------------|------------------|
+| **Home — Latest News** | The homepage headline feed. |
+| **Players — Transfers & Updates** | News items on the Current Players page. |
+| **Players — Teams & Positions** | Each player's club/position. |
+| **Players — Add Extra Players / Performers** | Extra squad entries and weekend performer cards. |
+| **Legends & Cult — Comp / Archive Links** | Repoint any "Watch on X" link at a player's archive (blank = keep default). |
+| **Legends — Essien Embedded Post** | Paste an X post URL to embed the clip (blank = show nothing). |
+| **Legends / Cult — Add** | Add extra legend / cult-hero cards. |
+| **Black Stars — Latest Update** | The editorial news block (eyebrow, title, body). |
+| **Black Stars — Goals & Moments** | X post URLs that embed and play on the site. |
+| **Black Stars — Fixtures & Countdowns** | Matchup, detail, and the ISO kickoff that drives the live countdown. |
+| **Home / Black Stars — Highlights** | Self-hosted clip tiles (or embed an X post). |
+| **GPA — Weekly Links** | The GPA Weekly link buttons. |
+
+Anything left blank falls back to the built-in default. Page wording/design is
+fixed and not edited here (by design).
 
 ---
 
 ## Local development
 
 - `npm run dev` (Vite) runs the UI **without** the Worker. There's no KV, so
-  edits fall back to your browser's localStorage and the admin password is a
-  local dev fallback (`Abdul0244058517`). Good for UI work.
+  `/admin` lets you in with any password and edits save to your browser's
+  localStorage. Good for UI work.
 - To test the **real** API locally (KV + auth), run:
   ```bash
   npm run build
