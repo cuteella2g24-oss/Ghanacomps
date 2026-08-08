@@ -6,7 +6,7 @@ import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import SportyIcon from '../components/SportyIcon';
 import { useAdmin } from '../contexts/AdminContext';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useContentList } from '../contexts/ContentContext';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import HeroVideo from '../components/HeroVideo';
@@ -22,8 +22,8 @@ interface NewsItem {
 
 export default function Home() {
   const { isAdmin } = useAdmin();
-  const [news, setNews] = useLocalStorage<NewsItem[]>('gc_news', []);
-  const [highlights, setHighlights] = useLocalStorage<Clip[]>('gc_highlights', DEFAULT_HOME_HIGHLIGHTS);
+  const [news, setNews] = useContentList<NewsItem[]>('gc_news', []);
+  const [highlights, setHighlights] = useContentList<Clip[]>('gc_highlights', DEFAULT_HOME_HIGHLIGHTS);
   const [newsTag, setNewsTag] = useState<'general' | 'injury' | 'transfer'>('general');
   const [newsHeadline, setNewsHeadline] = useState('');
   const [newsUrl, setNewsUrl] = useState('');

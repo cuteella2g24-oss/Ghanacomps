@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { type ResolvedClip } from '../data/clips';
+import TweetEmbed, { tweetId } from './TweetEmbed';
 
 /**
  * VideoLightbox — the one immersive mode (spec §2.d). Sound + native controls,
@@ -185,8 +186,14 @@ export default function VideoLightbox({ clip, triggerEl, onClose }: Props) {
               )}
             </video>
           )}
-          {/* Embed fallback OR missing-media fallback: contained link-out. */}
-          {(isEmbed || mediaError) && (
+          {/* Embedded X post → plays inline in the frame. */}
+          {isEmbed && clip.originalUrl && tweetId(clip.originalUrl) && (
+            <div className="gc-lightbox-embed">
+              <TweetEmbed url={clip.originalUrl} />
+            </div>
+          )}
+          {/* Non-tweet embed OR missing-media fallback: contained link-out. */}
+          {((isEmbed && !(clip.originalUrl && tweetId(clip.originalUrl))) || mediaError) && (
             <div className="gc-lightbox-fallback">
               <p>
                 {isEmbed

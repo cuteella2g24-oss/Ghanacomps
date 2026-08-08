@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useContentList } from '../contexts/ContentContext';
 import { Button } from '@/components/ui/button';
 
 interface GpaLinks {
@@ -72,7 +72,7 @@ function GpaBlock({
 
 export default function GPA() {
   const { isAdmin } = useAdmin();
-  const [links, setLinks] = useLocalStorage<GpaLinks>('gc_gpa_links', {});
+  const [links, setLinks] = useContentList<GpaLinks>('gc_gpa_links', {});
 
   function saveLink(id: keyof GpaLinks, caption: string, url: string) {
     setLinks({ ...links, [id]: { caption, url } });

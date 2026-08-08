@@ -5,13 +5,14 @@ import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useContentList } from '../contexts/ContentContext';
 import { Button } from '@/components/ui/button';
 import VideoCard from '../components/VideoCard';
 import { type Clip, DEFAULT_PERFORMER_CLIPS } from '../data/clips';
 
 interface Performer { caption: string; url: string; }
 interface ExtraPlayer { id: string; name: string; club: string; league: string; label: string; }
+interface PlayerNews { title: string; detail: string; tag: 'transfer' | 'injury' | 'callup' | 'general'; }
 
 const leagueLabels: Record<string, string> = {
   pl: 'Premier League', l1: 'Ligue 1', ll: 'La Liga', sa: 'Serie A',
@@ -99,11 +100,28 @@ export default function Players() {
   const { isAdmin } = useAdmin();
   const [activeLeague, setActiveLeague] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [performers, setPerformers] = useLocalStorage<Performer[]>('gc_performers', []);
-  const [extraPlayers, setExtraPlayers] = useLocalStorage<ExtraPlayer[]>('gc_extra_players', []);
+  const [performers, setPerformers] = useContentList<Performer[]>('gc_performers', []);
+  const [extraPlayers, setExtraPlayers] = useContentList<ExtraPlayer[]>('gc_extra_players', []);
+  const [playerNews, setPlayerNews] = useContentList<PlayerNews[]>('gc_player_news', []);
   const [showAddPerformer, setShowAddPerformer] = useState(false);
   const [perfCaption, setPerfCaption] = useState('');
   const [perfUrl, setPerfUrl] = useState('');
+  const [pnTitle, setPnTitle] = useState('');
+  const [pnDetail, setPnDetail] = useState('');
+  const [pnTag, setPnTag] = useState<PlayerNews['tag']>('transfer');
+
+  function addPlayerNews() {
+    if (!pnTitle.trim()) { alert('Please enter a headline.'); return; }
+    setPlayerNews([{ title: pnTitle.trim(), detail: pnDetail.trim(), tag: pnTag }, ...playerNews]);
+    setPnTitle('');
+    setPnDetail('');
+  }
+
+  function removePlayerNews(i: number) {
+    const updated = [...playerNews];
+    updated.splice(i, 1);
+    setPlayerNews(updated);
+  }
 
   function addPerformer() {
     if (!perfCaption.trim() || !perfUrl.trim()) { alert('Please fill in both the caption and the URL.'); return; }
@@ -175,6 +193,48 @@ export default function Players() {
         </div>
       </div>
 
+      {/* TRANSFERS & UPDATES — admin-managed player news, persisted server-side */}
+      {(playerNews.length > 0 || isAdmin) && (
+        <section className="reveal">
+          <div className="gc-eyebrow">Latest</div>
+          <h2 className="gc-h2" style={{ marginBottom: 'var(--space-2xl)' }}>Transfers &amp; <span className="gold">Updates.</span></h2>
+
+          {playerNews.length > 0 ? (
+            <div className="gc-updates">
+              {playerNews.map((n, i) => (
+                <div key={i} className="gc-update-row">
+                  <span className={`gc-feed-tag ${n.tag}`}>{n.tag}</span>
+                  <div className="gc-update-main">
+                    <div className="gc-update-t">{n.title}</div>
+                    {n.detail && <p className="gc-update-b">{n.detail}</p>}
+                  </div>
+                  {isAdmin && <button className="gc-entry-remove" onClick={() => removePlayerNews(i)}>Remove</button>}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="lead" style={{ fontSize: 'var(--fs-base)' }}>No updates yet this week.</p>
+          )}
+
+          {isAdmin && (
+            <div style={{ marginTop: 'var(--space-xl)', padding: 'var(--space-3xl)', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
+              <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-md)' }}>Add Update</div>
+              <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
+                <select value={pnTag} onChange={e => setPnTag(e.target.value as PlayerNews['tag'])} style={{ background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }}>
+                  <option value="transfer">Transfer</option>
+                  <option value="injury">Injury</option>
+                  <option value="callup">Call-up</option>
+                  <option value="general">General</option>
+                </select>
+                <input type="text" placeholder="Headline e.g. Kudus joins new club" value={pnTitle} onChange={e => setPnTitle(e.target.value)} style={{ flex: 1, minWidth: '180px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
+                <input type="text" placeholder="Detail (optional)..." value={pnDetail} onChange={e => setPnDetail(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
+                <Button size="sm" onClick={addPlayerNews}>Add</Button>
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
       {/* WEEKEND PERFORMERS */}
       <section className="reveal">
         <div className="gc-eyebrow">This Weekend</div>
@@ -242,7 +302,7 @@ export default function Players() {
                 <span className="gc-idx">{String(i + 1).padStart(2, '0')}</span>
                 <span className="gc-entry-main">
                   <Editable tag="span" eid={`${p.eid}n`} className="gc-entry-name">{p.name}</Editable>
-                  <div className="gc-entry-meta" dangerouslySetInnerHTML={{ __html: p.meta }} />
+                  <Editable tag="div" eid={`${p.eid}m`} className="gc-entry-meta">{p.meta}</Editable>
                 </span>
                 <span className={`gc-entry-lg ${p.lg}`}>
                   {leagueBadges[p.lg] ? (

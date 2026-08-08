@@ -4,9 +4,9 @@ import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import VideoCard from '../components/VideoCard';
-import { ESSIEN_CLIP } from '../data/clips';
+import { useContentList } from '../contexts/ContentContext';
+import EditableEmbed from '../components/EditableEmbed';
+import EditableLink from '../components/EditableLink';
 
 interface ExtraComp { title: string; url: string; stats: string; }
 interface ExtraLegend { name: string; era: string; pos: string; pos_display: string; bio: string; comps: ExtraComp[]; quote: string; }
@@ -17,8 +17,8 @@ export default function Legends() {
   const { isAdmin } = useAdmin();
   const [filterPos, setFilterPos] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [extraLegends, setExtraLegends] = useLocalStorage<ExtraLegend[]>('gc_extra_legends', []);
-  const [extraCult, setExtraCult] = useLocalStorage<ExtraLegend[]>('gc_extra_cult', []);
+  const [extraLegends, setExtraLegends] = useContentList<ExtraLegend[]>('gc_extra_legends', []);
+  const [extraCult, setExtraCult] = useContentList<ExtraLegend[]>('gc_extra_cult', []);
 
   function addLegend() {
     const name = prompt('Legend name:'); if (!name) return;
@@ -102,16 +102,16 @@ export default function Legends() {
           <div className="gc-ml-divider" aria-hidden="true" />
           <div className="lc-badge">★ Acknowledged on TikTok and Facebook</div>
           <Editable tag="p" eid="l2-bio" className="gc-ml-bio">The Bison. One of the most complete midfielders in the world at his peak. Box to box, physical, technical and always in the right place.</Editable>
-          {/* One moving-footage moment inside the gallery frame (§3 Legends).
-              Reverence register: no autoplay, poster + glyph, tap → lightbox. */}
-          <div className="gc-ml-clip" style={{ maxWidth: '230px', margin: '0 auto var(--space-6xl)' }}>
-            <VideoCard clip={ESSIEN_CLIP} size="sm" showCaption={false} />
+          {/* Embedded X post of the moment — plays inline on the site. Admin sets
+              the tweet URL; empty = nothing shown (no broken icon). */}
+          <div className="gc-ml-clip" style={{ maxWidth: '420px', margin: '0 auto var(--space-6xl)' }}>
+            <EditableEmbed fieldKey="embed:essien" label="Essien clip — X post" />
           </div>
           <div className="lc-comps gc-ml-comps">
-            <a href="https://x.com/Ghanacomps/status/2028823927577817257" target="_blank" rel="noopener" className="comp-row-link">
+            <EditableLink fieldKey="link:l2-c1" defaultUrl="https://x.com/Ghanacomps/status/2028823927577817257" className="comp-row-link">
               <div><Editable tag="div" eid="l2-c1" className="comp-row-t">vs Italy — 2006 FIFA World Cup</Editable><Editable tag="div" eid="l2-c1s" className="comp-row-s">265K Views · 3.7K Likes</Editable></div>
               <span className="watch-tag">▶ Watch on X</span>
-            </a>
+            </EditableLink>
           </div>
           <Editable tag="p" eid="l2-quote" className="gc-ml-quote">"Keeping the Ghanaian midfielders legacy alive" — fan on X</Editable>
         </div>
@@ -128,10 +128,10 @@ export default function Legends() {
               <Editable tag="p" eid="l1-bio" className="gc-lbio">Three time African Footballer of the Year. Ghana has never produced a player quite like him. A wizard in every sense of the word.</Editable>
               <div className="lc-comps gc-lcomps">
                 <div className="lc-comps-lbl">Our Comps</div>
-                <a href="https://x.com/Ghanacomps/status/2029905846784655770" target="_blank" rel="noopener" className="comp-row-link">
+                <EditableLink fieldKey="link:l1-c1" defaultUrl="https://x.com/Ghanacomps/status/2029905846784655770" className="comp-row-link">
                   <div><Editable tag="div" eid="l1-c1" className="comp-row-t">vs Nigeria — 1992 AFCON Semi Final</Editable><Editable tag="div" eid="l1-c1s" className="comp-row-s">18K Views · 806 Likes</Editable></div>
                   <span className="watch-tag">▶ Watch on X</span>
-                </a>
+                </EditableLink>
               </div>
               <Editable tag="p" eid="l1-quote" className="gc-lquote">"Ghana's greatest football player of all time?" — 18K views</Editable>
             </div>
@@ -147,9 +147,9 @@ export default function Legends() {
               <Editable tag="p" eid="l3-bio" className="gc-lbio">Ghana's all time top scorer. The goal machine. Powerful, direct and clinical. He carried Ghana on his back for years.</Editable>
               <div className="lc-comps gc-lcomps">
                 <div className="lc-comps-lbl">Our Comps</div>
-                <a href="https://x.com/Ghanacomps/status/2031388723254886504" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l3-c1" className="comp-row-t">vs Germany — 2014 FIFA World Cup</Editable><Editable tag="div" eid="l3-c1s" className="comp-row-s">19K Views · 385 Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
-                <a href="https://x.com/Ghanacomps/status/2029631065623527881" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l3-c2" className="comp-row-t">vs Czech Republic — 2006 FIFA World Cup</Editable><Editable tag="div" eid="l3-c2s" className="comp-row-s">15K Views · 711 Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
-                <a href="https://x.com/Ghanacomps/status/2024453540370931908" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l3-c3" className="comp-row-t">vs Egypt — 2014 WC Qualifiers at Baba Yara</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
+                <EditableLink fieldKey="link:l3-c1" defaultUrl="https://x.com/Ghanacomps/status/2031388723254886504" className="comp-row-link"><div><Editable tag="div" eid="l3-c1" className="comp-row-t">vs Germany — 2014 FIFA World Cup</Editable><Editable tag="div" eid="l3-c1s" className="comp-row-s">19K Views · 385 Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
+                <EditableLink fieldKey="link:l3-c2" defaultUrl="https://x.com/Ghanacomps/status/2029631065623527881" className="comp-row-link"><div><Editable tag="div" eid="l3-c2" className="comp-row-t">vs Czech Republic — 2006 FIFA World Cup</Editable><Editable tag="div" eid="l3-c2s" className="comp-row-s">15K Views · 711 Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
+                <EditableLink fieldKey="link:l3-c3" defaultUrl="https://x.com/Ghanacomps/status/2024453540370931908" className="comp-row-link"><div><Editable tag="div" eid="l3-c3" className="comp-row-t">vs Egypt — 2014 WC Qualifiers at Baba Yara</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
               </div>
               <Editable tag="p" eid="l3-quote" className="gc-lquote">"He had it all. What would prime Gyan be worth today?"</Editable>
             </div>
@@ -165,7 +165,7 @@ export default function Legends() {
               <Editable tag="p" eid="l4-bio" className="gc-lbio">Captain Fantastic. The man who led Ghana to their first ever World Cup in 2006. Elegant, intelligent and everything you want in a leader.</Editable>
               <div className="lc-comps gc-lcomps">
                 <div className="lc-comps-lbl">Our Comps</div>
-                <a href="https://x.com/Ghanacomps/status/2033504111916707972" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l4-c1" className="comp-row-t">vs Italy — 2006 FIFA World Cup</Editable><Editable tag="div" eid="l4-c1s" className="comp-row-s">29K Views · 1.1K Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
+                <EditableLink fieldKey="link:l4-c1" defaultUrl="https://x.com/Ghanacomps/status/2033504111916707972" className="comp-row-link"><div><Editable tag="div" eid="l4-c1" className="comp-row-t">vs Italy — 2006 FIFA World Cup</Editable><Editable tag="div" eid="l4-c1s" className="comp-row-s">29K Views · 1.1K Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
               </div>
               <Editable tag="p" eid="l4-quote" className="gc-lquote">"Captain's performance" — 29K views</Editable>
             </div>
@@ -181,8 +181,8 @@ export default function Legends() {
               <Editable tag="p" eid="l5-bio" className="gc-lbio">One of the most versatile players Ghana has ever produced. His display against Uruguay at the 2010 World Cup is still talked about.</Editable>
               <div className="lc-comps gc-lcomps">
                 <div className="lc-comps-lbl">Our Comps</div>
-                <a href="https://x.com/Ghanacomps/status/2027132060452683814" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l5-c1" className="comp-row-t">vs Uruguay — 2010 World Cup Quarter Final</Editable><Editable tag="div" eid="l5-c1s" className="comp-row-s">30K Views · 878 Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
-                <a href="https://x.com/Ghanacomps/status/2024796549763527166" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l5-c2" className="comp-row-t">vs USA — 2010 World Cup Round of 16</Editable><Editable tag="div" eid="l5-c2s" className="comp-row-s">32K Views · 751 Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
+                <EditableLink fieldKey="link:l5-c1" defaultUrl="https://x.com/Ghanacomps/status/2027132060452683814" className="comp-row-link"><div><Editable tag="div" eid="l5-c1" className="comp-row-t">vs Uruguay — 2010 World Cup Quarter Final</Editable><Editable tag="div" eid="l5-c1s" className="comp-row-s">30K Views · 878 Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
+                <EditableLink fieldKey="link:l5-c2" defaultUrl="https://x.com/Ghanacomps/status/2024796549763527166" className="comp-row-link"><div><Editable tag="div" eid="l5-c2" className="comp-row-t">vs USA — 2010 World Cup Round of 16</Editable><Editable tag="div" eid="l5-c2s" className="comp-row-s">32K Views · 751 Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
               </div>
               <Editable tag="p" eid="l5-quote" className="gc-lquote">"Which current Black Stars player reflects this profile?"</Editable>
             </div>
@@ -198,7 +198,7 @@ export default function Legends() {
               <Editable tag="p" eid="l6-bio" className="gc-lbio">Our biggest legend comp. 76K views. The football world went back and remembered just how good he was against Uruguay at the 2010 World Cup.</Editable>
               <div className="lc-comps gc-lcomps">
                 <div className="lc-comps-lbl">Our Comps</div>
-                <a href="https://x.com/Ghanacomps/status/2026357491534045582" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l6-c1" className="comp-row-t">vs Uruguay — 2010 FIFA World Cup Quarter Finals</Editable><Editable tag="div" eid="l6-c1s" className="comp-row-s">76K Views · 1.1K Likes · 263 Reposts</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
+                <EditableLink fieldKey="link:l6-c1" defaultUrl="https://x.com/Ghanacomps/status/2026357491534045582" className="comp-row-link"><div><Editable tag="div" eid="l6-c1" className="comp-row-t">vs Uruguay — 2010 FIFA World Cup Quarter Finals</Editable><Editable tag="div" eid="l6-c1s" className="comp-row-s">76K Views · 1.1K Likes · 263 Reposts</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
               </div>
               <Editable tag="p" eid="l6-quote" className="gc-lquote">76K views · 263 reposts · Our biggest legend comp</Editable>
             </div>
@@ -214,7 +214,7 @@ export default function Legends() {
               <Editable tag="p" eid="l7-bio" className="gc-lbio">Olele. One of the most loved goalkeepers in Ghana's history. His performance against Italy at the 2006 World Cup showed exactly what he was capable of.</Editable>
               <div className="lc-comps gc-lcomps">
                 <div className="lc-comps-lbl">Our Comps</div>
-                <a href="https://x.com/Ghanacomps/status/2031072162723897579" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l7-c1" className="comp-row-t">vs Italy — 2006 FIFA World Cup</Editable><Editable tag="div" eid="l7-c1s" className="comp-row-s">35K Views · 1K Likes · 155 Reposts</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
+                <EditableLink fieldKey="link:l7-c1" defaultUrl="https://x.com/Ghanacomps/status/2031072162723897579" className="comp-row-link"><div><Editable tag="div" eid="l7-c1" className="comp-row-t">vs Italy — 2006 FIFA World Cup</Editable><Editable tag="div" eid="l7-c1s" className="comp-row-s">35K Views · 1K Likes · 155 Reposts</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
               </div>
               <Editable tag="p" eid="l7-quote" className="gc-lquote">35K views · 155 reposts · 1K likes</Editable>
             </div>
@@ -230,7 +230,7 @@ export default function Legends() {
               <Editable tag="p" eid="l8-bio" className="gc-lbio">Denied prime Cristiano Ronaldo 8 times. One of the most underrated goalkeeper performances in Ghana's World Cup history.</Editable>
               <div className="lc-comps gc-lcomps">
                 <div className="lc-comps-lbl">Our Comps</div>
-                <a href="https://x.com/Ghanacomps/status/2037923262466826395" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l8-c1" className="comp-row-t">vs Portugal — 2014 FIFA World Cup Group Stage</Editable><Editable tag="div" eid="l8-c1s" className="comp-row-s">20K Views · 752 Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
+                <EditableLink fieldKey="link:l8-c1" defaultUrl="https://x.com/Ghanacomps/status/2037923262466826395" className="comp-row-link"><div><Editable tag="div" eid="l8-c1" className="comp-row-t">vs Portugal — 2014 FIFA World Cup Group Stage</Editable><Editable tag="div" eid="l8-c1s" className="comp-row-s">20K Views · 752 Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
               </div>
               <Editable tag="p" eid="l8-quote" className="gc-lquote">Denied Ronaldo 8 times. The world finally took notice.</Editable>
             </div>
@@ -246,8 +246,8 @@ export default function Legends() {
               <Editable tag="p" eid="l9-bio" className="gc-lbio">One of the most technically gifted players to ever pull on the Black Stars shirt. His performances at the 2010 World Cup were something special.</Editable>
               <div className="lc-comps gc-lcomps">
                 <div className="lc-comps-lbl">Our Comps</div>
-                <a href="https://x.com/Ghanacomps/status/2037159684314960081" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l9-c1" className="comp-row-t">vs Uruguay — 2010 FIFA World Cup</Editable><Editable tag="div" eid="l9-c1s" className="comp-row-s">140K Views · 2.8K Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
-                <a href="https://x.com/Ghanacomps/status/2029998390428275159" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="l9-c2" className="comp-row-t">vs Australia — 2010 FIFA World Cup</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
+                <EditableLink fieldKey="link:l9-c1" defaultUrl="https://x.com/Ghanacomps/status/2037159684314960081" className="comp-row-link"><div><Editable tag="div" eid="l9-c1" className="comp-row-t">vs Uruguay — 2010 FIFA World Cup</Editable><Editable tag="div" eid="l9-c1s" className="comp-row-s">140K Views · 2.8K Likes</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
+                <EditableLink fieldKey="link:l9-c2" defaultUrl="https://x.com/Ghanacomps/status/2029998390428275159" className="comp-row-link"><div><Editable tag="div" eid="l9-c2" className="comp-row-t">vs Australia — 2010 FIFA World Cup</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
               </div>
               <Editable tag="p" eid="l9-quote" className="gc-lquote">With Essien out, KPB stepped in and delivered beyond all expectation.</Editable>
             </div>
@@ -306,7 +306,7 @@ export default function Legends() {
               <Editable tag="p" eid="ch1-bio" className="gc-lbio">One of the most naturally gifted Ghanaians of his generation. The cult hero Ghana never forgot.</Editable>
               <div className="lc-comps gc-lcomps">
                 <div className="lc-comps-lbl">Our Comps</div>
-                <a href="https://x.com/Ghanacomps/status/2026997762345021923" target="_blank" rel="noopener" className="comp-row-link"><div><Editable tag="div" eid="ch1-c1" className="comp-row-t">vs Australia — 2010 World Cup Group Stages</Editable></div><span className="watch-tag">▶ Watch on X</span></a>
+                <EditableLink fieldKey="link:ch1-c1" defaultUrl="https://x.com/Ghanacomps/status/2026997762345021923" className="comp-row-link"><div><Editable tag="div" eid="ch1-c1" className="comp-row-t">vs Australia — 2010 World Cup Group Stages</Editable></div><span className="watch-tag">▶ Watch on X</span></EditableLink>
               </div>
               <Editable tag="p" eid="ch1-quote" className="gc-lquote">KALYJAY requested this. We dropped it the next day.</Editable>
             </div>

@@ -11,7 +11,7 @@ export default function AdminUI() {
       <div className={`admin-bar${isAdmin ? ' show' : ''}`} id="admin-bar">
         <span className="admin-bar-txt">Edit mode active — click any text to edit</span>
         <div className="admin-bar-btns">
-          <Button variant="outline" size="sm" onClick={reset}>Reset Page</Button>
+          <Button variant="outline" size="sm" onClick={reset}>Discard Changes</Button>
           <Button variant="outline" size="sm" onClick={exit}>Exit</Button>
           <Button size="sm" onClick={save}>{saveLabel}</Button>
         </div>

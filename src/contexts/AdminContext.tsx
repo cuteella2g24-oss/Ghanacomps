@@ -1,6 +1,13 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { verifyToken } from '../lib/content';
+import { useContent } from './ContentContext';
 
-const PASS = 'Abdul0244058517';
+/**
+ * Only used when the site is running WITHOUT the Worker/API (local `vite dev`),
+ * so you can still preview edits against the localStorage fallback. In production
+ * the real gate is the Worker's ADMIN_SECRET — this string grants nothing there.
+ */
+const DEV_FALLBACK_PASS = 'Abdul0244058517';
 
 interface AdminContextType {
   isAdmin: boolean;
@@ -16,39 +23,50 @@ const AdminContext = createContext<AdminContextType>({
 });
 
 export function AdminProvider({ children }: { children: ReactNode }) {
+  const content = useContent();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [token, setToken] = useState('');
   const [saveLabel, setSaveLabel] = useState('Save Changes');
 
-  const enter = useCallback(() => {
+  const enter = useCallback((pass: string) => {
+    setToken(pass);
     setIsAdmin(true);
     document.body.classList.add('edit');
   }, []);
 
   const exit = useCallback(() => {
     setIsAdmin(false);
+    setToken('');
     document.body.classList.remove('edit');
   }, []);
 
-  const login = useCallback(() => {
+  const login = useCallback(async () => {
     const p = prompt('Admin password:');
-    if (p === PASS) enter();
-    else if (p !== null) alert('Wrong password.');
+    if (p === null) return;
+    const res = await verifyToken(p);
+    if (res === 'ok' || (res === 'no-api' && p === DEV_FALLBACK_PASS)) {
+      enter(p);
+    } else if (res === 'error') {
+      alert('Login service is temporarily unavailable. Please try again in a moment.');
+    } else {
+      alert('Wrong password.');
+    }
   }, [enter]);
 
-  const save = useCallback(() => {
-    const KEY = 'gc_edits_' + window.location.pathname;
-    const out: Record<string, string> = {};
-    document.querySelectorAll<HTMLElement>('.editable[data-eid]').forEach(el => {
-      out[el.dataset.eid!] = el.innerHTML;
-    });
-    localStorage.setItem(KEY, JSON.stringify(out));
-    setSaveLabel('Saved!');
-    setTimeout(() => setSaveLabel('Save Changes'), 2000);
-  }, []);
+  const save = useCallback(async () => {
+    setSaveLabel('Saving…');
+    const r = await content.save(token);
+    if (r === 'saved') setSaveLabel('Saved — live for everyone!');
+    else if (r === 'local') setSaveLabel('Saved locally (dev only)');
+    else if (r === 'unauthorized') { setSaveLabel('Save Changes'); alert('Wrong password — changes were not saved. Log in again.'); return; }
+    else setSaveLabel('Save failed');
+    setTimeout(() => setSaveLabel('Save Changes'), 3000);
+  }, [content, token]);
 
   const reset = useCallback(() => {
-    const KEY = 'gc_edits_' + window.location.pathname;
-    if (confirm('Reset all edits on this page?')) { localStorage.removeItem(KEY); window.location.reload(); }
+    if (confirm('Discard unsaved changes and reload the latest published content?')) {
+      window.location.reload();
+    }
   }, []);
 
   return (
@@ -59,10 +77,3 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 }
 
 export const useAdmin = () => useContext(AdminContext);
-
-export function loadPageEdits(): Record<string, string> {
-  try {
-    const saved = localStorage.getItem('gc_edits_' + window.location.pathname);
-    return saved ? JSON.parse(saved) : {};
-  } catch { return {}; }
-}

@@ -1,18 +1,38 @@
+import { useState } from 'react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
 import Editable from '../components/Editable';
 import SportyIcon from '../components/SportyIcon';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useAdmin } from '../contexts/AdminContext';
+import { useContentList } from '../contexts/ContentContext';
 import { Button } from '@/components/ui/button';
 import HighlightsSection from '../components/HighlightsSection';
+import TweetEmbed from '../components/TweetEmbed';
+import { EditableCountdown } from '../components/Countdown';
 import { type Clip, DEFAULT_BS_HIGHLIGHTS } from '../data/clips';
 
+interface PostEmbed { url: string; caption: string; }
 
 export default function BlackStars() {
-  const [bsHighlights, setBsHighlights] = useLocalStorage<Clip[]>('gc_bs_highlights', DEFAULT_BS_HIGHLIGHTS);
+  const { isAdmin } = useAdmin();
+  const [bsHighlights, setBsHighlights] = useContentList<Clip[]>('gc_bs_highlights', DEFAULT_BS_HIGHLIGHTS);
+  const [bsEmbeds, setBsEmbeds] = useContentList<PostEmbed[]>('gc_bs_embeds', []);
+  const [embUrl, setEmbUrl] = useState('');
+  const [embCaption, setEmbCaption] = useState('');
 
+  function addEmbed() {
+    if (!embUrl.trim()) { alert('Paste an X post URL.'); return; }
+    setBsEmbeds([{ url: embUrl.trim(), caption: embCaption.trim() }, ...bsEmbeds]);
+    setEmbUrl('');
+    setEmbCaption('');
+  }
 
+  function removeEmbed(i: number) {
+    const updated = [...bsEmbeds];
+    updated.splice(i, 1);
+    setBsEmbeds(updated);
+  }
 
   return (
     <>
@@ -50,6 +70,40 @@ export default function BlackStars() {
         onChange={setBsHighlights}
       />
 
+      {/* GOALS & MOMENTS ON X — embedded posts play inline on the site */}
+      {(bsEmbeds.length > 0 || isAdmin) && (
+        <section className="reveal">
+          <div className="gc-eyebrow">Watch on Site</div>
+          <h2 className="gc-h2" style={{ marginBottom: 'var(--space-2xl)' }}>Goals &amp; <span className="gold">Moments.</span></h2>
+          <p className="lead" style={{ marginBottom: 'var(--space-4xl)', fontSize: 'var(--fs-base)' }}>Every Ghanaian goal, embedded straight from X so you can watch it right here.</p>
+
+          {bsEmbeds.length > 0 ? (
+            <div className="gc-embed-grid">
+              {bsEmbeds.map((e, i) => (
+                <div key={`${e.url}-${i}`} className="gc-embed-item">
+                  {e.caption && <div className="gc-embed-caption">{e.caption}</div>}
+                  <TweetEmbed url={e.url} />
+                  {isAdmin && <button className="btn-remove-card" onClick={() => removeEmbed(i)}>✕ Remove</button>}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="post-placeholder"><p>No posts embedded yet — add a goal from X.</p></div>
+          )}
+
+          {isAdmin && (
+            <div style={{ marginTop: 'var(--space-xl)', padding: 'var(--space-3xl)', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
+              <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-md)' }}>Embed an X Post</div>
+              <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
+                <input type="url" placeholder="X post URL (e.g. https://x.com/Ghanacomps/status/…)" value={embUrl} onChange={e => setEmbUrl(e.target.value)} style={{ flex: 2, minWidth: '220px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
+                <input type="text" placeholder="Caption (optional)..." value={embCaption} onChange={e => setEmbCaption(e.target.value)} style={{ flex: 1, minWidth: '160px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
+                <Button size="sm" onClick={addEmbed}>Add Post</Button>
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
       {/* FIXTURES */}
       <section className="alt reveal">
         <div className="gc-eyebrow">Coming Up</div>
@@ -59,6 +113,7 @@ export default function BlackStars() {
             <Editable tag="div" eid="f1l" className="gc-fix-lbl">Next Fixture — Pre World Cup Friendly</Editable>
             <Editable tag="div" eid="f1t" className="gc-fix-title">Ghana vs Mexico</Editable>
             <Editable tag="div" eid="f1d" className="gc-fix-det">Friday May 22 2026 · Venue in Mexico TBC · 17:00 GMT</Editable>
+            <EditableCountdown fieldKey="fixture:f1" defaultIso="2026-05-22T17:00:00Z" />
             <Editable tag="p" eid="f1-stake" className="gc-fix-stake">The final major World Cup warm-up. Mexico are a co-host nation and one of CONCACAF's strongest sides. Ghana lost 2-0 to them in 2023. Whoever takes the Ghana job will use this game to assess the squad before naming the World Cup 26-man roster. A big test under a new technical direction.</Editable>
             <Button asChild variant="ghost"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Follow for Updates</a></Button>
           </div>
@@ -66,6 +121,7 @@ export default function BlackStars() {
             <Editable tag="div" eid="f2l" className="gc-fix-lbl">Final Warm-Up — Pre World Cup Friendly</Editable>
             <Editable tag="div" eid="f2t" className="gc-fix-title">Wales vs Ghana</Editable>
             <Editable tag="div" eid="f2d" className="gc-fix-det">Tuesday June 2 2026 · Cardiff City Stadium · KO Time TBC</Editable>
+            <EditableCountdown fieldKey="fixture:f2" defaultIso="" />
             <Editable tag="p" eid="f2-stake" className="gc-fix-stake">The last game before the World Cup. Wales did not qualify — they were knocked out on penalties by Bosnia and Herzegovina in the play-offs — but this historic first ever meeting between the two nations goes ahead. Ghana face Panama 15 days after this. The last chance for fringe players to make their case.</Editable>
             <Button asChild variant="ghost"><a href="https://x.com/Ghanacomps" target="_blank" rel="noopener">Stay Updated</a></Button>
           </div>

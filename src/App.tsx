@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ContentProvider } from './contexts/ContentContext';
 import { AdminProvider } from './contexts/AdminContext';
 import AdminUI from './components/AdminUI';
 import ScrollReveal from './components/ScrollReveal';
@@ -13,6 +14,7 @@ import Contact from './pages/Contact';
 export default function App() {
   return (
     <BrowserRouter>
+      <ContentProvider>
       <AdminProvider>
         <ScrollReveal />
         <Routes>
@@ -26,6 +28,7 @@ export default function App() {
         </Routes>
         <AdminUI />
       </AdminProvider>
+      </ContentProvider>
     </BrowserRouter>
   );
 }
