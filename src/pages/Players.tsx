@@ -137,7 +137,7 @@ export default function Players() {
 
           {isAdmin && (
             <div style={{ marginTop: 'var(--space-xl)', padding: 'var(--space-3xl)', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
-              <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-md)' }}>Add Update</div>
+              <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--white)', marginBottom: 'var(--space-md)' }}>Add Update</div>
               <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
                 <select value={pnTag} onChange={e => setPnTag(e.target.value as PlayerNews['tag'])} style={{ background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }}>
                   <option value="transfer">Transfer</option>
@@ -180,7 +180,7 @@ export default function Players() {
           </div>
         ) : (
           <div style={{ border: '1px dashed rgb(var(--gold-rgb) / .2)', padding: 'var(--space-6xl) var(--space-4xl)', textAlign: 'center' }}>
-            <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--sub)', fontStyle: 'italic' }}>No performers added yet this week. Follow <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--gold)' }}>@Ghanacomps on X</a> to see all the comps live.</p>
+            <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--sub)', fontStyle: 'italic' }}>No performers added yet this week. Follow <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--white)' }}>@Ghanacomps on X</a> to see all the comps live.</p>
           </div>
         )}
 
@@ -191,7 +191,7 @@ export default function Players() {
 
         {isAdmin && showAddPerformer && (
           <div style={{ marginTop: 'var(--space-xl)', padding: 'var(--space-3xl)', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
-            <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-md)' }}>Add Performer Card</div>
+            <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--white)', marginBottom: 'var(--space-md)' }}>Add Performer Card</div>
             <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap' }}>
               <input type="text" placeholder='Caption e.g. "Kudus vs Man City — Matchday 38"' value={perfCaption} onChange={e => setPerfCaption(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
               <input type="url" placeholder="X or TikTok post URL..." value={perfUrl} onChange={e => setPerfUrl(e.target.value)} style={{ flex: 1, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-base)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
@@ -208,7 +208,7 @@ export default function Players() {
           <h2 className="gc-rule-l">Ghanaians <span className="gold">Playing Abroad.</span></h2>
           <span className="gc-rule-r">Full Squad Directory</span>
         </div>
-        <p className="lead" style={{ marginBottom: 'var(--space-2xl)', fontSize: 'var(--fs-base)' }}>We track as many Ghanaians playing abroad as we can. If we are missing someone or a club is wrong, <Link to="/contact" style={{ color: 'var(--gold)' }}>contact us</Link> and we will update it.</p>
+        <p className="lead" style={{ marginBottom: 'var(--space-2xl)', fontSize: 'var(--fs-base)' }}>We track as many Ghanaians playing abroad as we can. If we are missing someone or a club is wrong, <Link to="/contact" style={{ color: 'var(--white)' }}>contact us</Link> and we will update it.</p>
 
         <input type="text" className="search player-search" placeholder="Search player by name..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} style={{ marginBottom: 'var(--space-4xl)' }} />
 
@@ -261,7 +261,7 @@ export default function Players() {
         </div>
 
         <button className="add-player-btn" onClick={addPlayer}>+ Add New Player</button>
-        <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--sub)', fontStyle: 'italic', marginTop: 'var(--space-xl)', padding: 'var(--space-md) var(--space-xl)', border: '1px solid var(--line)' }}>Missing a player or wrong club? <Link to="/contact" style={{ color: 'var(--gold)' }}>Contact us</Link> and we will update it.</p>
+        <p style={{ fontSize: 'var(--fs-sm)', color: 'var(--sub)', fontStyle: 'italic', marginTop: 'var(--space-xl)', padding: 'var(--space-md) var(--space-xl)', border: '1px solid var(--line)' }}>Missing a player or wrong club? <Link to="/contact" style={{ color: 'var(--white)' }}>Contact us</Link> and we will update it.</p>
       </section>
 
       <Footer />

@@ -133,7 +133,7 @@ export default function About() {
             <p>As the platform grows we want to use it to shine a light on young Ghanaian talent. Players who deserve to be seen but have not had that chance yet.</p>
           </div>
           <div style={{ border: '1px dashed rgb(var(--gold-rgb) / .25)', padding: 'var(--space-6xl) var(--space-5xl)', position: 'relative' }}>
-            <span style={{ position: 'absolute', top: '-10px', left: '18px', background: 'var(--bg)', padding: 'var(--space-3xs) var(--space-md)', fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)' }}>Coming Soon</span>
+            <span style={{ position: 'absolute', top: '-10px', left: '18px', background: 'var(--bg)', padding: 'var(--space-3xs) var(--space-md)', fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--white)' }}>Coming Soon</span>
             <div style={{ fontSize: 'var(--fs-2xl)', marginBottom: 'var(--space-md)' }}>🌱</div>
             <div style={{ fontFamily: 'var(--font-d)', fontSize: 'var(--fs-xl)', color: 'var(--white)', marginBottom: 'var(--space-md)' }}>Young Talent Showcase</div>
             <p className="lead" style={{ fontSize: 'var(--fs-base)' }}>When we build Ghana Comps to the right level we want to start featuring young footballers from across the country. Giving them visibility and putting them in front of scouts and clubs who might otherwise never have seen them.</p>
@@ -202,7 +202,7 @@ export default function About() {
         <p className="lead" style={{ marginBottom: 'var(--space-6xl)', fontSize: 'var(--fs-base)' }}>Every request goes into the list. Some footage is copyrighted and not always available but when we can do it we do it fast.</p>
 
         <div style={{ marginBottom: 'var(--space-7xl)' }}>
-          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-lg)' }}>★ Requested and Delivered in 24 Hours</p>
+          <p style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--white)', marginBottom: 'var(--space-lg)' }}>★ Requested and Delivered in 24 Hours</p>
           <div className="req-pair">
             <div><div className="req-lbl">The Request</div><img src="/assets/reactions/req01.jpg" alt="" style={{ width: '100%', borderRadius: 'var(--radius-md)', border: '1px solid var(--line)' }} /></div>
             <div className="req-arrow">→</div>
@@ -238,7 +238,7 @@ export default function About() {
         </div>
         <p className="lead" style={{ marginBottom: 'var(--space-5xl)', fontSize: 'var(--fs-base)' }}>Two months in and we were already reaching the legends. Michael Essien saw our compilation and acknowledged it on both his TikTok and his Facebook.</p>
         <div className="special-box">
-          <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-xl)' }}>★ Special Moment</div>
+          <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--white)', marginBottom: 'var(--space-xl)' }}>★ Special Moment</div>
           <p className="italic" style={{ fontSize: 'var(--fs-lg)', color: 'var(--white)', maxWidth: '560px', lineHeight: 'var(--lh-body)' }}>"Incredible experience, Thanks #ghanacomps @fifaworldcup"</p>
           <p style={{ fontSize: 'var(--fs-2xs)', letterSpacing: 'var(--ls-3)', textTransform: 'uppercase', color: 'var(--sub)', marginTop: 'var(--space-sm)' }}>Michael Essien ✓ — on TikTok and Facebook</p>
           <div className="special-screens">

@@ -77,7 +77,7 @@ export default function Contact() {
               <span className="gc-sportcard-chip"><SportyIcon name="mail" /></span>
               <div className="gc-sportcard-body">
                 <div className="gc-sportcard-t">Email Us</div>
-                <a href="mailto:compsghana@gmail.com" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>compsghana@gmail.com</a>
+                <a href="mailto:compsghana@gmail.com" style={{ color: 'var(--white)', fontSize: 'var(--fs-base)' }}>compsghana@gmail.com</a>
                 <div className="gc-sportcard-b" style={{ marginTop: 'var(--space-2xs)' }}>For general enquiries, feedback and content requests.</div>
               </div>
             </div>
@@ -85,7 +85,7 @@ export default function Contact() {
               <span className="gc-sportcard-chip"><SportyIcon name="broadcast" /></span>
               <div className="gc-sportcard-body">
                 <div className="gc-sportcard-t">Find Us on X</div>
-                <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>@Ghanacomps ✓</a>
+                <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--white)', fontSize: 'var(--fs-base)' }}>@Ghanacomps ✓</a>
                 <div className="gc-sportcard-b" style={{ marginTop: 'var(--space-2xs)' }}>Drop your comp requests in our quotes or comments. We go through all of them.</div>
               </div>
             </div>
@@ -93,7 +93,7 @@ export default function Contact() {
               <span className="gc-sportcard-chip"><SportyIcon name="ball" /></span>
               <div className="gc-sportcard-body">
                 <div className="gc-sportcard-t">Find Us on TikTok</div>
-                <a href="https://tiktok.com/@ghanacompss" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>@ghanacompss</a>
+                <a href="https://tiktok.com/@ghanacompss" target="_blank" rel="noopener" style={{ color: 'var(--white)', fontSize: 'var(--fs-base)' }}>@ghanacompss</a>
                 <div className="gc-sportcard-b" style={{ marginTop: 'var(--space-2xs)' }}>Goals, assists and skills every weekend on TikTok.</div>
               </div>
             </div>
@@ -101,7 +101,7 @@ export default function Contact() {
               <span className="gc-sportcard-chip"><SportyIcon name="broadcast" /></span>
               <div className="gc-sportcard-body">
                 <div className="gc-sportcard-t">Find Us on Facebook</div>
-                <a href="https://www.facebook.com/share/1GL7b1Qsuq/" target="_blank" rel="noopener" style={{ color: 'var(--gold)', fontSize: 'var(--fs-base)' }}>Ghana Comps on Facebook</a>
+                <a href="https://www.facebook.com/share/1GL7b1Qsuq/" target="_blank" rel="noopener" style={{ color: 'var(--white)', fontSize: 'var(--fs-base)' }}>Ghana Comps on Facebook</a>
                 <div className="gc-sportcard-b" style={{ marginTop: 'var(--space-2xs)' }}>Follow us on Facebook for highlights, throwbacks and updates.</div>
               </div>
             </div>

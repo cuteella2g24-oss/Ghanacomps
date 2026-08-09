@@ -83,7 +83,7 @@ export default function HighlightsSection({
         <div className="post-placeholder" style={{ marginTop: 'var(--space-8xl)' }}>
           <p>
             No highlights yet —{' '}
-            <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--gold)' }}>
+            <a href="https://x.com/Ghanacomps" target="_blank" rel="noopener" style={{ color: 'var(--white)' }}>
               follow @Ghanacomps
             </a>
             .
@@ -112,7 +112,7 @@ export default function HighlightsSection({
 
       {isAdmin && showAdd && (
         <div style={{ marginTop: 'var(--space-xl)', padding: 'var(--space-3xl)', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
-          <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 'var(--space-md)' }}>Add Highlight Clip</div>
+          <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--white)', marginBottom: 'var(--space-md)' }}>Add Highlight Clip</div>
           <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
             <input type="text" placeholder="Title..." value={title} onChange={e => setTitle(e.target.value)} style={inputStyle} />
             <input type="text" placeholder="Tag (e.g. Premier League)..." value={tag} onChange={e => setTag(e.target.value)} style={inputStyle} />
