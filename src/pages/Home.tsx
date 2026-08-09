@@ -46,8 +46,8 @@ export default function Home() {
       <Stripe />
       <Nav />
 
-      {/* HERO — broadcast title card (static: subtle centred gold glow, no video) */}
-      <section className="gc-hero">
+      {/* HERO — broadcast title card (static: chevron field kept, ambient video removed) */}
+      <section className="gc-hero gc-chevrons loud">
         <div className="gc-hero-glow" />
         <div className="gc-hero-grid">
           <div className="reveal">
