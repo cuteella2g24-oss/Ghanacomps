@@ -9,10 +9,9 @@ import { useAdmin } from '../contexts/AdminContext';
 import { useContentList } from '../contexts/ContentContext';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import HeroVideo from '../components/HeroVideo';
 import HighlightsSection from '../components/HighlightsSection';
 import SocialStrip from '../components/SocialStrip';
-import { type Clip, HOME_HERO_VIDEO, DEFAULT_HOME_HIGHLIGHTS } from '../data/clips';
+import { type Clip, DEFAULT_HOME_HIGHLIGHTS } from '../data/clips';
 
 interface NewsItem {
   title: string;
@@ -47,9 +46,8 @@ export default function Home() {
       <Stripe />
       <Nav />
 
-      {/* HERO — broadcast title card */}
-      <section className="gc-hero gc-chevrons loud">
-        <HeroVideo video={HOME_HERO_VIDEO} />
+      {/* HERO — broadcast title card (static: subtle centred gold glow, no video) */}
+      <section className="gc-hero">
         <div className="gc-hero-glow" />
         <div className="gc-hero-grid">
           <div className="reveal">

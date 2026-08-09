@@ -1436,9 +1436,9 @@ body.edit .react-remove-btn { display: flex !important; }
   border-bottom: 1px solid var(--line);
 }
 .gc-hero-glow {
-  position: absolute; top: 40%; right: 6%; transform: translateY(-50%);
-  width: 420px; height: 420px; z-index: 0; pointer-events: none;
-  background: radial-gradient(circle, rgb(var(--gold-rgb) / .08), transparent 70%);
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 640px; height: 640px; max-width: 92%; z-index: 0; pointer-events: none;
+  background: radial-gradient(circle, rgb(var(--gold-rgb) / .06), transparent 70%);
 }
 .gc-hero-grid {
   position: relative; z-index: 1;
