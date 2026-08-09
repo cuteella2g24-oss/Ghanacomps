@@ -99,10 +99,20 @@ function ListEditor({ listKey, columns, blank }: { listKey: string; columns: Col
 
 /* ---------- dashboard ---------- */
 
+type TabId = 'home' | 'players' | 'legends' | 'blackstars' | 'gpa';
+const TABS: { id: TabId; label: string }[] = [
+  { id: 'home', label: 'Home' },
+  { id: 'players', label: 'Players' },
+  { id: 'legends', label: 'Legends & Cult' },
+  { id: 'blackstars', label: 'Black Stars' },
+  { id: 'gpa', label: 'GPA' },
+];
+
 function Dashboard({ token }: { token: string }) {
   const { save } = useContent();
   const [status, setStatus] = useState('');
   const [saving, setSaving] = useState(false);
+  const [tab, setTab] = useState<TabId>('home');
 
   async function doSave() {
     setSaving(true);
@@ -131,118 +141,151 @@ function Dashboard({ token }: { token: string }) {
         </div>
       </div>
 
-      <p className="adm-intro">Edit the site's information below, then press <strong>Save Changes</strong> once — everything publishes to every visitor. Page wording and design are not edited here.</p>
+      <p className="adm-intro">Pick a section, edit its info, then press <strong>Save Changes</strong> once — it publishes to every visitor across all sections. Page wording and design are not edited here.</p>
 
-      <Section id="home-news" title="Home — Latest News" note="The headline feed on the homepage. Tag is shown as a coloured chip.">
-        <ListEditor
-          listKey="gc_news"
-          columns={[
-            { key: 'tag', type: 'select', ph: '', options: ['general', 'injury', 'transfer'] },
-            { key: 'title', ph: 'Headline…' },
-            { key: 'url', type: 'url', ph: 'Link URL (optional)…' },
-          ]}
-          blank={() => ({ tag: 'general', title: '', url: '' })}
-        />
-      </Section>
-
-      <Section id="player-news" title="Players — Transfers & Updates" note="Shown on the Current Players page.">
-        <ListEditor
-          listKey="gc_player_news"
-          columns={[
-            { key: 'tag', type: 'select', ph: '', options: ['transfer', 'injury', 'callup', 'general'] },
-            { key: 'title', ph: 'Headline e.g. Kudus joins new club' },
-            { key: 'detail', type: 'textarea', ph: 'Detail (optional)…' },
-          ]}
-          blank={() => ({ tag: 'transfer', title: '', detail: '' })}
-        />
-      </Section>
-
-      <Section id="teams" title="Players — Teams & Positions" note="Change a player's club or position. Format: Club · Position. Leave a player untouched to keep the default.">
-        <div className="adm-teams">
-          {staticPlayers.map(p => (
-            <FieldText key={p.eid} label={p.name} fieldKey={`team:${p.eid}`} def={p.meta} ph="Club · Position" />
-          ))}
-        </div>
-        <p className="adm-note">Tip: the small dot between club and position is written as <code>&lt;s&gt;·&lt;/s&gt;</code>. You can also just type <code>Club · Position</code>.</p>
-      </Section>
-
-      <Section id="extra-players" title="Players — Add Extra Players" note="Players not in the built-in list. League codes: pl, l1, ll, sa, bl, ch, ot.">
-        <ExtraPlayersEditor />
-      </Section>
-
-      <Section id="performers" title="Players — Weekend Performers" note="Cards that link out to a comp on X / TikTok.">
-        <ListEditor
-          listKey="gc_performers"
-          columns={[
-            { key: 'caption', ph: 'Caption e.g. Kudus vs Man City — MW38' },
-            { key: 'url', type: 'url', ph: 'X or TikTok post URL…' },
-          ]}
-          blank={() => ({ caption: '', url: '' })}
-        />
-      </Section>
-
-      <Section id="legend-links" title="Legends & Cult — Comp / Archive Links" note="Repoint any 'Watch on X' link, e.g. to a player's whole archive. Leave blank to keep the built-in link.">
-        <div className="adm-links">
-          {LEGEND_LINKS.map(l => (
-            <FieldText key={l.key} label={l.label} fieldKey={`link:${l.key}`} ph="Archive / post URL (blank = default)" />
-          ))}
-        </div>
-      </Section>
-
-      <Section id="essien" title="Legends — Essien Embedded Post" note="Paste an X post URL to embed the clip on the Essien card. Leave blank to show nothing.">
-        <FieldText label="Essien X post URL" fieldKey="embed:essien" ph="https://x.com/Ghanacomps/status/…" />
-      </Section>
-
-      <Section id="extra-legends" title="Legends — Add Extra Legends" note="Adds a card to the Legends ledger.">
-        <ExtraLegendsEditor listKey="gc_extra_legends" />
-      </Section>
-
-      <Section id="extra-cult" title="Cult Heroes — Add">
-        <ExtraLegendsEditor listKey="gc_extra_cult" />
-      </Section>
-
-      <Section id="bs-update" title="Black Stars — Latest Update" note="The editorial news block at the top of the Black Stars page.">
-        <FieldText label="Eyebrow" fieldKey="bs:eyebrow" def={BS_UPDATE_DEFAULTS['bs:eyebrow']} />
-        <FieldText label="Title (gold headline)" fieldKey="bs:title" def={BS_UPDATE_DEFAULTS['bs:title']} />
-        <FieldText label="Sub-heading" fieldKey="bs:heading" def={BS_UPDATE_DEFAULTS['bs:heading']} />
-        <FieldText label="Body (blank line = new paragraph)" fieldKey="bs:body" def={BS_UPDATE_DEFAULTS['bs:body']} area />
-      </Section>
-
-      <Section id="bs-embeds" title="Black Stars — Goals & Moments (embedded X posts)" note="Paste X post URLs of goals; they embed and play on the site.">
-        <ListEditor
-          listKey="gc_bs_embeds"
-          columns={[
-            { key: 'url', type: 'url', ph: 'X post URL…' },
-            { key: 'caption', ph: 'Caption (optional)…' },
-          ]}
-          blank={() => ({ url: '', caption: '' })}
-        />
-      </Section>
-
-      <Section id="fixtures" title="Black Stars — Fixtures & Countdowns" note="Kickoff must be ISO format, e.g. 2026-05-22T17:00:00Z. Blank kickoff hides that fixture's countdown. Clear the matchup to hide the whole card.">
-        {(['f1', 'f2'] as const).map(fx => (
-          <div key={fx} className="adm-fixture">
-            <div className="adm-sub">{fx === 'f1' ? 'Fixture 1' : 'Fixture 2'}</div>
-            <FieldText label="Label" fieldKey={`bs:${fx}-label`} def={FIXTURE_DEFAULTS[fx].label} />
-            <FieldText label="Matchup" fieldKey={`bs:${fx}-title`} def={FIXTURE_DEFAULTS[fx].title} />
-            <FieldText label="Detail (date · venue · time)" fieldKey={`bs:${fx}-det`} def={FIXTURE_DEFAULTS[fx].det} />
-            <FieldText label="Kickoff (ISO, for countdown)" fieldKey={`fixture:${fx}`} def={FIXTURE_DEFAULTS[fx].iso} ph="2026-05-22T17:00:00Z" />
-            <FieldText label="What's at stake" fieldKey={`bs:${fx}-stake`} def={FIXTURE_DEFAULTS[fx].stake} area />
-          </div>
+      <div className="adm-tabs" role="tablist">
+        {TABS.map(t => (
+          <button
+            key={t.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.id}
+            className={`adm-tab${tab === t.id ? ' active' : ''}`}
+            onClick={() => setTab(t.id)}
+          >
+            {t.label}
+          </button>
         ))}
-      </Section>
+      </div>
 
-      <Section id="home-highlights" title="Home — Highlights" note="Self-hosted clip tiles. Slug points at /assets/video/{slug}.mp4 + .poster.jpg. Set source to 'embed' + an X URL to play a post in the lightbox.">
-        <ClipEditor listKey="gc_highlights" def={DEFAULT_HOME_HIGHLIGHTS} slugPrefix="highlights" />
-      </Section>
+      {tab === 'home' && (
+        <>
+          <Section id="home-news" title="Latest News" note="The headline feed on the homepage. Tag is shown as a coloured chip.">
+            <ListEditor
+              listKey="gc_news"
+              columns={[
+                { key: 'tag', type: 'select', ph: '', options: ['general', 'injury', 'transfer'] },
+                { key: 'title', ph: 'Headline…' },
+                { key: 'url', type: 'url', ph: 'Link URL (optional)…' },
+              ]}
+              blank={() => ({ tag: 'general', title: '', url: '' })}
+            />
+          </Section>
 
-      <Section id="bs-highlights" title="Black Stars — Matchday Highlights">
-        <ClipEditor listKey="gc_bs_highlights" def={DEFAULT_BS_HIGHLIGHTS} slugPrefix="highlights" />
-      </Section>
+          <Section id="home-highlights" title="Highlights" note="Self-hosted clip tiles. Slug points at /assets/video/{slug}.mp4 + .poster.jpg. Set source to 'embed' + an X URL to play a post in the lightbox.">
+            <ClipEditor listKey="gc_highlights" def={DEFAULT_HOME_HIGHLIGHTS} slugPrefix="highlights" />
+          </Section>
+        </>
+      )}
 
-      <Section id="gpa" title="GPA — Weekly Links" note="The link buttons on the GPA Weekly page.">
-        <GpaLinksEditor />
-      </Section>
+      {tab === 'players' && (
+        <>
+          <Section id="player-news" title="Transfers & Updates" note="Shown on the Current Players page.">
+            <ListEditor
+              listKey="gc_player_news"
+              columns={[
+                { key: 'tag', type: 'select', ph: '', options: ['transfer', 'injury', 'callup', 'general'] },
+                { key: 'title', ph: 'Headline e.g. Kudus joins new club' },
+                { key: 'detail', type: 'textarea', ph: 'Detail (optional)…' },
+              ]}
+              blank={() => ({ tag: 'transfer', title: '', detail: '' })}
+            />
+          </Section>
+
+          <Section id="teams" title="Teams & Positions" note="Change a player's club or position. Format: Club · Position. Leave a player untouched to keep the default.">
+            <div className="adm-teams">
+              {staticPlayers.map(p => (
+                <FieldText key={p.eid} label={p.name} fieldKey={`team:${p.eid}`} def={p.meta} ph="Club · Position" />
+              ))}
+            </div>
+            <p className="adm-note">Tip: the small dot between club and position is written as <code>&lt;s&gt;·&lt;/s&gt;</code>. You can also just type <code>Club · Position</code>.</p>
+          </Section>
+
+          <Section id="extra-players" title="Add Extra Players" note="Players not in the built-in list. League codes: pl, l1, ll, sa, bl, ch, ot.">
+            <ExtraPlayersEditor />
+          </Section>
+
+          <Section id="performers" title="Weekend Performers" note="Cards that link out to a comp on X / TikTok.">
+            <ListEditor
+              listKey="gc_performers"
+              columns={[
+                { key: 'caption', ph: 'Caption e.g. Kudus vs Man City — MW38' },
+                { key: 'url', type: 'url', ph: 'X or TikTok post URL…' },
+              ]}
+              blank={() => ({ caption: '', url: '' })}
+            />
+          </Section>
+        </>
+      )}
+
+      {tab === 'legends' && (
+        <>
+          <Section id="legend-links" title="Comp / Archive Links" note="Repoint any 'Watch on X' link, e.g. to a player's whole archive. Leave blank to keep the built-in link.">
+            <div className="adm-links">
+              {LEGEND_LINKS.map(l => (
+                <FieldText key={l.key} label={l.label} fieldKey={`link:${l.key}`} ph="Archive / post URL (blank = default)" />
+              ))}
+            </div>
+          </Section>
+
+          <Section id="essien" title="Essien Embedded Post" note="Paste an X post URL to embed the clip on the Essien card. Leave blank to show nothing.">
+            <FieldText label="Essien X post URL" fieldKey="embed:essien" ph="https://x.com/Ghanacomps/status/…" />
+          </Section>
+
+          <Section id="extra-legends" title="Add Extra Legends" note="Adds a card to the Legends ledger.">
+            <ExtraLegendsEditor listKey="gc_extra_legends" />
+          </Section>
+
+          <Section id="extra-cult" title="Add Cult Heroes">
+            <ExtraLegendsEditor listKey="gc_extra_cult" />
+          </Section>
+        </>
+      )}
+
+      {tab === 'blackstars' && (
+        <>
+          <Section id="bs-update" title="Latest Update" note="The editorial news block at the top of the Black Stars page.">
+            <FieldText label="Eyebrow" fieldKey="bs:eyebrow" def={BS_UPDATE_DEFAULTS['bs:eyebrow']} />
+            <FieldText label="Title (gold headline)" fieldKey="bs:title" def={BS_UPDATE_DEFAULTS['bs:title']} />
+            <FieldText label="Sub-heading" fieldKey="bs:heading" def={BS_UPDATE_DEFAULTS['bs:heading']} />
+            <FieldText label="Body (blank line = new paragraph)" fieldKey="bs:body" def={BS_UPDATE_DEFAULTS['bs:body']} area />
+          </Section>
+
+          <Section id="bs-embeds" title="Goals & Moments (embedded X posts)" note="Paste X post URLs of goals; they embed and play on the site.">
+            <ListEditor
+              listKey="gc_bs_embeds"
+              columns={[
+                { key: 'url', type: 'url', ph: 'X post URL…' },
+                { key: 'caption', ph: 'Caption (optional)…' },
+              ]}
+              blank={() => ({ url: '', caption: '' })}
+            />
+          </Section>
+
+          <Section id="fixtures" title="Fixtures & Countdowns" note="Kickoff must be ISO format, e.g. 2026-05-22T17:00:00Z. Blank kickoff hides that fixture's countdown. Clear the matchup to hide the whole card.">
+            {(['f1', 'f2'] as const).map(fx => (
+              <div key={fx} className="adm-fixture">
+                <div className="adm-sub">{fx === 'f1' ? 'Fixture 1' : 'Fixture 2'}</div>
+                <FieldText label="Label" fieldKey={`bs:${fx}-label`} def={FIXTURE_DEFAULTS[fx].label} />
+                <FieldText label="Matchup" fieldKey={`bs:${fx}-title`} def={FIXTURE_DEFAULTS[fx].title} />
+                <FieldText label="Detail (date · venue · time)" fieldKey={`bs:${fx}-det`} def={FIXTURE_DEFAULTS[fx].det} />
+                <FieldText label="Kickoff (ISO, for countdown)" fieldKey={`fixture:${fx}`} def={FIXTURE_DEFAULTS[fx].iso} ph="2026-05-22T17:00:00Z" />
+                <FieldText label="What's at stake" fieldKey={`bs:${fx}-stake`} def={FIXTURE_DEFAULTS[fx].stake} area />
+              </div>
+            ))}
+          </Section>
+
+          <Section id="bs-highlights" title="Matchday Highlights">
+            <ClipEditor listKey="gc_bs_highlights" def={DEFAULT_BS_HIGHLIGHTS} slugPrefix="highlights" />
+          </Section>
+        </>
+      )}
+
+      {tab === 'gpa' && (
+        <Section id="gpa" title="GPA — Weekly Links" note="The link buttons on the GPA Weekly page.">
+          <GpaLinksEditor />
+        </Section>
+      )}
 
       <div className="adm-footer">
         <button type="button" className="adm-btn adm-btn-primary" onClick={doSave} disabled={saving}>

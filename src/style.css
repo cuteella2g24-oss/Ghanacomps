@@ -2624,7 +2624,22 @@ body.edit .react-remove-btn { display: flex !important; }
 .adm-bar-title { font-family: var(--font-d); font-size: var(--fs-xl); color: var(--white); }
 .adm-bar-actions { display: flex; align-items: center; gap: var(--space-md); flex-wrap: wrap; }
 .adm-status { font-size: var(--fs-sm); color: var(--green); }
-.adm-intro { font-size: var(--fs-sm); color: var(--body); margin-bottom: var(--space-4xl); line-height: var(--lh-body); }
+.adm-intro { font-size: var(--fs-sm); color: var(--body); margin-bottom: var(--space-lg); line-height: var(--lh-body); }
+
+.adm-tabs {
+  display: flex; gap: var(--space-xs); flex-wrap: wrap;
+  padding: var(--space-md) 0; margin-bottom: var(--space-2xl);
+  border-bottom: 1px solid var(--line);
+}
+.adm-tab {
+  font-family: var(--font-b); font-size: var(--fs-2xs); letter-spacing: var(--ls-2); text-transform: uppercase;
+  padding: var(--space-sm) var(--space-lg); border: 1px solid var(--line); border-radius: var(--radius-pill);
+  color: var(--sub); background: transparent; cursor: pointer; white-space: nowrap; transition: all .15s;
+}
+.adm-tab:hover { color: var(--white); border-color: rgb(var(--gold-rgb) /.4); }
+.adm-tab.active { color: #111; background: var(--gold); border-color: var(--gold); font-weight: var(--fw-semibold); }
+/* First section in a tab shouldn't double up the top border/padding under the tabs */
+.adm-tabs + * > .adm-section:first-child, .adm-section:first-of-type { border-top: none; padding-top: var(--space-lg); }
 
 .adm-btn {
   font-family: var(--font-b); font-size: var(--fs-2xs); letter-spacing: var(--ls-2); text-transform: uppercase;
