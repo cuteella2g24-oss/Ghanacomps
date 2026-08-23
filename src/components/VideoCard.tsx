@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { type Clip, resolveClip } from '../data/clips';
-import VideoLightbox from './VideoLightbox';
+import UniversalEmbed from './UniversalEmbed';
+import { resolveEmbed } from '../lib/videoEmbed';
 
 /**
- * VideoCard — the single reusable poster-first video tile (spec §2.b). A real
- * <button> showing a lazy poster + one Apple play glyph; tap opens the immersive
- * lightbox. NO <video> is mounted here — the MP4 is only fetched once the
- * lightbox opens, so a dense grid stays N images, not N videos.
+ * VideoCard — a poster-first video tile that plays IN PLACE (spec §2.b, revised).
+ * Tap the poster and the tile swaps to the live player right where it sits — no
+ * modal. Embed clips (X, YouTube, TikTok, Instagram, MP4) render via
+ * UniversalEmbed; self-hosted clips render a native <video>. Until tapped, NO
+ * player is mounted, so a dense grid stays N images, not N players.
  *
  * Size: 'lg' (highlights grid) | 'sm' (player/legend card clips).
  * Ratio comes from the clip record ('16x9' | '9x16' | '4x5').
@@ -29,60 +31,81 @@ const PlayGlyph = () => (
 );
 
 export default function VideoCard({ clip, size = 'lg', showCaption }: Props) {
-  // The triggering element is captured on click (not read from a ref during
-  // render) so the lightbox can return focus to it on close.
-  const [trigger, setTrigger] = useState<HTMLButtonElement | null>(null);
+  const [playing, setPlaying] = useState(false);
   const [posterError, setPosterError] = useState(false);
   const resolved = resolveClip(clip);
 
   const ratioClass =
     clip.ratio === '9x16' ? 'r9x16' : clip.ratio === '4x5' ? 'r4x5' : 'r16x9';
   const withCaption = showCaption ?? size === 'lg';
+  const isEmbed = clip.source === 'embed' && !!clip.originalUrl;
+  // Card-style embeds (X / TikTok / Instagram) set their own tall height, so the
+  // media box must grow to fit them instead of being clamped to the clip ratio.
+  const embedKind = isEmbed ? resolveEmbed(clip.originalUrl!).kind : null;
+  const cardEmbed = embedKind === 'twitter' || embedKind === 'tiktok' || embedKind === 'instagram';
+
+  const caption = withCaption && (
+    <span className="gc-vcard-cap">
+      {clip.tag && <span className="gc-vcard-tag">{clip.tag}</span>}
+      <span className="gc-vcard-title">{clip.title}</span>
+    </span>
+  );
+
+  // Playing: the tile becomes a live player in place (not a button — it now
+  // contains interactive media).
+  if (playing) {
+    return (
+      <div className={`gc-vcard ${size} ${ratioClass} is-playing`}>
+        <span className={`gc-vcard-media is-live${cardEmbed ? ' is-cardembed' : ''}`}>
+          {isEmbed ? (
+            <UniversalEmbed url={clip.originalUrl!} caption={clip.title} />
+          ) : (
+            <video
+              className="gc-vcard-video"
+              controls
+              autoPlay
+              playsInline
+              poster={resolved.posterSrc}
+            >
+              {resolved.webmSrc && <source src={resolved.webmSrc} type="video/webm" />}
+              <source src={resolved.mp4Src} type="video/mp4" />
+            </video>
+          )}
+        </span>
+        {caption}
+      </div>
+    );
+  }
 
   return (
-    <>
-      <button
-        type="button"
-        className={`gc-vcard ${size} ${ratioClass}`}
-        aria-label={`Play highlight: ${clip.title}`}
-        onClick={e => setTrigger(e.currentTarget)}
-      >
-        <span className="gc-vcard-media">
-          {!posterError ? (
-            <img
-              className="gc-vcard-poster"
-              src={resolved.posterSrc}
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              decoding="async"
-              onError={() => setPosterError(true)}
-            />
-          ) : (
-            // Missing poster → reads as "clip unavailable", never a broken box.
-            <span className="gc-vcard-noposter" aria-hidden="true">
-              ▶
-            </span>
-          )}
-          <span className="gc-vcard-scrim" aria-hidden="true" />
-          {clip.duration && <span className="gc-vcard-dur">{clip.duration}</span>}
-          <PlayGlyph />
-        </span>
-        {withCaption && (
-          <span className="gc-vcard-cap">
-            {clip.tag && <span className="gc-vcard-tag">{clip.tag}</span>}
-            <span className="gc-vcard-title">{clip.title}</span>
+    <button
+      type="button"
+      className={`gc-vcard ${size} ${ratioClass}`}
+      aria-label={`Play highlight: ${clip.title}`}
+      onClick={() => setPlaying(true)}
+    >
+      <span className="gc-vcard-media">
+        {!posterError ? (
+          <img
+            className="gc-vcard-poster"
+            src={resolved.posterSrc}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            onError={() => setPosterError(true)}
+          />
+        ) : (
+          // Missing poster → reads as "clip unavailable", never a broken box.
+          <span className="gc-vcard-noposter" aria-hidden="true">
+            ▶
           </span>
         )}
-      </button>
-
-      {trigger && (
-        <VideoLightbox
-          clip={resolved}
-          triggerEl={trigger}
-          onClose={() => setTrigger(null)}
-        />
-      )}
-    </>
+        <span className="gc-vcard-scrim" aria-hidden="true" />
+        {clip.duration && <span className="gc-vcard-dur">{clip.duration}</span>}
+        <PlayGlyph />
+      </span>
+      {caption}
+    </button>
   );
 }
