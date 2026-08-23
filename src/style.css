@@ -1529,24 +1529,32 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-feed-tag.injury   { background: rgb(var(--red-rgb) / .15); color: var(--red); }
 .gc-feed-tag.general  { background: rgb(var(--green-rgb) / .14); color: var(--green); }
 .gc-feed-t { font-size: var(--fs-base); color: var(--white); line-height: var(--lh-heading); }
+.gc-feed-emoji { font-style: normal; }
+.gc-feed-src {
+  display: block; margin-top: var(--space-3xs);
+  font-size: var(--fs-2xs); color: var(--sub); letter-spacing: var(--ls-1);
+}
 .gc-feed-empty {
   padding: var(--space-5xl) var(--space-2xl); font-size: var(--fs-sm);
   color: var(--sub);
 }
 
-/* B/R Football-style headlines grid — full-width "The Feed" section. Renders
-   every gc_news item; image items get a 16:9 cover, text-only items get a
-   tinted top band so the mixed grid still reads deliberate. Whole card is
-   clickable via an absolutely-positioned stretched link (.gc-news-hit) — valid
-   HTML, full-card click, keyboard-focusable. */
+/* Bleacher-Report-style headlines feed — full-width "The Feed" section.
+   Each gc_news item is a horizontal card: square thumbnail on the left, an
+   attribution row (source + time + tag) on top, a bold uppercase headline, then
+   an optional summary dek. Text-only items drop the thumbnail and run full
+   width. The whole card is clickable via an absolutely-positioned stretched
+   link (.gc-news-hit) — valid HTML, full-card click, keyboard-focusable. */
 .gc-news-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: var(--space-lg);
 }
 .gc-news-card {
-  position: relative; display: flex; flex-direction: column;
+  position: relative; display: flex; align-items: stretch;
+  gap: var(--space-xl);
   overflow: hidden; border: 1px solid var(--line);
-  border-radius: var(--radius-lg); background: var(--raised);
+  border-radius: var(--radius-xl); background: var(--raised);
+  padding: var(--space-lg);
   transition: background var(--dur-fast) var(--ease-soft),
               border-color var(--dur-fast) var(--ease-soft),
               transform var(--dur-fast) var(--ease-soft);
@@ -1560,31 +1568,39 @@ body.edit .react-remove-btn { display: flex !important; }
   outline: 2px solid rgb(var(--gold-rgb) / .5); outline-offset: 2px;
 }
 .gc-news-thumb {
-  aspect-ratio: 16 / 9; overflow: hidden; background: var(--lift);
+  flex: 0 0 auto; width: 118px; height: 118px; align-self: center;
+  overflow: hidden; background: var(--lift);
+  border-radius: var(--radius-lg);
 }
 .gc-news-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-/* Text-only cards: a subtle gold-tinted band stands in for the missing image. */
-.gc-news-band {
-  height: 6px; flex: 0 0 auto;
-  background: linear-gradient(90deg,
-    rgb(var(--gold-rgb) / .55), rgb(var(--gold-rgb) / .12));
-}
 .gc-news-body {
-  display: flex; flex-direction: column; gap: var(--space-sm);
-  padding: var(--space-2xl); flex: 1;
+  display: flex; flex-direction: column; gap: var(--space-xs);
+  flex: 1; min-width: 0; justify-content: center;
 }
-.gc-news-top { display: flex; align-items: center; gap: var(--space-sm); }
-.gc-news-title {
-  font-family: var(--font-d); font-size: var(--fs-lg);
-  font-weight: var(--fw-semibold); color: var(--white);
-  line-height: var(--lh-heading);
+/* Attribution row — source · time · category, B/R "🔗 Bleacher Report • 2d". */
+.gc-news-meta {
+  display: flex; align-items: center; gap: var(--space-sm);
+  flex-wrap: wrap; margin-bottom: var(--space-3xs);
 }
-.gc-news-read {
-  margin-top: auto;
-  font-size: var(--fs-micro); letter-spacing: var(--ls-2);
-  text-transform: uppercase; color: var(--sub); font-weight: var(--fw-semibold);
+.gc-news-source {
+  display: inline-flex; align-items: center; gap: var(--space-2xs);
+  font-size: var(--fs-xs); color: var(--sub); font-weight: var(--fw-medium);
 }
-.gc-news-card:hover .gc-news-read { color: var(--white); }
+.gc-news-source svg { width: 13px; height: 13px; opacity: .7; flex: 0 0 auto; }
+.gc-news-time {
+  font-size: var(--fs-xs); color: var(--sub);
+}
+.gc-news-time::before { content: "•"; margin-right: var(--space-sm); opacity: .55; }
+.gc-news-headline {
+  font-family: var(--font-b); font-weight: 700;
+  text-transform: uppercase; letter-spacing: -0.005em;
+  font-size: var(--fs-lg); line-height: var(--lh-snug); color: var(--white);
+  display: flex; align-items: baseline; gap: var(--space-xs);
+}
+.gc-news-emoji { font-weight: 400; letter-spacing: 0; flex: 0 0 auto; }
+.gc-news-summary {
+  font-size: var(--fs-sm); color: var(--body); line-height: var(--lh-body);
+}
 /* Stretched link — covers the whole card so the entire card is clickable
    without nesting interactive elements inside an anchor. */
 .gc-news-hit {
@@ -1597,6 +1613,63 @@ body.edit .react-remove-btn { display: flex !important; }
   min-width: 20px; height: 20px; border: none; cursor: pointer;
   border-radius: var(--radius-full); background: var(--red); color: var(--on-brand);
   font-size: var(--fs-2xs); line-height: var(--lh-none);
+}
+@media (max-width: 520px) {
+  .gc-news-grid { grid-template-columns: 1fr; }
+  .gc-news-thumb { width: 84px; height: 84px; }
+}
+
+/* ─── Admin: add-news form ────────────────────────────────────
+   Roomy labelled grid so every B/R field has space to breathe. */
+.gc-news-admin {
+  margin-top: var(--space-3xl); padding: var(--space-2xl);
+  background: rgb(var(--gold-rgb) / .04);
+  border: 1px dashed rgb(var(--gold-rgb) / .25);
+  border-radius: var(--radius-lg);
+}
+.gc-news-admin-h {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-4);
+  text-transform: uppercase; color: var(--white);
+}
+.gc-news-admin-hint {
+  margin: var(--space-xs) 0 var(--space-xl);
+  font-size: var(--fs-xs); color: var(--sub); line-height: var(--lh-body);
+  max-width: 60ch;
+}
+.gc-news-admin-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+.gc-field { display: flex; flex-direction: column; gap: var(--space-2xs); min-width: 0; }
+.gc-field--full { grid-column: 1 / -1; }
+.gc-field > span {
+  font-size: var(--fs-2xs); letter-spacing: var(--ls-2);
+  text-transform: uppercase; color: var(--sub); font-weight: var(--fw-medium);
+}
+.gc-field > span em { color: var(--gold); font-style: normal; }
+.gc-field input,
+.gc-field select,
+.gc-field textarea {
+  width: 100%; background: var(--raised); border: 1px solid var(--line);
+  color: var(--white); padding: var(--space-sm) var(--space-md);
+  font-size: var(--fs-sm); border-radius: var(--radius-sm);
+  font-family: var(--font-b); resize: vertical;
+}
+.gc-field input:focus,
+.gc-field select:focus,
+.gc-field textarea:focus {
+  outline: none; border-color: rgb(var(--gold-rgb) / .5);
+}
+.gc-news-admin-foot {
+  display: flex; align-items: center; gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+.gc-news-admin-count { font-size: var(--fs-xs); color: var(--sub); }
+@media (max-width: 720px) {
+  .gc-news-admin-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 460px) {
+  .gc-news-admin-grid { grid-template-columns: 1fr; }
 }
 
 /* ─── SECTION HEADER — B variant (eyebrow + rule, §1.5) ──────
