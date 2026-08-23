@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import UniversalEmbed from './UniversalEmbed';
 
 /**
  * SocialStrip — the "Latest on X / TikTok" band (spec §2.e). The ONLY place raw
@@ -8,11 +9,15 @@ import { useEffect, useRef, useState } from 'react';
  * the cell frame + badge are the corral, and that's accepted here and nowhere
  * else.
  *
- * Performance: the platform scripts (widgets.js / embed.js) are lazy-mounted
- * ONCE, only when the strip scrolls into view (IntersectionObserver), and are
- * removed on unmount so there's no leak. Until then / if a script fails, each
- * cell shows a graceful "View on X ↗" link-out — still useful, never a broken
- * frame.
+ * Rendering: each cell defers to <UniversalEmbed>, which builds the embed
+ * EXPLICITLY (X via createTweet, TikTok via a scanned blockquote) rather than
+ * relying on a platform script's one-shot auto-scan. That auto-scan is why
+ * embeds used to intermittently vanish — if widgets.js was already loaded
+ * elsewhere on the page it never re-scanned these late-mounted blockquotes.
+ *
+ * Performance: the embeds (and their platform scripts) are only mounted once the
+ * strip scrolls into view (IntersectionObserver); until then each cell shows a
+ * graceful "View on X ↗" link-out — still useful, never a broken frame.
  */
 
 interface SocialPost {
@@ -34,47 +39,19 @@ const POSTS: SocialPost[] = [
   { platform: 'x', url: 'https://x.com/Ghanacomps/status/2026357491534045582', handle: '@Ghanacomps', caption: 'Anthony Annan vs Uruguay — our biggest legend comp.' },
 ];
 
-const X_SCRIPT = 'https://platform.twitter.com/widgets.js';
-const TIKTOK_SCRIPT = 'https://www.tiktok.com/embed.js';
-
-/** Inject a script once (keyed by src); resolves the shared load state. */
-function ensureScript(src: string): void {
-  if (document.querySelector(`script[data-gc-embed="${src}"]`)) return;
-  const s = document.createElement('script');
-  s.src = src;
-  s.async = true;
-  s.setAttribute('data-gc-embed', src);
-  document.body.appendChild(s);
-}
-
-/** Resolve the site's active theme so the embed roughly matches paper/dark mode. */
-function resolveTheme(): 'light' | 'dark' {
-  const set = document.documentElement.dataset.theme;
-  if (set === 'light' || set === 'dark') return set;
-  return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-}
-
 export default function SocialStrip() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [scriptsMounted, setScriptsMounted] = useState(false);
-  const [embedTheme, setEmbedTheme] = useState<'light' | 'dark'>('dark');
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
 
-    const needsX = POSTS.some(p => p.platform === 'x');
-    const needsTikTok = POSTS.some(p => p.platform === 'tiktok');
-
     const observer = new IntersectionObserver(
       entries => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            // Match the embed chrome to the site theme at mount time.
-            setEmbedTheme(resolveTheme());
-            if (needsX) ensureScript(X_SCRIPT);
-            if (needsTikTok) ensureScript(TIKTOK_SCRIPT);
-            setScriptsMounted(true);
+            setVisible(true);
             observer.disconnect();
           }
         }
@@ -82,12 +59,6 @@ export default function SocialStrip() {
       { threshold: 0.1 }
     );
     observer.observe(el);
-
-    // Only disconnect the observer. The platform scripts are idempotent
-    // singletons (ensureScript guards double-injection); removing them on
-    // unmount would yank them out from under any other SocialStrip instance
-    // and wouldn't clear the globals/iframes anyway. Leaving them is the
-    // standard third-party-widget pattern.
     return () => observer.disconnect();
   }, []);
 
@@ -108,16 +79,10 @@ export default function SocialStrip() {
             key={i}
             className={`gc-social-cell${post.platform === 'tiktok' ? ' tiktok' : ''}`}
           >
-            {scriptsMounted && post.platform === 'x' ? (
-              <blockquote className="twitter-tweet" data-theme={embedTheme} data-dnt="true">
-                <a href={post.url}>{post.caption}</a>
-              </blockquote>
-            ) : scriptsMounted && post.platform === 'tiktok' ? (
-              <blockquote className="tiktok-embed" cite={post.url}>
-                <a href={post.url}>{post.caption}</a>
-              </blockquote>
+            {visible ? (
+              <UniversalEmbed url={post.url} caption={post.caption} />
             ) : (
-              // Pre-load / failed-script fallback: graceful, still useful.
+              // Pre-scroll fallback: graceful, still useful.
               <div className="gc-social-fallback">
                 <div className="gc-social-fallback-handle">{post.handle}</div>
                 <p className="gc-social-fallback-cap">{post.caption}</p>
