@@ -1546,14 +1546,14 @@ body.edit .react-remove-btn { display: flex !important; }
    width. The whole card is clickable via an absolutely-positioned stretched
    link (.gc-news-hit) — valid HTML, full-card click, keyboard-focusable. */
 .gc-news-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: var(--space-lg);
+  display: flex; flex-direction: column; gap: var(--space-md);
+  max-width: 680px;
 }
 .gc-news-card {
-  position: relative; display: flex; align-items: stretch;
+  position: relative; display: flex; align-items: center;
   gap: var(--space-xl);
   overflow: hidden; border: 1px solid var(--line);
-  border-radius: var(--radius-xl); background: var(--raised);
+  border-radius: 18px; background: var(--raised);
   padding: var(--space-lg);
   transition: background var(--dur-fast) var(--ease-soft),
               border-color var(--dur-fast) var(--ease-soft),
@@ -1568,9 +1568,9 @@ body.edit .react-remove-btn { display: flex !important; }
   outline: 2px solid rgb(var(--gold-rgb) / .5); outline-offset: 2px;
 }
 .gc-news-thumb {
-  flex: 0 0 auto; width: 118px; height: 118px; align-self: center;
+  flex: 0 0 auto; width: 132px; aspect-ratio: 4 / 3; align-self: center;
   overflow: hidden; background: var(--lift);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
 }
 .gc-news-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .gc-news-body {
@@ -1615,8 +1615,8 @@ body.edit .react-remove-btn { display: flex !important; }
   font-size: var(--fs-2xs); line-height: var(--lh-none);
 }
 @media (max-width: 520px) {
-  .gc-news-grid { grid-template-columns: 1fr; }
-  .gc-news-thumb { width: 84px; height: 84px; }
+  .gc-news-card { gap: var(--space-md); padding: var(--space-md); }
+  .gc-news-thumb { width: 96px; }
 }
 
 /* ─── Admin: add-news form ────────────────────────────────────
