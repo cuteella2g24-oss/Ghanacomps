@@ -1512,11 +1512,18 @@ body.edit .react-remove-btn { display: flex !important; }
 }
 .gc-feed-item {
   display: flex; align-items: center; gap: var(--space-md);
-  padding: var(--space-lg) var(--space-2xl);
+  padding: var(--space-md) var(--space-xl);
   border-bottom: 1px solid var(--line); border-left: 3px solid transparent;
   transition: background var(--dur-fast) var(--ease-soft),
               border-color var(--dur-fast) var(--ease-soft);
 }
+.gc-feed-thumb {
+  flex: 0 0 auto; width: 42px; height: 42px; overflow: hidden;
+  border-radius: 8px; background: var(--lift);
+}
+.gc-feed-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gc-feed-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.gc-feed-top { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
 .gc-feed-item:last-child { border-bottom: none; }
 .gc-feed-item:hover { background: var(--lift); border-left-color: var(--white); }
 .gc-feed-tag {
@@ -1528,10 +1535,9 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-feed-tag.transfer { background: rgb(var(--gold-rgb) / .14); color: var(--white); }
 .gc-feed-tag.injury   { background: rgb(var(--red-rgb) / .15); color: var(--red); }
 .gc-feed-tag.general  { background: rgb(var(--green-rgb) / .14); color: var(--green); }
-.gc-feed-t { font-size: var(--fs-base); color: var(--white); line-height: var(--lh-heading); }
+.gc-feed-t { font-size: var(--fs-sm); color: var(--white); line-height: var(--lh-snug); }
 .gc-feed-emoji { font-style: normal; }
 .gc-feed-src {
-  display: block; margin-top: var(--space-3xs);
   font-size: var(--fs-2xs); color: var(--sub); letter-spacing: var(--ls-1);
 }
 .gc-feed-empty {

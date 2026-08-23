@@ -109,18 +109,27 @@ export default function Home() {
                 <p className="gc-feed-empty">No news yet. Add headlines via the admin panel.</p>
               )}
               {news.slice(0, 3).map((item, i) => {
-                // Compact broadcast rows only — no big image cards in the narrow panel.
+                // Compact B/R-style rows: small thumbnail (when present) + text.
                 const inner = (
                   <>
-                    <span className={`gc-feed-tag ${item.tag}`}>{item.tag}</span>
-                    <span className="gc-feed-t">
-                      {item.emoji && <span className="gc-feed-emoji">{item.emoji} </span>}
-                      {item.title}
-                      {(item.source || item.time) && (
-                        <span className="gc-feed-src">
-                          {item.source}{item.source && item.time ? ' · ' : ''}{item.time}
-                        </span>
-                      )}
+                    {item.image && (
+                      <span className="gc-feed-thumb">
+                        <img src={item.image} alt="" loading="lazy" decoding="async" />
+                      </span>
+                    )}
+                    <span className="gc-feed-main">
+                      <span className="gc-feed-top">
+                        <span className={`gc-feed-tag ${item.tag}`}>{item.tag}</span>
+                        {(item.source || item.time) && (
+                          <span className="gc-feed-src">
+                            {item.source}{item.source && item.time ? ' · ' : ''}{item.time}
+                          </span>
+                        )}
+                      </span>
+                      <span className="gc-feed-t">
+                        {item.emoji && <span className="gc-feed-emoji">{item.emoji} </span>}
+                        {item.title}
+                      </span>
                     </span>
                   </>
                 );
