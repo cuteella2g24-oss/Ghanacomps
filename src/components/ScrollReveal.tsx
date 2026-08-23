@@ -40,12 +40,29 @@ export default function ScrollReveal() {
       { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
     );
 
-    // Re-scan on each navigation; a microtask lets the new route paint first.
-    const id = window.setTimeout(() => {
-      document.querySelectorAll<HTMLElement>('.reveal:not(.in)').forEach(el => {
-        observer.observe(el);
+    // Observe every not-yet-revealed section. Idempotent: re-observing an element
+    // is a no-op, and `.in` ones are excluded, so this is safe to call repeatedly.
+    let scheduled = false;
+    const scanSoon = () => {
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(() => {
+        scheduled = false;
+        document.querySelectorAll<HTMLElement>('.reveal:not(.in)').forEach(el => observer.observe(el));
       });
-    }, 0);
+    };
+
+    scanSoon();
+
+    // Catch sections added AFTER the initial scan without a route change — team
+    // tabs, conditional blocks, admin add/remove. Without this, a freshly mounted
+    // `.reveal` is never observed and stays at opacity:0, blanking the page.
+    const mo = new MutationObserver(records => {
+      for (const r of records) {
+        if (r.addedNodes.length) { scanSoon(); return; }
+      }
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
 
     // Failsafe: if the observer never fires (some engines/edge cases don't emit
     // the initial intersection), content stuck at opacity:0 would blank the page.
@@ -60,8 +77,8 @@ export default function ScrollReveal() {
     }, 1200);
 
     return () => {
-      window.clearTimeout(id);
       window.clearTimeout(failsafe);
+      mo.disconnect();
       observer.disconnect();
     };
   }, [location.pathname]);
