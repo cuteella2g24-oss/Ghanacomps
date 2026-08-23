@@ -1564,8 +1564,9 @@ body.edit .react-remove-btn { display: flex !important; }
   max-width: 680px;
 }
 .gc-news-card {
-  position: relative; display: flex; align-items: center;
+  position: relative; display: flex; align-items: stretch;
   gap: var(--space-xl);
+  height: 150px;   /* every card the same dimensions; text is clamped to fit */
   overflow: hidden; border: 1px solid var(--line);
   border-radius: 18px; background: var(--raised);
   padding: var(--space-lg);
@@ -1582,14 +1583,14 @@ body.edit .react-remove-btn { display: flex !important; }
   outline: 2px solid rgb(var(--gold-rgb) / .5); outline-offset: 2px;
 }
 .gc-news-thumb {
-  flex: 0 0 auto; width: 132px; aspect-ratio: 4 / 3; align-self: center;
+  flex: 0 0 auto; width: 150px; align-self: stretch;
   overflow: hidden; background: var(--lift);
   border-radius: 12px;
 }
 .gc-news-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .gc-news-body {
   display: flex; flex-direction: column; gap: var(--space-xs);
-  flex: 1; min-width: 0; justify-content: center;
+  flex: 1; min-width: 0; justify-content: center; overflow: hidden;
 }
 /* Attribution row — source · time · category, B/R "🔗 Bleacher Report • 2d". */
 .gc-news-meta {
@@ -1609,11 +1610,14 @@ body.edit .react-remove-btn { display: flex !important; }
   font-family: var(--font-b); font-weight: 700;
   text-transform: uppercase; letter-spacing: -0.005em;
   font-size: var(--fs-lg); line-height: var(--lh-snug); color: var(--white);
-  display: flex; align-items: baseline; gap: var(--space-xs);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow: hidden;
 }
-.gc-news-emoji { font-weight: 400; letter-spacing: 0; flex: 0 0 auto; }
+.gc-news-emoji { font-weight: 400; letter-spacing: 0; margin-right: 0.35em; }
 .gc-news-summary {
   font-size: var(--fs-sm); color: var(--body); line-height: var(--lh-body);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 /* Stretched link — covers the whole card so the entire card is clickable
    without nesting interactive elements inside an anchor. */
@@ -1629,8 +1633,9 @@ body.edit .react-remove-btn { display: flex !important; }
   font-size: var(--fs-2xs); line-height: var(--lh-none);
 }
 @media (max-width: 520px) {
-  .gc-news-card { gap: var(--space-md); padding: var(--space-md); }
-  .gc-news-thumb { width: 96px; }
+  .gc-news-card { gap: var(--space-md); padding: var(--space-md); height: 118px; }
+  .gc-news-thumb { width: 104px; }
+  .gc-news-summary { -webkit-line-clamp: 1; }
 }
 
 /* ─── Admin: add-news form ────────────────────────────────────
