@@ -63,9 +63,15 @@ export default function TweetEmbed({ url, theme = 'dark', align = 'center' }: Pr
     setStatus('loading');
     loadWidgets()
       .then(twttr => twttr.widgets.createTweet(id, host, { theme, align, dnt: true, conversation: 'none' }))
-      .then(el => { if (!cancelled) setStatus(el ? 'ready' : 'error'); })
+      .then(el => {
+        // StrictMode (dev) runs this effect twice; the first pass is cancelled but
+        // its async createTweet still appends a card. Remove that orphan so only one
+        // tweet survives instead of two rendering side by side.
+        if (cancelled) { el?.remove(); return; }
+        setStatus(el ? 'ready' : 'error');
+      })
       .catch(() => { if (!cancelled) setStatus('error'); });
-    return () => { cancelled = true; };
+    return () => { cancelled = true; host.innerHTML = ''; };
   }, [id, theme, align]);
 
   if (!id) {
