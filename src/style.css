@@ -2746,6 +2746,30 @@ body.edit .react-remove-btn { display: flex !important; }
   background: var(--raised); border-radius: var(--radius-lg); padding: var(--space-md);
 }
 
+/* ─── Embed clips: platform-aware sizing ─────────────────────────────────────
+   The default frame is a fixed 16:9 box with overflow:hidden — perfect for a
+   self-hosted <video> or a YouTube/Vimeo iframe, but it CROPS a tall X / TikTok /
+   Instagram card so the video can't be seen or played. For those, let the frame
+   grow to the embed's natural height and scroll if it exceeds the viewport. */
+.gc-lightbox.is-embed .gc-lightbox-frame {
+  aspect-ratio: auto; height: auto;
+  background: transparent; box-shadow: none; overflow: visible;
+}
+.gc-lightbox.is-embed .gc-lightbox-poster { display: none; }
+.gc-lightbox.is-embed .gc-lightbox-embed {
+  position: static; max-height: calc(100vh - var(--space-11xl) * 2);
+  overflow-y: auto; background: transparent; padding: 0;
+}
+/* YouTube / Vimeo / direct file stay true 16:9 within the flexible frame. */
+.gc-lightbox.embed-youtube .gc-lightbox-stage,
+.gc-lightbox.embed-vimeo .gc-lightbox-stage,
+.gc-lightbox.embed-file .gc-lightbox-stage { width: min(100%, 1100px); }
+/* X posts cap themselves ~550px — narrow the stage so the card isn't marooned. */
+.gc-lightbox.embed-twitter .gc-lightbox-stage { width: min(100%, 560px); }
+/* TikTok / Instagram are vertical — narrower still. */
+.gc-lightbox.embed-tiktok .gc-lightbox-stage,
+.gc-lightbox.embed-instagram .gc-lightbox-stage { width: min(100%, 430px); }
+
 /* Fixture countdown */
 .gc-fix-countdown { margin: var(--space-lg) 0; display: flex; flex-direction: column; gap: var(--space-sm); align-items: flex-start; }
 .gc-countdown-edit { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); }

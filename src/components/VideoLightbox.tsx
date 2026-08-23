@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { type ResolvedClip } from '../data/clips';
 import UniversalEmbed from './UniversalEmbed';
+import { resolveEmbed } from '../lib/videoEmbed';
 
 /**
  * VideoLightbox — the one immersive mode (spec §2.d). Sound + native controls,
@@ -113,6 +114,10 @@ export default function VideoLightbox({ clip, triggerEl, onClose }: Props) {
 
   const ratioClass = clip.ratio === '9x16' ? 'r9x16' : '';
   const isEmbed = clip.source === 'embed';
+  // Embeds need platform-aware sizing: X/TikTok/Instagram cards set their own
+  // (often tall) height, so the frame can't be locked to 16:9 or it clips them.
+  const embedKind = isEmbed && clip.originalUrl ? resolveEmbed(clip.originalUrl).kind : null;
+  const embedClass = embedKind ? `is-embed embed-${embedKind}` : '';
 
   const stageState = isClosing
     ? 'is-closing'
@@ -124,7 +129,7 @@ export default function VideoLightbox({ clip, triggerEl, onClose }: Props) {
 
   return createPortal(
     <div
-      className={`gc-lightbox ${ratioClass} ${openClass} ${isReady ? 'is-ready' : ''}`}
+      className={`gc-lightbox ${ratioClass} ${embedClass} ${openClass} ${isReady ? 'is-ready' : ''}`}
       role="dialog"
       aria-modal="true"
       aria-label={clip.title}
