@@ -1946,13 +1946,15 @@ body.edit .react-remove-btn { display: flex !important; }
   line-height: var(--lh-relaxed); color: var(--body);
   letter-spacing: 0.004em;  /* POLISH §2.2 */
 }
-.gc-editorial .gpa-write-body::first-letter {
+.gc-editorial .gpa-write-body p + p { margin-top: var(--space-lg); }
+.gc-editorial .gpa-write-body > p:first-child::first-letter {
   font-family: var(--font-d); font-weight: var(--fw-semibold);
   font-size: var(--fs-4xl); float: left; line-height: 0.82;
   padding: 6px var(--space-sm) 0 0; color: var(--white);
 }
-.gc-editorial.red-accent .gpa-write-body::first-letter { color: var(--red); }
-.gc-editorial.green-accent .gpa-write-body::first-letter { color: var(--green); }
+.gc-editorial.red-accent .gpa-write-body > p:first-child::first-letter { color: var(--red); }
+.gc-editorial.green-accent .gpa-write-body > p:first-child::first-letter { color: var(--green); }
+.gpa-write-hint { font-size: var(--fs-sm); color: var(--sub); font-style: italic; }
 /* The Goal + Assist split shares one section: two measures side by side. */
 .gc-col-split .gpa-write-block:not(:first-child) { margin-top: 0; }
 

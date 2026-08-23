@@ -2,9 +2,8 @@ import { useState } from 'react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
-import Editable from '../components/Editable';
 import { useAdmin } from '../contexts/AdminContext';
-import { useContentList } from '../contexts/ContentContext';
+import { useContent, useContentList } from '../contexts/ContentContext';
 import { Button } from '@/components/ui/button';
 
 interface GpaLinks {
@@ -20,10 +19,9 @@ function GpaBlock({
   sectionClass,
   labelClass,
   label,
-  nameEid,
+  nameKey,
   nameDef,
-  bodyEid,
-  bodyDef,
+  bodyKey,
   linkDefault,
   links,
   onSaveLink,
@@ -34,30 +32,40 @@ function GpaBlock({
   sectionClass?: string;
   labelClass?: string;
   label: string;
-  nameEid: string;
-  nameDef: string;
-  bodyEid: string;
-  bodyDef: string;
+  /** Content field key for the block heading (player/status). Omit for none. */
+  nameKey?: string;
+  nameDef?: string;
+  /** Content field key for the written breakdown (blank line = new paragraph). */
+  bodyKey: string;
   linkDefault: string;
   links: GpaLinks;
   onSaveLink: (id: keyof GpaLinks, caption: string, url: string) => void;
   onClearLink: (id: keyof GpaLinks) => void;
   isAdmin: boolean;
 }) {
+  const { getField } = useContent();
   const [caption, setCaption] = useState('');
   const [url, setUrl] = useState('');
   const linkData = links[id];
+  const name = nameKey ? getField(nameKey, nameDef ?? '') : '';
+  const body = getField(bodyKey, '').trim();
 
   return (
     <div className={`gpa-write-block${sectionClass ? ' ' + sectionClass : ''}`}>
       <div className={`gpa-write-label${labelClass ? ' ' + labelClass : ''}`}>{label}</div>
-      {nameEid && <Editable tag="div" eid={nameEid} className="gpa-write-heading">{nameDef}</Editable>}
-      <Editable tag="div" eid={bodyEid} className="gpa-write-body">{bodyDef}</Editable>
-      <div className="gpa-link-wrap">
-        {linkData?.url ? (
+      {name && <div className="gpa-write-heading">{name}</div>}
+      {body ? (
+        <div className="gpa-write-body">
+          {body.split(/\n\n+/).map((para, i) => <p key={i}>{para}</p>)}
+        </div>
+      ) : isAdmin ? (
+        <p className="gpa-write-hint">No write-up yet — add it from the admin panel (GPA tab).</p>
+      ) : null}
+      {linkData?.url && (
+        <div className="gpa-link-wrap">
           <a href={linkData.url} target="_blank" rel="noopener" className="gpa-link-btn">{linkData.caption}</a>
-        ) : null}
-      </div>
+        </div>
+      )}
       {isAdmin && (
         <div className="gpa-admin-link admin-only" style={{ display: 'flex' }}>
           <input type="text" placeholder={`Link caption e.g. ${linkDefault}`} value={caption} onChange={e => setCaption(e.target.value)} />
@@ -72,6 +80,7 @@ function GpaBlock({
 
 export default function GPA() {
   const { isAdmin } = useAdmin();
+  const { getField } = useContent();
   const [links, setLinks] = useContentList<GpaLinks>('gc_gpa_links', {});
 
   function saveLink(id: keyof GpaLinks, caption: string, url: string) {
@@ -105,14 +114,11 @@ export default function GPA() {
         <div className="gc-rule">
           <span className="gc-rule-eyebrow">Matchweek Review</span>
         </div>
-        <h2 className="gc-col-head"><Editable tag="span" eid="mwr-heading">Matchweek 34 Review.</Editable></h2>
+        <h2 className="gc-col-head">{getField('gpa-mwr-heading', 'Matchweek 34 Review.')}</h2>
         <GpaBlock
           id="mwr"
           label="This Week's Breakdown"
-          nameEid=""
-          nameDef=""
-          bodyEid="mwr-body"
-          bodyDef="Write your matchweek review here. Talk about the week in Ghanaian football — what impressed you, what disappointed, the conversation that needs to happen. This is your column, written in your voice."
+          bodyKey="gpa-mwr-body"
           linkDefault="Watch: Kudus vs Man City — Matchday 38"
           links={links}
           onSaveLink={saveLink}
@@ -132,10 +138,9 @@ export default function GPA() {
           sectionClass="red"
           labelClass="red"
           label="Player of the Week"
-          nameEid="potw-name"
+          nameKey="gpa-potw-name"
           nameDef="Updated Every Monday"
-          bodyEid="potw-body"
-          bodyDef="Write about the player of the week here. What did he do, which game, what made the performance stand out. Talk about the details — the numbers, the moments, the context. This is a written breakdown, not just a caption."
+          bodyKey="gpa-potw-body"
           linkDefault="Watch: Kudus vs Man City — Matchday 38"
           links={links}
           onSaveLink={saveLink}
@@ -155,10 +160,9 @@ export default function GPA() {
             <GpaBlock
               id="goal"
               label="Goal of the Week"
-              nameEid="goal-name"
+              nameKey="gpa-goal-name"
               nameDef="Coming Monday"
-              bodyEid="goal-body"
-              bodyDef="Write about the goal here. Which player, which game, what made it special. Not every goal is equal — explain why this one deserved to be picked."
+              bodyKey="gpa-goal-body"
               linkDefault="Link caption..."
               links={links}
               onSaveLink={saveLink}
@@ -170,10 +174,9 @@ export default function GPA() {
             <GpaBlock
               id="assist"
               label="Assist of the Week"
-              nameEid="assist-name"
+              nameKey="gpa-assist-name"
               nameDef="Coming Monday"
-              bodyEid="assist-body"
-              bodyDef="Write about the assist here. The pass that made everything possible. The one nobody talked about."
+              bodyKey="gpa-assist-body"
               linkDefault="Link caption..."
               links={links}
               onSaveLink={saveLink}
@@ -194,10 +197,9 @@ export default function GPA() {
           id="up"
           sectionClass="grn"
           label="Underrated Performance"
-          nameEid="up-name"
+          nameKey="gpa-up-name"
           nameDef="Updated Every Week"
-          bodyEid="up-body"
-          bodyDef="Write about the performance that deserved more noise. The player who did their job brilliantly and got no credit. Every week someone has a brilliant game and the world moves on without noticing. Find them. Write about them. Make sure they are seen."
+          bodyKey="gpa-up-body"
           linkDefault="Link caption..."
           links={links}
           onSaveLink={saveLink}

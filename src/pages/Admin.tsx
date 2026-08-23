@@ -318,9 +318,36 @@ function Dashboard({ token }: { token: string }) {
       )}
 
       {tab === 'gpa' && (
-        <Section id="gpa" title="GPA — Weekly Links" note="The link buttons on the GPA Weekly page.">
-          <GpaLinksEditor />
-        </Section>
+        <>
+          <Section id="gpa-mwr" title="Matchweek Review" note="The opening editorial column. Leave a write-up blank to hide it on the page.">
+            <FieldText label="Heading (e.g. Matchweek 34 Review.)" fieldKey="gpa-mwr-heading" def="Matchweek 34 Review." />
+            <FieldText label="Write-up (leave a blank line between paragraphs)" fieldKey="gpa-mwr-body" area ph="The week in Ghanaian football — what impressed, what disappointed, the conversation that needs to happen." />
+          </Section>
+
+          <Section id="gpa-potw" title="Player of the Week" note="Who stood out this week.">
+            <FieldText label="Player / status heading" fieldKey="gpa-potw-name" def="Updated Every Monday" ph="e.g. Mohammed Kudus" />
+            <FieldText label="Write-up (leave a blank line between paragraphs)" fieldKey="gpa-potw-body" area ph="What he did, which game, what made it stand out — the numbers, the moments, the context. A written breakdown, not a caption." />
+          </Section>
+
+          <Section id="gpa-goal" title="Goal of the Week">
+            <FieldText label="Player / status heading" fieldKey="gpa-goal-name" def="Coming Monday" ph="e.g. Antoine Semenyo" />
+            <FieldText label="Write-up" fieldKey="gpa-goal-body" area ph="Which player, which game, what made it special — why this goal deserved to be picked." />
+          </Section>
+
+          <Section id="gpa-assist" title="Assist of the Week">
+            <FieldText label="Player / status heading" fieldKey="gpa-assist-name" def="Coming Monday" ph="e.g. Thomas Partey" />
+            <FieldText label="Write-up" fieldKey="gpa-assist-body" area ph="The pass that made everything possible — the one nobody talked about." />
+          </Section>
+
+          <Section id="gpa-up" title="Underrated Performance of the Week">
+            <FieldText label="Player / status heading" fieldKey="gpa-up-name" def="Updated Every Week" ph="e.g. Alexander Djiku" />
+            <FieldText label="Write-up" fieldKey="gpa-up-body" area ph="The performance that deserved more noise — the player who did their job brilliantly and got no credit." />
+          </Section>
+
+          <Section id="gpa-links" title="Weekly Links" note="The 'Watch' button under each block. Paste an X or TikTok URL.">
+            <GpaLinksEditor />
+          </Section>
+        </>
       )}
 
       <div className="adm-footer">
