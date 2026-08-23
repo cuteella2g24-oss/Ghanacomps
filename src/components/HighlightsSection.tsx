@@ -28,12 +28,6 @@ interface Props {
   className?: string;
 }
 
-const inputStyle: React.CSSProperties = {
-  flex: 1, minWidth: '160px', background: 'var(--raised)', border: '1px solid var(--line)',
-  color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)',
-  borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)',
-};
-
 export default function HighlightsSection({
   eyebrow, headingLead, headingGold, clips, onChange, slugPrefix = 'highlights', className = '',
 }: Props) {
@@ -45,24 +39,38 @@ export default function HighlightsSection({
   const [slug, setSlug] = useState('');
   const [duration, setDuration] = useState('');
   const [originalUrl, setOriginalUrl] = useState('');
-  const [src, setSrc] = useState<'self' | 'embed'>('self');
+  const [poster, setPoster] = useState('');
+  const [src, setSrc] = useState<'self' | 'embed'>('embed');
 
   function addClip() {
-    if (!title.trim() || !slug.trim()) {
-      alert('Please enter at least a title and a slug (e.g. highlights/kudus-goal).');
+    if (!title.trim()) {
+      alert('Please enter a title.');
       return;
     }
-    const normalizedSlug = slug.includes('/') ? slug.trim() : `${slugPrefix}/${slug.trim()}`;
+    if (src === 'embed' && !originalUrl.trim()) {
+      alert('Paste the video link (e.g. the X post URL) to embed it.');
+      return;
+    }
+    if (src === 'self' && !slug.trim()) {
+      alert('Self-hosted clips need a slug (e.g. highlights/kudus-goal).');
+      return;
+    }
+    // Embed clips don't need a real asset path — derive a stable slug from the
+    // title so the key stays unique without the admin having to invent one.
+    const rawSlug = slug.trim()
+      || title.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const normalizedSlug = rawSlug.includes('/') ? rawSlug : `${slugPrefix}/${rawSlug}`;
     onChange([
       ...clips,
       {
         slug: normalizedSlug, title: title.trim(), tag: tag.trim() || undefined,
         ratio, duration: duration.trim() || undefined,
         originalUrl: originalUrl.trim() || undefined, source: src,
+        poster: poster.trim() || undefined,
       },
     ]);
-    setTitle(''); setTag(''); setSlug(''); setDuration(''); setOriginalUrl('');
-    setRatio('16x9'); setSrc('self'); setShowAdd(false);
+    setTitle(''); setTag(''); setSlug(''); setDuration(''); setOriginalUrl(''); setPoster('');
+    setRatio('16x9'); setSrc('embed'); setShowAdd(false);
   }
 
   function removeClip(i: number) {
@@ -111,29 +119,67 @@ export default function HighlightsSection({
       )}
 
       {isAdmin && showAdd && (
-        <div style={{ marginTop: 'var(--space-xl)', padding: 'var(--space-3xl)', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
-          <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--white)', marginBottom: 'var(--space-md)' }}>Add Highlight Clip</div>
-          <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
-            <input type="text" placeholder="Title..." value={title} onChange={e => setTitle(e.target.value)} style={inputStyle} />
-            <input type="text" placeholder="Tag (e.g. Premier League)..." value={tag} onChange={e => setTag(e.target.value)} style={inputStyle} />
-            <input type="text" placeholder={`Slug (e.g. ${slugPrefix}/kudus-goal)...`} value={slug} onChange={e => setSlug(e.target.value)} style={inputStyle} />
-            <input type="text" placeholder="Duration (e.g. 1:24)..." value={duration} onChange={e => setDuration(e.target.value)} style={{ ...inputStyle, minWidth: '100px' }} />
-            <select value={ratio} onChange={e => setRatio(e.target.value as ClipRatio)} style={{ ...inputStyle, flex: 'none' }}>
-              <option value="16x9">16:9</option>
-              <option value="9x16">9:16</option>
-              <option value="4x5">4:5</option>
-            </select>
-            <input type="url" placeholder="Video link — YouTube, TikTok, Instagram, X, Vimeo or MP4..." value={originalUrl} onChange={e => setOriginalUrl(e.target.value)} style={inputStyle} />
-            <select value={src} onChange={e => setSrc(e.target.value as 'self' | 'embed')} style={{ ...inputStyle, flex: 'none' }}>
-              <option value="self">Self-hosted</option>
-              <option value="embed">Embed fallback</option>
-            </select>
-            <button className="add-archive-btn" onClick={addClip}>Add</button>
+        <div className="gc-news-admin" style={{ marginTop: 'var(--space-xl)' }}>
+          <div className="gc-news-admin-h">Add Highlight Clip</div>
+          <p className="gc-news-admin-hint">
+            The usual flow: keep <strong>Embed</strong> selected, paste the <strong>X post link</strong>,
+            and add a <strong>thumbnail image URL</strong> so the tile shows a still. The X video then
+            plays inline when the tile is clicked. (YouTube, TikTok, Instagram, Vimeo and direct MP4
+            links work too.)
+          </p>
+          <div className="gc-news-admin-grid">
+            <label className="gc-field gc-field--full">
+              <span>Video link <em>(required for embeds)</em></span>
+              <input type="url" placeholder="https://x.com/Ghanacomps/status/…" value={originalUrl} onChange={e => setOriginalUrl(e.target.value)} />
+            </label>
+            <label className="gc-field gc-field--full">
+              <span>Thumbnail image URL</span>
+              <input type="url" placeholder="https://…/still.jpg — shown on the tile" value={poster} onChange={e => setPoster(e.target.value)} />
+            </label>
+            <label className="gc-field gc-field--full">
+              <span>Title <em>(required)</em></span>
+              <input type="text" placeholder="e.g. Kudus' Weekend Masterclass" value={title} onChange={e => setTitle(e.target.value)} />
+            </label>
+            <label className="gc-field">
+              <span>Tag</span>
+              <input type="text" placeholder="e.g. Premier League" value={tag} onChange={e => setTag(e.target.value)} />
+            </label>
+            <label className="gc-field">
+              <span>Duration</span>
+              <input type="text" placeholder="e.g. 1:24" value={duration} onChange={e => setDuration(e.target.value)} />
+            </label>
+            <label className="gc-field">
+              <span>Aspect ratio</span>
+              <select value={ratio} onChange={e => setRatio(e.target.value as ClipRatio)}>
+                <option value="16x9">16:9 (landscape)</option>
+                <option value="9x16">9:16 (vertical)</option>
+                <option value="4x5">4:5 (portrait)</option>
+              </select>
+            </label>
+            <label className="gc-field">
+              <span>Source</span>
+              <select value={src} onChange={e => setSrc(e.target.value as 'self' | 'embed')}>
+                <option value="embed">Embed a link</option>
+                <option value="self">Self-hosted MP4</option>
+              </select>
+            </label>
+            {src === 'self' && (
+              <label className="gc-field gc-field--full">
+                <span>Slug <em>(self-hosted path)</em></span>
+                <input type="text" placeholder={`e.g. ${slugPrefix}/kudus-goal`} value={slug} onChange={e => setSlug(e.target.value)} />
+              </label>
+            )}
+          </div>
+          <div className="gc-news-admin-foot">
+            <button className="add-archive-btn" onClick={addClip}>Add Clip</button>
             <button className="clear-performers-btn" onClick={() => setShowAdd(false)}>Cancel</button>
           </div>
-          <p style={{ fontSize: 'var(--fs-xs)', color: 'var(--sub)', marginTop: 'var(--space-sm)', fontStyle: 'italic' }}>
-            Choose <strong>Embed</strong> and paste any video link (YouTube, TikTok, Instagram, X, Vimeo or a direct MP4) to play it inline — no file upload needed. Or choose <strong>Self-hosted</strong> and drop a real MP4 + poster at <code>/assets/video/{'{slug}'}.mp4</code> and <code>.poster.jpg</code> to swap it in (see the video README).
-          </p>
+          {src === 'self' && (
+            <p className="gc-news-admin-hint" style={{ marginTop: 'var(--space-md)', marginBottom: 0 }}>
+              Self-hosted: drop a real MP4 + poster at <code>/assets/video/{'{slug}'}.mp4</code> and{' '}
+              <code>.poster.jpg</code> (see the video README).
+            </p>
+          )}
         </div>
       )}
     </section>
