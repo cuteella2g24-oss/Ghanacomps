@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Stripe from '../components/Stripe';
 import ImageLightbox from '../components/ImageLightbox';
+import UniversalEmbed from '../components/UniversalEmbed';
 import SportyIcon from '../components/SportyIcon';
 import { useAdmin } from '../contexts/AdminContext';
+import { useContentList } from '../contexts/ContentContext';
 
 /** Decorative expand affordance — a frosted disc + ⤢ glyph, bottom-right of a
  *  tap-to-expand tile. The host <button> carries the accessible label. */
@@ -23,38 +25,13 @@ interface LightboxState {
   triggerEl: HTMLElement | null;
 }
 
-const reactionGroups = [
-  { label: '⚽ Michael Essien', images: [{ id: 'rimg-1', src: 'r16' }, { id: 'rimg-2', src: 'r06' }, { id: 'rimg-3', src: 'r20' }] },
-  { label: '⚽ Anthony Annan', images: [{ id: 'rimg-4', src: 'r23' }, { id: 'rimg-5', src: 'r37' }, { id: 'rimg-6', src: 'r15' }] },
-  { label: '⚽ Asamoah Gyan', images: [{ id: 'rimg-12', src: 'r22' }, { id: 'rimg-13', src: 'r37' }, { id: 'rimg-15', src: 'r35' }] },
-  { label: '⚽ Kwadwo Asamoah', images: [{ id: 'rimg-10', src: 'r30' }, { id: 'rimg-11', src: 'r09' }] },
-  { label: '⚽ Stephen Appiah', images: [{ id: 'rimg-14', src: 'r28' }, { id: 'rimg-17', src: 'r32' }] },
-  { label: '⚽ Abedi Pele', images: [{ id: 'rimg-16', src: 'r41' }, { id: 'rimg-8', src: 'r42' }] },
-  { label: '🧤 Richard Kingson', images: [{ id: 'rimg-7', src: 'r21' }] },
-  { label: '🇬🇭 Current Players and General', images: [{ id: 'rimg-20', src: 'r11' }, { id: 'rimg-21', src: 'r24' }, { id: 'rimg-22', src: 'r25' }, { id: 'rimg-18', src: 'r19' }] },
-  { label: '💛 Praise for Ghana Comps', images: [{ id: 'rimg-23', src: 'r04' }, { id: 'rimg-24', src: 'r02' }, { id: 'rimg-25', src: 'r03' }, { id: 'rimg-26', src: 'r01' }, { id: 'rimg-27', src: 'r07' }, { id: 'rimg-28', src: 'r10' }] },
-];
-
-function getRemovedImgs(): string[] {
-  try { return JSON.parse(localStorage.getItem('gc_removed_imgs') || '[]'); } catch { return []; }
-}
+/** A fan reaction is a live X post embedded on the site (added from /admin). */
+interface FanReaction { url: string; caption?: string; }
 
 export default function About() {
   const { isAdmin } = useAdmin();
-  const [removedImgs, setRemovedImgs] = useState<string[]>(getRemovedImgs);
+  const [reactions] = useContentList<FanReaction[]>('gc_fan_reactions', []);
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
-
-  useEffect(() => {
-    setRemovedImgs(getRemovedImgs());
-  }, [isAdmin]);
-
-  function removeReactImg(id: string) {
-    if (!isAdmin) return;
-    if (!confirm('Remove this screenshot?')) return;
-    const updated = [...removedImgs, id];
-    localStorage.setItem('gc_removed_imgs', JSON.stringify(updated));
-    setRemovedImgs(updated);
-  }
 
   function openLightbox(e: React.MouseEvent<HTMLButtonElement>, src: string, label: string) {
     setLightbox({ src, label, triggerEl: e.currentTarget });
@@ -141,57 +118,29 @@ export default function About() {
         </div>
       </section>
 
-      {/* FAN REACTIONS GALLERY */}
-      <section className="alt reveal">
-        <div className="gc-rule">
-          <h2 className="gc-rule-l">What Ghana Football Fans Are <span className="gold">Saying.</span></h2>
-          <span className="gc-rule-r">The People</span>
-        </div>
-        <p className="lead" style={{ marginBottom: 'var(--space-7xl)', fontSize: 'var(--fs-base)' }}>We post. They react. And the conversation never stops.</p>
-
-        {reactionGroups.map(group => (
-          <div key={group.label} className="player-group">
-            <div className="group-label">{group.label}</div>
-            <div className="react-grid">
-              {group.images.filter(img => !removedImgs.includes(img.id)).map((img, i) => {
-                const src = `/assets/reactions/${img.src}.jpg`;
-                const label = `${group.label.replace(/^[^\p{L}]+/u, '').trim()} — fan reaction ${i + 1}`;
-                return (
-                  <button
-                    key={img.id}
-                    type="button"
-                    className="react-img-wrap"
-                    id={img.id}
-                    aria-label={`View ${label}`}
-                    onClick={e => openLightbox(e, src, label)}
-                  >
-                    <img src={src} alt="" className="react-img" />
-                    <ExpandGlyph />
-                    {isAdmin && (
-                      <span
-                        className="react-remove-btn"
-                        role="button"
-                        tabIndex={0}
-                        aria-label="Remove this screenshot"
-                        onClick={e => { e.stopPropagation(); removeReactImg(img.id); }}
-                        onKeyDown={e => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            removeReactImg(img.id);
-                          }
-                        }}
-                      >
-                        ✕
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+      {/* FAN REACTIONS — live X embeds, added from /admin (About tab) */}
+      {(reactions.length > 0 || isAdmin) && (
+        <section className="alt reveal">
+          <div className="gc-rule">
+            <h2 className="gc-rule-l">What Ghana Football Fans Are <span className="gold">Saying.</span></h2>
+            <span className="gc-rule-r">The People</span>
           </div>
-        ))}
-      </section>
+          <p className="lead" style={{ marginBottom: 'var(--space-6xl)', fontSize: 'var(--fs-base)' }}>We post. They react. And the conversation never stops.</p>
+
+          {reactions.length > 0 ? (
+            <div className="gc-react-embeds">
+              {reactions.map((r, i) => (
+                <div key={`${r.url}-${i}`} className="gc-react-embed">
+                  {r.caption && <div className="gc-embed-caption">{r.caption}</div>}
+                  <UniversalEmbed url={r.url} caption={r.caption} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="post-placeholder"><p>No fan reactions yet — add X posts from the admin panel (About tab).</p></div>
+          )}
+        </section>
+      )}
 
       {/* REQUESTS */}
       <section className="reveal">

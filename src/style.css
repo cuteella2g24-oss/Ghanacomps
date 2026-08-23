@@ -854,6 +854,14 @@ select.form-inp option { background: var(--raised); color: var(--white); }
   display: block; border-radius: inherit;
 }
 
+/* Fan reactions — live X embeds in a masonry of small cards. Column layout lets
+   each tweet keep its natural height (no cropping) while packing tightly. */
+.gc-react-embeds { column-count: 3; column-gap: var(--space-lg); }
+.gc-react-embed { break-inside: avoid; margin: 0 0 var(--space-lg); }
+.gc-react-embed .gc-embed-caption { margin-bottom: var(--space-sm); }
+@media (max-width: 900px) { .gc-react-embeds { column-count: 2; } }
+@media (max-width: 560px) { .gc-react-embeds { column-count: 1; } }
+
 /* Requests */
 .req-pair {
   display: grid; grid-template-columns: 1fr 36px 1fr;

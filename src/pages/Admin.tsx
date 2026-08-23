@@ -120,13 +120,14 @@ function ListEditor({ listKey, columns, blank }: { listKey: string; columns: Col
 
 /* ---------- dashboard ---------- */
 
-type TabId = 'home' | 'players' | 'legends' | 'blackstars' | 'gpa';
+type TabId = 'home' | 'players' | 'legends' | 'blackstars' | 'gpa' | 'about';
 const TABS: { id: TabId; label: string }[] = [
   { id: 'home', label: 'Home' },
   { id: 'players', label: 'Players' },
   { id: 'legends', label: 'Legends & Cult' },
   { id: 'blackstars', label: 'National Teams' },
   { id: 'gpa', label: 'GPA' },
+  { id: 'about', label: 'About' },
 ];
 
 // Shown as a banner above each tab's editors so it's obvious which page — and
@@ -137,6 +138,7 @@ const PAGE_META: Record<TabId, { name: string; blurb: string }> = {
   legends: { name: 'Legends & Cult Heroes page', blurb: 'These editors map to the sections on the Legends & Cult Heroes page.' },
   blackstars: { name: 'National Teams pages', blurb: 'Pick a team below, then edit the sections that appear on that team’s page.' },
   gpa: { name: 'GPA Weekly page', blurb: 'These editors map to the sections on the GPA Weekly page.' },
+  about: { name: 'About page', blurb: 'These editors map to the sections on the About page.' },
 };
 
 function PageBanner({ tab }: { tab: TabId }) {
@@ -348,6 +350,19 @@ function Dashboard({ token }: { token: string }) {
             <GpaLinksEditor />
           </Section>
         </>
+      )}
+
+      {tab === 'about' && (
+        <Section id="about-reactions" title="Fan Reactions" note="The 'What Ghana Football Fans Are Saying' section. Paste X post links — each renders as a live tweet in a small card. Caption is optional.">
+          <ListEditor
+            listKey="gc_fan_reactions"
+            columns={[
+              { key: 'url', type: 'url', ph: 'X post URL — https://x.com/…/status/…' },
+              { key: 'caption', ph: 'Caption (optional)…' },
+            ]}
+            blank={() => ({ url: '', caption: '' })}
+          />
+        </Section>
       )}
 
       <div className="adm-footer">
