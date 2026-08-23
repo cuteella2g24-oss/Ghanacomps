@@ -129,6 +129,27 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'gpa', label: 'GPA' },
 ];
 
+// Shown as a banner above each tab's editors so it's obvious which page — and
+// which sections of it — the admin is currently editing.
+const PAGE_META: Record<TabId, { name: string; blurb: string }> = {
+  home: { name: 'Home page', blurb: 'These editors map to the sections on the homepage, in the order they appear.' },
+  players: { name: 'Current Players page', blurb: 'These editors map to the sections on the Current Players page.' },
+  legends: { name: 'Legends & Cult Heroes page', blurb: 'These editors map to the sections on the Legends & Cult Heroes page.' },
+  blackstars: { name: 'National Teams pages', blurb: 'Pick a team below, then edit the sections that appear on that team’s page.' },
+  gpa: { name: 'GPA Weekly page', blurb: 'These editors map to the sections on the GPA Weekly page.' },
+};
+
+function PageBanner({ tab }: { tab: TabId }) {
+  const meta = PAGE_META[tab];
+  return (
+    <div className="adm-pagehead">
+      <div className="adm-pagehead-eyebrow">Now editing</div>
+      <h2 className="adm-pagehead-h">{meta.name}</h2>
+      <p className="adm-pagehead-blurb">{meta.blurb}</p>
+    </div>
+  );
+}
+
 function Dashboard({ token }: { token: string }) {
   const { save } = useContent();
   const [status, setStatus] = useState('');
@@ -180,22 +201,28 @@ function Dashboard({ token }: { token: string }) {
         ))}
       </div>
 
+      <PageBanner tab={tab} />
+
       {tab === 'home' && (
         <>
-          <Section id="home-news" title="Latest News" note="The headline feed on the homepage. Tag is shown as a coloured chip.">
+          <Section id="home-news" title="Latest News / The Feed" note="The Bleacher-Report-style headline cards — the hero “Latest News” panel and “The Feed” grid. Only the headline is required.">
             <ListEditor
               listKey="gc_news"
               columns={[
-                { key: 'tag', type: 'select', ph: '', options: ['general', 'injury', 'transfer'] },
+                { key: 'tag', type: 'select', ph: '', options: ['general', 'injury', 'transfer', 'callup'] },
+                { key: 'emoji', ph: 'Emoji e.g. 🚨 (optional)' },
                 { key: 'title', ph: 'Headline…' },
+                { key: 'summary', type: 'textarea', ph: 'Summary / dek (optional)…' },
+                { key: 'source', ph: 'Source e.g. Fabrizio Romano (optional)' },
+                { key: 'time', ph: 'Time e.g. 2d (optional)' },
                 { key: 'url', type: 'url', ph: 'Link URL (optional)…' },
-                { key: 'image', type: 'url', ph: 'Image URL (optional) — shows as card…' },
+                { key: 'image', type: 'url', ph: 'Image URL (optional)…' },
               ]}
-              blank={() => ({ tag: 'general', title: '', url: '', image: '' })}
+              blank={() => ({ tag: 'general', emoji: '', title: '', summary: '', source: '', time: '', url: '', image: '' })}
             />
           </Section>
 
-          <Section id="home-highlights" title="Highlights" note="Self-hosted clip tiles. Slug points at /assets/video/{slug}.mp4 + .poster.jpg. Set source to 'embed' + an X URL to play a post in the lightbox.">
+          <Section id="home-highlights" title="The Best of the Weekend" note="The video highlights grid on the homepage (its eyebrow reads “Highlights”). Paste an X post link + a thumbnail image; the video plays inline in the lightbox on click.">
             <ClipEditor listKey="gc_highlights" def={DEFAULT_HOME_HIGHLIGHTS} slugPrefix="highlights" />
           </Section>
         </>
@@ -387,29 +414,70 @@ function ClipEditor({ listKey, def, slugPrefix }: { listKey: string; def: Clip[]
   const items = getList<Clip[]>(listKey, def);
   const update = (i: number, key: keyof Clip, val: string) => setList(listKey, items.map((it, idx) => (idx === i ? { ...it, [key]: val } : it)));
   const remove = (i: number) => setList(listKey, items.filter((_, idx) => idx !== i));
-  const add = () => setList(listKey, [...items, { slug: `${slugPrefix}/new-clip`, title: '', ratio: '16x9', source: 'self' } as Clip]);
+  const add = () => {
+    const n = items.length + 1;
+    setList(listKey, [...items, { slug: `${slugPrefix}/clip-${n}`, title: '', ratio: '16x9', source: 'embed' } as Clip]);
+  };
   return (
     <div className="adm-list">
+      <p className="adm-note">
+        Usual flow: keep <strong>Source = Embed a link</strong>, paste the <strong>X post link</strong>,
+        and add a <strong>thumbnail image URL</strong> so the tile shows a still. The video then plays
+        inline on the site when the tile is clicked. (YouTube, TikTok, Instagram, Vimeo and MP4 links
+        work too.)
+      </p>
       {items.length === 0 && <p className="adm-empty">None yet.</p>}
-      {items.map((it, i) => (
-        <div key={i} className="adm-card">
-          <div className="adm-card-grid">
-            <input className="adm-input" placeholder="Title" value={it.title} onChange={e => update(i, 'title', e.target.value)} />
-            <input className="adm-input" placeholder="Tag e.g. Premier League" value={it.tag ?? ''} onChange={e => update(i, 'tag', e.target.value)} />
-            <input className="adm-input" placeholder="Slug e.g. highlights/kudus-goal" value={it.slug} onChange={e => update(i, 'slug', e.target.value)} />
-            <input className="adm-input" placeholder="Duration e.g. 1:24" value={it.duration ?? ''} onChange={e => update(i, 'duration', e.target.value)} />
-            <select className="adm-input adm-sel" value={it.ratio} onChange={e => update(i, 'ratio', e.target.value)}>
-              {['16x9', '9x16', '4x5'].map(o => <option key={o} value={o}>{o}</option>)}
-            </select>
-            <select className="adm-input adm-sel" value={it.source ?? 'self'} onChange={e => update(i, 'source', e.target.value)}>
-              <option value="self">Self-hosted</option>
-              <option value="embed">Embed X post</option>
-            </select>
-            <input className="adm-input" placeholder="Original / X URL (attribution or embed)" value={it.originalUrl ?? ''} onChange={e => update(i, 'originalUrl', e.target.value)} />
+      {items.map((it, i) => {
+        const isEmbed = (it.source ?? 'self') === 'embed';
+        return (
+          <div key={i} className="adm-card">
+            <div className="adm-card-grid">
+              <label className="adm-field">
+                <span className="adm-label">Source</span>
+                <select className="adm-input adm-sel" value={it.source ?? 'self'} onChange={e => update(i, 'source', e.target.value)}>
+                  <option value="embed">Embed a link</option>
+                  <option value="self">Self-hosted MP4</option>
+                </select>
+              </label>
+              <label className="adm-field">
+                <span className="adm-label">{isEmbed ? 'Video link (X, YouTube, TikTok…)' : 'Original / X URL (attribution)'}</span>
+                <input className="adm-input" placeholder="https://x.com/Ghanacomps/status/…" value={it.originalUrl ?? ''} onChange={e => update(i, 'originalUrl', e.target.value)} />
+              </label>
+              <label className="adm-field">
+                <span className="adm-label">Thumbnail image URL</span>
+                <input className="adm-input" placeholder="https://…/still.jpg — shown on the tile" value={it.poster ?? ''} onChange={e => update(i, 'poster', e.target.value)} />
+              </label>
+              <label className="adm-field">
+                <span className="adm-label">Title</span>
+                <input className="adm-input" placeholder="e.g. Kudus' Weekend Masterclass" value={it.title} onChange={e => update(i, 'title', e.target.value)} />
+              </label>
+              <label className="adm-field">
+                <span className="adm-label">Tag</span>
+                <input className="adm-input" placeholder="e.g. Premier League" value={it.tag ?? ''} onChange={e => update(i, 'tag', e.target.value)} />
+              </label>
+              <label className="adm-field">
+                <span className="adm-label">Duration</span>
+                <input className="adm-input" placeholder="e.g. 1:24" value={it.duration ?? ''} onChange={e => update(i, 'duration', e.target.value)} />
+              </label>
+              <label className="adm-field">
+                <span className="adm-label">Aspect ratio</span>
+                <select className="adm-input adm-sel" value={it.ratio} onChange={e => update(i, 'ratio', e.target.value)}>
+                  <option value="16x9">16:9 (landscape)</option>
+                  <option value="9x16">9:16 (vertical)</option>
+                  <option value="4x5">4:5 (portrait)</option>
+                </select>
+              </label>
+              {!isEmbed && (
+                <label className="adm-field">
+                  <span className="adm-label">Slug (self-hosted path)</span>
+                  <input className="adm-input" placeholder={`e.g. ${slugPrefix}/kudus-goal`} value={it.slug} onChange={e => update(i, 'slug', e.target.value)} />
+                </label>
+              )}
+            </div>
+            <button type="button" className="adm-del adm-del-wide" onClick={() => remove(i)}>Remove clip</button>
           </div>
-          <button type="button" className="adm-del adm-del-wide" onClick={() => remove(i)}>Remove clip</button>
-        </div>
-      ))}
+        );
+      })}
       <button type="button" className="adm-add" onClick={add}>+ Add Clip</button>
     </div>
   );

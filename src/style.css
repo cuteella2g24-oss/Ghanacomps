@@ -2880,6 +2880,24 @@ body.edit .react-remove-btn { display: flex !important; }
 }
 .adm-tab:hover { color: var(--white); border-color: rgb(var(--gold-rgb) /.4); }
 .adm-tab.active { color: #111; background: var(--gold); border-color: var(--gold); font-weight: var(--fw-semibold); }
+/* Page banner — tells the admin which page (and which sections) they're editing. */
+.adm-pagehead {
+  margin: var(--space-xl) 0 var(--space-sm);
+  padding: var(--space-lg) var(--space-xl);
+  background: rgb(var(--gold-rgb) / .06);
+  border: 1px solid rgb(var(--gold-rgb) / .22);
+  border-radius: var(--radius-lg);
+}
+.adm-pagehead-eyebrow {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-4); text-transform: uppercase;
+  color: var(--gold); margin-bottom: var(--space-2xs);
+}
+.adm-pagehead-h {
+  font-family: var(--font-d); font-size: var(--fs-xl); color: var(--white);
+  line-height: var(--lh-snug);
+}
+.adm-pagehead-blurb { font-size: var(--fs-xs); color: var(--body); margin-top: var(--space-2xs); line-height: var(--lh-body); }
+
 /* First section in a tab shouldn't double up the top border/padding under the tabs */
 .adm-tabs + * > .adm-section:first-child, .adm-section:first-of-type { border-top: none; padding-top: var(--space-lg); }
 
