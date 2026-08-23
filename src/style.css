@@ -76,10 +76,10 @@
   --fs-micro: 0.56rem;  /* eyebrows, tags, meta, micro-labels */
   --fs-2xs:   0.62rem;  /* buttons, filters, nav links */
   --fs-xs:    0.68rem;  /* small links, footer, admin text */
-  --fs-sm:    0.76rem;  /* secondary body, captions, details */
-  --fs-base:  0.82rem;  /* default card body copy */
-  --fs-md:    0.9rem;   /* body / lead paragraphs */
-  --fs-lg:    0.95rem;  /* emphasis body, small titles */
+  --fs-sm:    0.8rem;   /* secondary body, captions, details */
+  --fs-base:  0.88rem;  /* default card body copy */
+  --fs-md:    0.98rem;  /* body / lead paragraphs (≈16px — readable long-form) */
+  --fs-lg:    1.04rem;  /* emphasis body, small titles */
   --fs-xl:    1.1rem;   /* card / player titles */
   --fs-2xl:   1.3rem;   /* section subtitles, small display */
   --fs-3xl:   1.7rem;   /* large display names */

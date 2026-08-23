@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ContentProvider } from './contexts/ContentContext';
 import { AdminProvider } from './contexts/AdminContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import ScrollReveal from './components/ScrollReveal';
 import Home from './pages/Home';
 import Players from './pages/Players';
@@ -17,16 +18,18 @@ export default function App() {
       <ContentProvider>
       <AdminProvider>
         <ScrollReveal />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/gpa" element={<GPA />} />
-          <Route path="/players" element={<Players />} />
-          <Route path="/legends" element={<Legends />} />
-          <Route path="/blackstars" element={<BlackStars />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/gpa" element={<GPA />} />
+            <Route path="/players" element={<Players />} />
+            <Route path="/legends" element={<Legends />} />
+            <Route path="/blackstars" element={<BlackStars />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
+        </ErrorBoundary>
       </AdminProvider>
       </ContentProvider>
     </BrowserRouter>

@@ -47,8 +47,21 @@ export default function ScrollReveal() {
       });
     }, 0);
 
+    // Failsafe: if the observer never fires (some engines/edge cases don't emit
+    // the initial intersection), content stuck at opacity:0 would blank the page.
+    // After a short delay, force-reveal anything already at/above the fold so the
+    // visible viewport can never stay blank — below-fold sections still animate
+    // on scroll via the observer.
+    const failsafe = window.setTimeout(() => {
+      const vh = window.innerHeight;
+      document.querySelectorAll<HTMLElement>('.reveal:not(.in)').forEach(el => {
+        if (el.getBoundingClientRect().top < vh) el.classList.add('in');
+      });
+    }, 1200);
+
     return () => {
       window.clearTimeout(id);
+      window.clearTimeout(failsafe);
       observer.disconnect();
     };
   }, [location.pathname]);

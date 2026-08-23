@@ -51,7 +51,7 @@ function GpaBlock({
   return (
     <div className={`gpa-write-block${sectionClass ? ' ' + sectionClass : ''}`}>
       <div className={`gpa-write-label${labelClass ? ' ' + labelClass : ''}`}>{label}</div>
-      <Editable tag="div" eid={nameEid} className="gpa-write-heading">{nameDef}</Editable>
+      {nameEid && <Editable tag="div" eid={nameEid} className="gpa-write-heading">{nameDef}</Editable>}
       <Editable tag="div" eid={bodyEid} className="gpa-write-body">{bodyDef}</Editable>
       <div className="gpa-link-wrap">
         {linkData?.url ? (
