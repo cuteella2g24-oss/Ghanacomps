@@ -7,12 +7,20 @@ import { useAdmin } from '../contexts/AdminContext';
 import { useContentList, useContent } from '../contexts/ContentContext';
 import { Button } from '@/components/ui/button';
 import VideoCard from '../components/VideoCard';
+import UniversalEmbed from '../components/UniversalEmbed';
 import { type Clip, DEFAULT_PERFORMER_CLIPS } from '../data/clips';
 import { staticPlayers, leagueBadges, leagueFilters, leagueLabels } from '../data/players';
 
 interface Performer { caption: string; url: string; }
 interface ExtraPlayer { id: string; name: string; club: string; league: string; label: string; }
-interface PlayerNews { title: string; detail: string; tag: 'transfer' | 'injury' | 'callup' | 'general'; }
+interface PlayerNews {
+  title: string;
+  detail: string;
+  tag: 'transfer' | 'injury' | 'callup' | 'general';
+  link?: string;
+  image?: string;
+  video?: string;
+}
 
 export default function Players() {
   const { isAdmin } = useAdmin();
@@ -28,12 +36,23 @@ export default function Players() {
   const [pnTitle, setPnTitle] = useState('');
   const [pnDetail, setPnDetail] = useState('');
   const [pnTag, setPnTag] = useState<PlayerNews['tag']>('transfer');
+  const [pnLink, setPnLink] = useState('');
+  const [pnImage, setPnImage] = useState('');
+  const [pnVideo, setPnVideo] = useState('');
+  const [openVideo, setOpenVideo] = useState<string | null>(null);
 
   function addPlayerNews() {
     if (!pnTitle.trim()) { alert('Please enter a headline.'); return; }
-    setPlayerNews([{ title: pnTitle.trim(), detail: pnDetail.trim(), tag: pnTag }, ...playerNews]);
+    const item: PlayerNews = { title: pnTitle.trim(), detail: pnDetail.trim(), tag: pnTag };
+    if (pnLink.trim()) item.link = pnLink.trim();
+    if (pnImage.trim()) item.image = pnImage.trim();
+    if (pnVideo.trim()) item.video = pnVideo.trim();
+    setPlayerNews([item, ...playerNews]);
     setPnTitle('');
     setPnDetail('');
+    setPnLink('');
+    setPnImage('');
+    setPnVideo('');
   }
 
   function removePlayerNews(i: number) {
@@ -121,13 +140,41 @@ export default function Players() {
           {playerNews.length > 0 ? (
             <div className="gc-updates">
               {playerNews.map((n, i) => (
-                <div key={i} className="gc-update-row">
-                  <span className={`gc-feed-tag ${n.tag}`}>{n.tag}</span>
-                  <div className="gc-update-main">
-                    <div className="gc-update-t">{n.title}</div>
-                    {n.detail && <p className="gc-update-b">{n.detail}</p>}
+                <div key={i}>
+                  <div className="gc-update-row">
+                    {n.image && (
+                      <img className="gc-update-thumb" src={n.image} alt="" loading="lazy" decoding="async" />
+                    )}
+                    <span className={`gc-feed-tag ${n.tag}`}>{n.tag}</span>
+                    <div className="gc-update-main">
+                      <div className="gc-update-t">{n.title}</div>
+                      {n.detail && <p className="gc-update-b">{n.detail}</p>}
+                      {(n.link || n.video) && (
+                        <div className="gc-update-actions">
+                          {n.link && (
+                            <a className="gc-update-more" href={n.link} target="_blank" rel="noopener">Read more ↗</a>
+                          )}
+                          {n.video && (
+                            <button
+                              type="button"
+                              className="gc-update-watch"
+                              aria-expanded={openVideo === n.video}
+                              aria-controls={`gc-update-video-${i}`}
+                              onClick={() => setOpenVideo(openVideo === n.video ? null : n.video!)}
+                            >
+                              ▶ Watch
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    {isAdmin && <button className="gc-entry-remove" onClick={() => removePlayerNews(i)}>Remove</button>}
                   </div>
-                  {isAdmin && <button className="gc-entry-remove" onClick={() => removePlayerNews(i)}>Remove</button>}
+                  {n.video && openVideo === n.video && (
+                    <div className="gc-update-video" id={`gc-update-video-${i}`}>
+                      <UniversalEmbed url={n.video} caption={n.title} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -147,6 +194,9 @@ export default function Players() {
                 </select>
                 <input type="text" placeholder="Headline e.g. Kudus joins new club" value={pnTitle} onChange={e => setPnTitle(e.target.value)} style={{ flex: 1, minWidth: '180px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
                 <input type="text" placeholder="Detail (optional)..." value={pnDetail} onChange={e => setPnDetail(e.target.value)} style={{ flex: 2, minWidth: '200px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
+                <input type="url" placeholder="Read-more link (optional)..." value={pnLink} onChange={e => setPnLink(e.target.value)} style={{ flex: 1, minWidth: '160px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
+                <input type="url" placeholder="Image URL (optional)..." value={pnImage} onChange={e => setPnImage(e.target.value)} style={{ flex: 1, minWidth: '160px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
+                <input type="url" placeholder="Video URL (optional)..." value={pnVideo} onChange={e => setPnVideo(e.target.value)} style={{ flex: 1, minWidth: '160px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }} />
                 <Button size="sm" onClick={addPlayerNews}>Add</Button>
               </div>
             </div>

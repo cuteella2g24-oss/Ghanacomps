@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useAdmin } from '../contexts/AdminContext';
-import { useContentField } from '../contexts/ContentContext';
 
 /**
- * Countdown — live ticking DD·HH·MM·SS to a kickoff time. EditableCountdown wraps
- * it with an admin control to set/repoint the target date (stored server-side),
- * so fixtures can show a real countdown that everyone sees.
+ * Countdown — live ticking DD·HH·MM·SS to a kickoff time. The admin control that
+ * sets/repoints the target date lives in the dashboard (Admin.tsx → FieldDateTime),
+ * which writes the same ISO field this reads, so everyone sees the countdown.
  */
 
 function CountCell({ value, label }: { value: number; label: string }) {
@@ -46,33 +44,6 @@ export function Countdown({ target }: { target: string }) {
       <CountCell value={mins} label="Min" />
       <span className="gc-count-sep">:</span>
       <CountCell value={secs} label="Sec" />
-    </div>
-  );
-}
-
-export function EditableCountdown({ fieldKey, defaultIso = '' }: { fieldKey: string; defaultIso?: string }) {
-  const { isAdmin } = useAdmin();
-  const [iso, setIso] = useContentField<string>(fieldKey, defaultIso);
-
-  function edit() {
-    const next = prompt(
-      'Kickoff date & time in ISO format, e.g. 2026-05-22T17:00:00Z (clear to hide):',
-      iso,
-    );
-    if (next !== null) setIso(next.trim());
-  }
-
-  const valid = iso && !Number.isNaN(Date.parse(iso));
-  if (!valid && !isAdmin) return null;
-
-  return (
-    <div className="gc-fix-countdown">
-      {valid && <Countdown target={iso} />}
-      {isAdmin && (
-        <button type="button" className="gc-embed-edit" onClick={edit}>
-          {valid ? '✎ Edit kickoff date' : '＋ Set kickoff date'}
-        </button>
-      )}
     </div>
   );
 }

@@ -17,6 +17,7 @@ interface NewsItem {
   title: string;
   url: string;
   tag: 'general' | 'injury' | 'transfer';
+  image?: string;
 }
 
 export default function Home() {
@@ -26,13 +27,17 @@ export default function Home() {
   const [newsTag, setNewsTag] = useState<'general' | 'injury' | 'transfer'>('general');
   const [newsHeadline, setNewsHeadline] = useState('');
   const [newsUrl, setNewsUrl] = useState('');
+  const [newsImage, setNewsImage] = useState('');
 
   function addNews() {
     if (!newsHeadline.trim()) { alert('Please enter a headline.'); return; }
-    if (news.length >= 4) { alert('Maximum 4 headlines. Remove one first.'); return; }
-    setNews([...news, { title: newsHeadline.trim(), url: newsUrl.trim(), tag: newsTag }]);
+    if (news.length >= 12) { alert('Maximum 12 headlines. Remove one first.'); return; }
+    const item: NewsItem = { title: newsHeadline.trim(), url: newsUrl.trim(), tag: newsTag };
+    if (newsImage.trim()) item.image = newsImage.trim();
+    setNews([...news, item]);
     setNewsHeadline('');
     setNewsUrl('');
+    setNewsImage('');
   }
 
   function removeNews(i: number) {
@@ -74,24 +79,19 @@ export default function Home() {
             </div>
           </div>
 
-          {/* NEWS PANEL — broadcast feed */}
+          {/* NEWS PANEL — broadcast feed teaser (top 3 only; full grid lives below) */}
           <div className="reveal delay">
             <div className="gc-feed">
               <div className="gc-feed-h"><span className="gc-feed-dot" />Latest News</div>
               {news.length === 0 && (
                 <p className="gc-feed-empty">No news yet. Add headlines via the admin panel.</p>
               )}
-              {news.map((item, i) => {
+              {news.slice(0, 3).map((item, i) => {
+                // Compact broadcast rows only — no big image cards in the narrow panel.
                 const inner = (
                   <>
                     <span className={`gc-feed-tag ${item.tag}`}>{item.tag}</span>
                     <span className="gc-feed-t">{item.title}</span>
-                    {isAdmin && (
-                      <button
-                        onClick={e => { e.preventDefault(); e.stopPropagation(); removeNews(i); }}
-                        style={{ background: 'var(--red)', color: '#fff', border: 'none', borderRadius: 'var(--radius-full)', minWidth: '20px', height: '20px', fontSize: 'var(--fs-2xs)', cursor: 'pointer', marginLeft: 'auto' }}
-                      >×</button>
-                    )}
                   </>
                 );
                 return item.url ? (
@@ -101,40 +101,93 @@ export default function Home() {
                 );
               })}
             </div>
-
-            {isAdmin && (
-              <div style={{ marginTop: 'var(--space-sm)', padding: 'var(--space-xl)', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
-                <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--white)', marginBottom: 'var(--space-md)' }}>Add News Headline</div>
-                <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
-                  <select
-                    value={newsTag}
-                    onChange={e => setNewsTag(e.target.value as 'general' | 'injury' | 'transfer')}
-                    style={{ background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }}
-                  >
-                    <option value="general">General</option>
-                    <option value="injury">Injury</option>
-                    <option value="transfer">Transfer</option>
-                  </select>
-                  <input
-                    type="text"
-                    placeholder="Headline..."
-                    value={newsHeadline}
-                    onChange={e => setNewsHeadline(e.target.value)}
-                    style={{ flex: 1, minWidth: '140px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }}
-                  />
-                  <input
-                    type="url"
-                    placeholder="Link URL (optional)..."
-                    value={newsUrl}
-                    onChange={e => setNewsUrl(e.target.value)}
-                    style={{ flex: 1, minWidth: '140px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }}
-                  />
-                  <Button size="sm" onClick={addNews}>Add</Button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
+      </section>
+
+      {/* THE FEED — full-width B/R-style headlines grid (leads after the hero) */}
+      <section className="reveal">
+        <div className="gc-eyebrow">The Feed</div>
+        <h2 className="gc-h2 tight">Latest <span className="gold">Headlines.</span></h2>
+        {news.length === 0 ? (
+          <p className="gc-feed-empty">No headlines yet. Add one via the admin panel.</p>
+        ) : (
+          <div className="gc-news-grid">
+            {news.map((item, i) => (
+              <div key={i} className="gc-news-card">
+                {item.image ? (
+                  <div className="gc-news-thumb">
+                    <img src={item.image} alt="" loading="lazy" decoding="async" />
+                  </div>
+                ) : (
+                  <div className="gc-news-band" aria-hidden="true" />
+                )}
+                <div className="gc-news-body">
+                  <div className="gc-news-top">
+                    <span className={`gc-feed-tag ${item.tag}`}>{item.tag}</span>
+                    {isAdmin && (
+                      <button
+                        className="gc-news-remove"
+                        aria-label="Remove headline"
+                        onClick={e => { e.preventDefault(); e.stopPropagation(); removeNews(i); }}
+                      >×</button>
+                    )}
+                  </div>
+                  <div className="gc-news-title">{item.title}</div>
+                  {item.url && <span className="gc-news-read" aria-hidden="true">Read ↗</span>}
+                </div>
+                {item.url && (
+                  <a
+                    className="gc-news-hit"
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={item.title}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {isAdmin && (
+          <div style={{ marginTop: 'var(--space-3xl)', padding: 'var(--space-xl)', background: 'rgb(var(--gold-rgb) / .04)', border: '1px dashed rgb(var(--gold-rgb) / .25)' }}>
+            <div style={{ fontSize: 'var(--fs-micro)', letterSpacing: 'var(--ls-4)', textTransform: 'uppercase', color: 'var(--white)', marginBottom: 'var(--space-md)' }}>Add News Headline</div>
+            <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', alignItems: 'center' }}>
+              <select
+                value={newsTag}
+                onChange={e => setNewsTag(e.target.value as 'general' | 'injury' | 'transfer')}
+                style={{ background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }}
+              >
+                <option value="general">General</option>
+                <option value="injury">Injury</option>
+                <option value="transfer">Transfer</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Headline..."
+                value={newsHeadline}
+                onChange={e => setNewsHeadline(e.target.value)}
+                style={{ flex: 1, minWidth: '140px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }}
+              />
+              <input
+                type="url"
+                placeholder="Link URL (optional)..."
+                value={newsUrl}
+                onChange={e => setNewsUrl(e.target.value)}
+                style={{ flex: 1, minWidth: '140px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }}
+              />
+              <input
+                type="url"
+                placeholder="Image URL (optional)..."
+                value={newsImage}
+                onChange={e => setNewsImage(e.target.value)}
+                style={{ flex: 1, minWidth: '140px', background: 'var(--raised)', border: '1px solid var(--line)', color: 'var(--white)', padding: 'var(--space-sm) var(--space-md)', fontSize: 'var(--fs-sm)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-b)' }}
+              />
+              <Button size="sm" onClick={addNews}>Add</Button>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* GPA PREVIEW — broadcast segment cards */}

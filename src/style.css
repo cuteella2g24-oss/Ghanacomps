@@ -935,7 +935,7 @@ footer { padding: var(--space-8xl) 5vw var(--space-5xl); background: var(--surfa
 @media (prefers-reduced-motion: reduce) {
   .card, .post-card, .legend-card, .player-card,
   .archive-card, .performer-card, .fixture, .gpa-card,
-  .gc-segcard, .gc-fixture, .gc-vcard, .gc-sportcard, [data-slot="card"] {
+  .gc-segcard, .gc-fixture, .gc-vcard, .gc-sportcard, .gc-news-card, [data-slot="card"] {
     transition: border-color var(--dur-fast) var(--ease-soft),
                 box-shadow var(--dur-fast) var(--ease-soft);
   }
@@ -943,7 +943,7 @@ footer { padding: var(--space-8xl) 5vw var(--space-5xl); background: var(--surfa
   .archive-card:hover, .performer-card:hover,
   .fixture:hover, .gpa-card:hover,
   .gc-segcard:hover, .gc-fixture:hover, .gc-vcard:hover,
-  .gc-sportcard--link:hover, [data-slot="card"]:hover { transform: none; }
+  .gc-sportcard--link:hover, .gc-news-card:hover, [data-slot="card"]:hover { transform: none; }
   /* Video-card internals: freeze poster/glyph scale under reduced-motion. */
   .gc-vcard:hover .gc-vcard-poster,
   .gc-vcard:hover .gc-vcard-glyph { transform: none; }
@@ -1434,6 +1434,14 @@ body.edit .react-remove-btn { display: flex !important; }
   position: relative; overflow: hidden;
   padding: var(--space-11xl) 5vw;
   border-bottom: 1px solid var(--line);
+  /* Always fill the viewport below the chrome above it: flag stripe (4px) +
+     sticky nav (56px inner + 1px bottom border) = 61px. So the next section
+     never peeks above the fold. min-height (not height) lets it grow if the
+     stacked mobile layout is ever taller. svh accounts for mobile browser
+     chrome; the vh line is the fallback for older engines. */
+  min-height: calc(100vh - 61px);
+  min-height: calc(100svh - 61px);
+  display: flex; flex-direction: column; justify-content: center;
 }
 .gc-hero-glow {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -1524,6 +1532,71 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-feed-empty {
   padding: var(--space-5xl) var(--space-2xl); font-size: var(--fs-sm);
   color: var(--sub);
+}
+
+/* B/R Football-style headlines grid — full-width "The Feed" section. Renders
+   every gc_news item; image items get a 16:9 cover, text-only items get a
+   tinted top band so the mixed grid still reads deliberate. Whole card is
+   clickable via an absolutely-positioned stretched link (.gc-news-hit) — valid
+   HTML, full-card click, keyboard-focusable. */
+.gc-news-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg);
+}
+.gc-news-card {
+  position: relative; display: flex; flex-direction: column;
+  overflow: hidden; border: 1px solid var(--line);
+  border-radius: var(--radius-lg); background: var(--raised);
+  transition: background var(--dur-fast) var(--ease-soft),
+              border-color var(--dur-fast) var(--ease-soft),
+              transform var(--dur-fast) var(--ease-soft);
+}
+.gc-news-card:hover {
+  background: var(--lift); border-color: var(--glass-border);
+  transform: translateY(-2px);
+}
+.gc-news-card:focus-within {
+  border-color: var(--glass-border);
+  outline: 2px solid rgb(var(--gold-rgb) / .5); outline-offset: 2px;
+}
+.gc-news-thumb {
+  aspect-ratio: 16 / 9; overflow: hidden; background: var(--lift);
+}
+.gc-news-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Text-only cards: a subtle gold-tinted band stands in for the missing image. */
+.gc-news-band {
+  height: 6px; flex: 0 0 auto;
+  background: linear-gradient(90deg,
+    rgb(var(--gold-rgb) / .55), rgb(var(--gold-rgb) / .12));
+}
+.gc-news-body {
+  display: flex; flex-direction: column; gap: var(--space-sm);
+  padding: var(--space-2xl); flex: 1;
+}
+.gc-news-top { display: flex; align-items: center; gap: var(--space-sm); }
+.gc-news-title {
+  font-family: var(--font-d); font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold); color: var(--white);
+  line-height: var(--lh-heading);
+}
+.gc-news-read {
+  margin-top: auto;
+  font-size: var(--fs-micro); letter-spacing: var(--ls-2);
+  text-transform: uppercase; color: var(--sub); font-weight: var(--fw-semibold);
+}
+.gc-news-card:hover .gc-news-read { color: var(--white); }
+/* Stretched link — covers the whole card so the entire card is clickable
+   without nesting interactive elements inside an anchor. */
+.gc-news-hit {
+  position: absolute; inset: 0; z-index: 1;
+  border-radius: inherit;
+}
+/* Admin remove button sits above the stretched link so it stays clickable. */
+.gc-news-remove {
+  position: relative; z-index: 2; margin-left: auto;
+  min-width: 20px; height: 20px; border: none; cursor: pointer;
+  border-radius: var(--radius-full); background: var(--red); color: var(--on-brand);
+  font-size: var(--fs-2xs); line-height: var(--lh-none);
 }
 
 /* ─── SECTION HEADER — B variant (eyebrow + rule, §1.5) ──────
@@ -1966,6 +2039,17 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-marquee-legend .lc-comps { border-top: none; padding: 0; width: 100%; max-width: 56ch; }
 .gc-marquee-legend .lc-comps-lbl { text-align: center; }
 .gc-marquee-legend .card-actions { justify-content: center; }
+
+/* Admin hide/restore — built-in legends & individual comps. Visitors never see
+   hidden items; admins keep them dimmed + dashed so they can restore. */
+.gc-hidden-admin { opacity: .45; outline: 1px dashed rgb(var(--red-rgb) / .6); outline-offset: 4px; }
+.gc-comp-wrap { position: relative; }
+.gc-comp-hide {
+  margin-top: var(--space-xs); font-size: var(--fs-2xs); letter-spacing: var(--ls-3);
+  text-transform: uppercase; color: var(--sub); background: none;
+  border: 1px solid var(--line); padding: var(--space-2xs) var(--space-md); cursor: pointer;
+}
+.gc-comp-hide:hover { color: var(--white); }
 
 /* ─── QUIET EDITORIAL PROSE (A, §7) — About / Contact ────────
    EB-Garamond reading column with an optional Playfair gold drop-cap on the
@@ -2533,6 +2617,26 @@ body.edit .react-remove-btn { display: flex !important; }
   padding: var(--space-sm) var(--space-lg);
 }
 
+/* Universal embed — responsive 16:9 iframe (YouTube / Vimeo) */
+.gc-embed-frame {
+  position: relative; width: 100%; aspect-ratio: 16 / 9;
+  /* Intentional on-media literal: a video letterbox is black in BOTH themes
+     (imagery, not a themed surface) — same exception as the on-media white chrome. */
+  border-radius: var(--radius-lg); overflow: hidden; background: #000;
+}
+.gc-embed-frame iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+}
+/* Script-embedded platforms (TikTok / Instagram) centre like the tweet host */
+.gc-embed-script { width: 100%; display: flex; justify-content: center; }
+.gc-embed-script :where(iframe, .tiktok-embed, .instagram-media) { margin: 0 auto !important; }
+/* Direct media file player */
+.gc-embed-video {
+  width: 100%; display: block; border-radius: var(--radius-lg);
+  /* Intentional on-media letterbox — black in both themes (see .gc-embed-frame). */
+  background: #000; max-height: 80vh;
+}
+
 /* Admin-managed embed slot (Essien plate etc.) */
 .gc-embed-slot { display: flex; flex-direction: column; gap: var(--space-sm); align-items: center; }
 .gc-embed-empty {
@@ -2544,7 +2648,7 @@ body.edit .react-remove-btn { display: flex !important; }
   font-family: var(--font-b); font-size: var(--fs-2xs); cursor: pointer;
   background: rgb(var(--gold-rgb) /.1); color: var(--white);
   border: 1px solid rgb(var(--gold-rgb) /.4); border-radius: var(--radius-sm);
-  padding: 2px 8px; letter-spacing: var(--ls-2); text-transform: uppercase;
+  padding: var(--space-3xs) var(--space-sm); letter-spacing: var(--ls-2); text-transform: uppercase;
 }
 .gc-embed-edit:hover, .edit-link-badge:hover { background: rgb(var(--gold-rgb) /.2); }
 .edit-link-badge { margin-left: var(--space-sm); flex: none; }
@@ -2565,6 +2669,18 @@ body.edit .react-remove-btn { display: flex !important; }
 
 /* Fixture countdown */
 .gc-fix-countdown { margin: var(--space-lg) 0; display: flex; flex-direction: column; gap: var(--space-sm); align-items: flex-start; }
+.gc-countdown-edit { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); }
+.gc-countdown-input {
+  font-family: var(--font-b); font-size: var(--fs-2xs); color: var(--white);
+  background: rgb(var(--gold-rgb) /.06); border: 1px solid rgb(var(--gold-rgb) /.4);
+  border-radius: var(--radius-sm); padding: var(--space-2xs) var(--space-sm);
+  color-scheme: dark;
+}
+.gc-countdown-input:focus { outline: none; border-color: var(--gold); }
+.gc-countdown-hint {
+  font-family: var(--font-b); font-size: var(--fs-2xs); letter-spacing: var(--ls-2);
+  text-transform: uppercase; color: var(--sub);
+}
 .gc-countdown { display: inline-flex; align-items: flex-end; gap: var(--space-xs); }
 .gc-countdown.is-live {
   font-family: var(--font-b); font-size: var(--fs-sm); text-transform: uppercase;
@@ -2573,24 +2689,47 @@ body.edit .react-remove-btn { display: flex !important; }
 .gc-count-cell { display: flex; flex-direction: column; align-items: center; min-width: 40px; }
 .gc-count-num {
   font-family: var(--font-d); font-size: var(--fs-2xl); font-weight: var(--fw-semibold);
-  color: var(--white); line-height: 1; font-variant-numeric: tabular-nums;
+  color: var(--white); line-height: var(--lh-none); font-variant-numeric: tabular-nums;
 }
 .gc-count-lbl {
   font-size: var(--fs-micro); letter-spacing: var(--ls-2); text-transform: uppercase;
-  color: var(--sub); margin-top: 2px;
+  color: var(--sub); margin-top: var(--space-3xs);
 }
-.gc-count-sep { font-family: var(--font-d); font-size: var(--fs-xl); color: rgb(var(--ink-rgb) /.4); line-height: 1.1; }
+.gc-count-sep { font-family: var(--font-d); font-size: var(--fs-xl); color: rgb(var(--ink-rgb) /.4); line-height: var(--lh-snug); }
 
 /* Players — transfers & updates list */
 .gc-updates { display: flex; flex-direction: column; gap: var(--space-sm); }
 .gc-update-row {
   display: flex; align-items: flex-start; gap: var(--space-md);
   padding: var(--space-md) var(--space-lg); border: 1px solid var(--line);
-  border-radius: var(--radius-sm); background: rgb(255 255 255 / .02);
+  border-radius: var(--radius-sm); background: rgb(var(--ink-rgb) / .03);
 }
 .gc-update-main { flex: 1; }
 .gc-update-t { font-size: var(--fs-base); color: var(--white); font-weight: var(--fw-semibold); }
-.gc-update-b { font-size: var(--fs-sm); color: var(--body); margin-top: 2px; line-height: var(--lh-body); }
+.gc-update-b { font-size: var(--fs-sm); color: var(--body); margin-top: var(--space-3xs); line-height: var(--lh-body); }
+.gc-update-thumb {
+  flex: 0 0 auto; width: 96px; aspect-ratio: 16 / 9; object-fit: cover;
+  border-radius: var(--radius-sm); background: var(--lift); display: block;
+}
+.gc-update-actions {
+  display: flex; align-items: center; gap: var(--space-md); flex-wrap: wrap;
+  margin-top: var(--space-sm);
+}
+.gc-update-more {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-2);
+  text-transform: uppercase; font-weight: var(--fw-semibold); color: var(--white);
+}
+.gc-update-more:hover { color: var(--gold); }
+.gc-update-watch {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-2);
+  text-transform: uppercase; font-weight: var(--fw-semibold);
+  color: var(--white); background: rgb(var(--gold-rgb) / .12);
+  border: 1px solid rgb(var(--gold-rgb) / .25); border-radius: var(--radius-sm);
+  padding: var(--space-3xs) var(--space-sm); cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-soft);
+}
+.gc-update-watch:hover { background: rgb(var(--gold-rgb) / .2); }
+.gc-update-video { margin-top: var(--space-sm); }
 
 @media (max-width: 768px) {
   .gc-embed-grid { grid-template-columns: 1fr; }
@@ -2658,6 +2797,8 @@ body.edit .react-remove-btn { display: flex !important; }
 
 .adm-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: var(--space-md); }
 .adm-label { font-size: var(--fs-xs); color: var(--body); }
+.adm-hint { font-size: var(--fs-xs); color: var(--sub); letter-spacing: var(--ls-1); }
+.adm-input[type="datetime-local"] { color-scheme: dark; }
 .adm-input {
   width: 100%; background: var(--raised); border: 1px solid var(--line); color: var(--white);
   padding: var(--space-sm) var(--space-md); font-size: var(--fs-sm); font-family: var(--font-b);

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { type ResolvedClip } from '../data/clips';
-import TweetEmbed, { tweetId } from './TweetEmbed';
+import UniversalEmbed from './UniversalEmbed';
 
 /**
  * VideoLightbox — the one immersive mode (spec §2.d). Sound + native controls,
@@ -186,14 +186,15 @@ export default function VideoLightbox({ clip, triggerEl, onClose }: Props) {
               )}
             </video>
           )}
-          {/* Embedded X post → plays inline in the frame. */}
-          {isEmbed && clip.originalUrl && tweetId(clip.originalUrl) && (
+          {/* Embed clip with a URL → play it inline (YouTube, Vimeo, TikTok,
+              Instagram, X, or MP4) via the universal resolver. */}
+          {isEmbed && clip.originalUrl && !mediaError && (
             <div className="gc-lightbox-embed">
-              <TweetEmbed url={clip.originalUrl} />
+              <UniversalEmbed url={clip.originalUrl} caption={clip.title} />
             </div>
           )}
-          {/* Non-tweet embed OR missing-media fallback: contained link-out. */}
-          {((isEmbed && !(clip.originalUrl && tweetId(clip.originalUrl))) || mediaError) && (
+          {/* Missing-media / no-URL fallback: contained link-out. */}
+          {((isEmbed && !clip.originalUrl) || mediaError) && (
             <div className="gc-lightbox-fallback">
               <p>
                 {isEmbed

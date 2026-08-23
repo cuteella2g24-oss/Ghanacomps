@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { useContent } from '../contexts/ContentContext';
 import { verifyToken, type SaveResult } from '../lib/content';
 import { staticPlayers, leagueLabels } from '../data/players';
-import { DEFAULT_HOME_HIGHLIGHTS, DEFAULT_BS_HIGHLIGHTS, type Clip } from '../data/clips';
-import { BS_UPDATE_DEFAULTS, FIXTURE_DEFAULTS } from './BlackStars';
+import { DEFAULT_HOME_HIGHLIGHTS, type Clip } from '../data/clips';
+import { TEAMS, teamKeys, type TeamId } from '../lib/nationalTeams';
+import { isoToLocalInput, localInputToIso, kickoffHint } from '../lib/countdown';
 
 /**
  * /admin — the single place to edit the site's *information* (news, transfers,
@@ -61,6 +62,26 @@ function FieldText({ label, fieldKey, def = '', area = false, ph = '' }: { label
   );
 }
 
+/** Kickoff picker. Stores an ISO string in the field (same setter as FieldText),
+ * but shows a friendly datetime-local picker + a live "X days to kickoff" hint. */
+function FieldDateTime({ label, fieldKey, def = '' }: { label: string; fieldKey: string; def?: string }) {
+  const { getField, setField } = useContent();
+  const [iso, setIso] = useState(() => getField(fieldKey, def));
+  const change = (v: string) => {
+    const next = localInputToIso(v);
+    setIso(next);
+    setField(fieldKey, next);
+  };
+  const hint = kickoffHint(iso);
+  return (
+    <label className="adm-field">
+      <span className="adm-label">{label}</span>
+      <input className="adm-input" type="datetime-local" value={isoToLocalInput(iso)} onChange={e => change(e.target.value)} />
+      {hint && <span className="adm-hint">{hint}</span>}
+    </label>
+  );
+}
+
 interface Column { key: string; ph: string; type?: 'text' | 'textarea' | 'select' | 'url'; options?: string[] }
 
 /** Generic add/edit/remove editor over an array of flat objects in lists[]. */
@@ -104,7 +125,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'home', label: 'Home' },
   { id: 'players', label: 'Players' },
   { id: 'legends', label: 'Legends & Cult' },
-  { id: 'blackstars', label: 'Black Stars' },
+  { id: 'blackstars', label: 'National Teams' },
   { id: 'gpa', label: 'GPA' },
 ];
 
@@ -113,6 +134,7 @@ function Dashboard({ token }: { token: string }) {
   const [status, setStatus] = useState('');
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState<TabId>('home');
+  const [ntTeam, setNtTeam] = useState<TeamId>('men');
 
   async function doSave() {
     setSaving(true);
@@ -167,8 +189,9 @@ function Dashboard({ token }: { token: string }) {
                 { key: 'tag', type: 'select', ph: '', options: ['general', 'injury', 'transfer'] },
                 { key: 'title', ph: 'Headline…' },
                 { key: 'url', type: 'url', ph: 'Link URL (optional)…' },
+                { key: 'image', type: 'url', ph: 'Image URL (optional) — shows as card…' },
               ]}
-              blank={() => ({ tag: 'general', title: '', url: '' })}
+              blank={() => ({ tag: 'general', title: '', url: '', image: '' })}
             />
           </Section>
 
@@ -187,8 +210,11 @@ function Dashboard({ token }: { token: string }) {
                 { key: 'tag', type: 'select', ph: '', options: ['transfer', 'injury', 'callup', 'general'] },
                 { key: 'title', ph: 'Headline e.g. Kudus joins new club' },
                 { key: 'detail', type: 'textarea', ph: 'Detail (optional)…' },
+                { key: 'link', type: 'url', ph: 'Read-more link (optional)…' },
+                { key: 'image', type: 'url', ph: 'Image URL (optional)…' },
+                { key: 'video', type: 'url', ph: 'Video URL (optional) — inline Watch…' },
               ]}
-              blank={() => ({ tag: 'transfer', title: '', detail: '' })}
+              blank={() => ({ tag: 'transfer', title: '', detail: '', link: '', image: '', video: '' })}
             />
           </Section>
 
@@ -244,40 +270,23 @@ function Dashboard({ token }: { token: string }) {
 
       {tab === 'blackstars' && (
         <>
-          <Section id="bs-update" title="Latest Update" note="The editorial news block at the top of the Black Stars page.">
-            <FieldText label="Eyebrow" fieldKey="bs:eyebrow" def={BS_UPDATE_DEFAULTS['bs:eyebrow']} />
-            <FieldText label="Title (gold headline)" fieldKey="bs:title" def={BS_UPDATE_DEFAULTS['bs:title']} />
-            <FieldText label="Sub-heading" fieldKey="bs:heading" def={BS_UPDATE_DEFAULTS['bs:heading']} />
-            <FieldText label="Body (blank line = new paragraph)" fieldKey="bs:body" def={BS_UPDATE_DEFAULTS['bs:body']} area />
-          </Section>
-
-          <Section id="bs-embeds" title="Goals & Moments (embedded X posts)" note="Paste X post URLs of goals; they embed and play on the site.">
-            <ListEditor
-              listKey="gc_bs_embeds"
-              columns={[
-                { key: 'url', type: 'url', ph: 'X post URL…' },
-                { key: 'caption', ph: 'Caption (optional)…' },
-              ]}
-              blank={() => ({ url: '', caption: '' })}
-            />
-          </Section>
-
-          <Section id="fixtures" title="Fixtures & Countdowns" note="Kickoff must be ISO format, e.g. 2026-05-22T17:00:00Z. Blank kickoff hides that fixture's countdown. Clear the matchup to hide the whole card.">
-            {(['f1', 'f2'] as const).map(fx => (
-              <div key={fx} className="adm-fixture">
-                <div className="adm-sub">{fx === 'f1' ? 'Fixture 1' : 'Fixture 2'}</div>
-                <FieldText label="Label" fieldKey={`bs:${fx}-label`} def={FIXTURE_DEFAULTS[fx].label} />
-                <FieldText label="Matchup" fieldKey={`bs:${fx}-title`} def={FIXTURE_DEFAULTS[fx].title} />
-                <FieldText label="Detail (date · venue · time)" fieldKey={`bs:${fx}-det`} def={FIXTURE_DEFAULTS[fx].det} />
-                <FieldText label="Kickoff (ISO, for countdown)" fieldKey={`fixture:${fx}`} def={FIXTURE_DEFAULTS[fx].iso} ph="2026-05-22T17:00:00Z" />
-                <FieldText label="What's at stake" fieldKey={`bs:${fx}-stake`} def={FIXTURE_DEFAULTS[fx].stake} area />
-              </div>
+          <div className="adm-tabs" role="tablist" style={{ marginTop: 0 }}>
+            {TEAMS.map(t => (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                aria-selected={ntTeam === t.id}
+                className={`adm-tab${ntTeam === t.id ? ' active' : ''}`}
+                onClick={() => setNtTeam(t.id)}
+              >
+                {t.label}
+              </button>
             ))}
-          </Section>
-
-          <Section id="bs-highlights" title="Matchday Highlights">
-            <ClipEditor listKey="gc_bs_highlights" def={DEFAULT_BS_HIGHLIGHTS} slugPrefix="highlights" />
-          </Section>
+          </div>
+          {/* key forces the FieldText/FieldDateTime local state to re-seed when
+              the selected team (and therefore the field keys) changes. */}
+          <NationalTeamEditor key={ntTeam} team={ntTeam} />
         </>
       )}
 
@@ -403,6 +412,55 @@ function ClipEditor({ listKey, def, slugPrefix }: { listKey: string; def: Clip[]
       ))}
       <button type="button" className="adm-add" onClick={add}>+ Add Clip</button>
     </div>
+  );
+}
+
+/** The full editor set for one national team — driven entirely by teamKeys(),
+ *  so 'men' points at the legacy bs / fixture / gc_bs_ keys (unchanged) and the
+ *  other teams at their namespaced keys. */
+function NationalTeamEditor({ team }: { team: TeamId }) {
+  const keys = teamKeys(team);
+  const label = TEAMS.find(t => t.id === team)!.label;
+  return (
+    <>
+      <Section id="nt-update" title="Latest Update" note={`The editorial news block at the top of the ${label} view.`}>
+        <FieldText label="Eyebrow" fieldKey={keys.editorial.eyebrow.key} def={keys.editorial.eyebrow.def} />
+        <FieldText label="Title (gold headline)" fieldKey={keys.editorial.title.key} def={keys.editorial.title.def} />
+        <FieldText label="Sub-heading" fieldKey={keys.editorial.heading.key} def={keys.editorial.heading.def} />
+        <FieldText label="Body (blank line = new paragraph)" fieldKey={keys.editorial.body.key} def={keys.editorial.body.def} area />
+      </Section>
+
+      <Section id="nt-embeds" title="Goals & Moments (embedded video)" note="Paste video links (YouTube, TikTok, Instagram, X, Vimeo, MP4); they embed and play on the site.">
+        <ListEditor
+          listKey={keys.embedsList}
+          columns={[
+            { key: 'url', type: 'url', ph: 'Video link (YouTube, TikTok, Instagram, X, Vimeo, MP4)…' },
+            { key: 'caption', ph: 'Caption (optional)…' },
+          ]}
+          blank={() => ({ url: '', caption: '' })}
+        />
+      </Section>
+
+      <Section id="nt-fixtures" title="Fixtures & Countdowns" note="Pick a kickoff date & time with the picker to drive the live countdown. Clear the kickoff to hide that fixture's countdown. Clear the matchup to hide the whole card.">
+        {(['f1', 'f2'] as const).map(fx => {
+          const fk = keys.fixtures[fx];
+          return (
+            <div key={fx} className="adm-fixture">
+              <div className="adm-sub">{fx === 'f1' ? 'Fixture 1' : 'Fixture 2'}</div>
+              <FieldText label="Label" fieldKey={fk.label.key} def={fk.label.def} />
+              <FieldText label="Matchup" fieldKey={fk.title.key} def={fk.title.def} />
+              <FieldText label="Detail (date · venue · time)" fieldKey={fk.det.key} def={fk.det.def} />
+              <FieldDateTime label="Kickoff (for countdown)" fieldKey={fk.iso.key} def={fk.iso.def} />
+              <FieldText label="What's at stake" fieldKey={fk.stake.key} def={fk.stake.def} area />
+            </div>
+          );
+        })}
+      </Section>
+
+      <Section id="nt-highlights" title="Matchday Highlights">
+        <ClipEditor listKey={keys.highlightsList} def={keys.highlightsDefault} slugPrefix="highlights" />
+      </Section>
+    </>
   );
 }
 

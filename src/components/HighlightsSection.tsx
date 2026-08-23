@@ -123,7 +123,7 @@ export default function HighlightsSection({
               <option value="9x16">9:16</option>
               <option value="4x5">4:5</option>
             </select>
-            <input type="url" placeholder="Original URL (attribution)..." value={originalUrl} onChange={e => setOriginalUrl(e.target.value)} style={inputStyle} />
+            <input type="url" placeholder="Video link — YouTube, TikTok, Instagram, X, Vimeo or MP4..." value={originalUrl} onChange={e => setOriginalUrl(e.target.value)} style={inputStyle} />
             <select value={src} onChange={e => setSrc(e.target.value as 'self' | 'embed')} style={{ ...inputStyle, flex: 'none' }}>
               <option value="self">Self-hosted</option>
               <option value="embed">Embed fallback</option>
@@ -132,7 +132,7 @@ export default function HighlightsSection({
             <button className="clear-performers-btn" onClick={() => setShowAdd(false)}>Cancel</button>
           </div>
           <p style={{ fontSize: 'var(--fs-xs)', color: 'var(--sub)', marginTop: 'var(--space-sm)', fontStyle: 'italic' }}>
-            Placeholder clips ship with the site — drop a real MP4 + poster at <code>/assets/video/{'{slug}'}.mp4</code> and <code>.poster.jpg</code> to swap it in (see the video README).
+            Choose <strong>Embed</strong> and paste any video link (YouTube, TikTok, Instagram, X, Vimeo or a direct MP4) to play it inline — no file upload needed. Or choose <strong>Self-hosted</strong> and drop a real MP4 + poster at <code>/assets/video/{'{slug}'}.mp4</code> and <code>.poster.jpg</code> to swap it in (see the video README).
           </p>
         </div>
       )}
