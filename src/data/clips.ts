@@ -73,35 +73,10 @@ export const HOME_HERO_VIDEO: HeroVideo = {
   posterMobile: `${BASE}/hero/home-hero-mobile.poster.jpg`,
 };
 
-/** Default Home highlights grid (placeholder clips — swap real files per README). */
-export const DEFAULT_HOME_HIGHLIGHTS: Clip[] = [
-  { slug: 'highlights/kudus-masterclass', title: "Kudus' Weekend Masterclass", tag: 'Premier League', ratio: '16x9', duration: '1:24', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-  { slug: 'highlights/semenyo-cameo',     title: 'Semenyo Off the Bench',      tag: 'Premier League', ratio: '16x9', duration: '0:48', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-  { slug: 'highlights/the-save',          title: 'The Save That Saved a Point', tag: 'La Liga',       ratio: '16x9', duration: '2:10', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-  { slug: 'highlights/debut-to-remember', title: 'A Debut to Remember',        tag: 'Serie A',        ratio: '16x9', duration: '1:02', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-  { slug: 'highlights/two-assists',       title: 'Two Assists, No Fuss',       tag: 'Bundesliga',     ratio: '16x9', duration: '0:36', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-  { slug: 'highlights/nobody-talked',     title: 'The One Nobody Talked About', tag: 'Championship',  ratio: '16x9', duration: '1:55', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-];
+/** Default Home highlights grid — empty until the admin adds real clips, so the
+ *  whole Highlights section stays hidden on the public site until then. */
+export const DEFAULT_HOME_HIGHLIGHTS: Clip[] = [];
 
-/** Default Black Stars matchday highlights (placeholder clips). */
-export const DEFAULT_BS_HIGHLIGHTS: Clip[] = [
-  { slug: 'highlights/bs-goal-of-the-night', title: 'Goal of the Night', tag: 'Black Stars', ratio: '16x9', duration: '0:42', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-  { slug: 'highlights/bs-keeper-heroics',    title: 'Keeper Heroics',    tag: 'Black Stars', ratio: '16x9', duration: '1:08', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-  { slug: 'highlights/bs-late-winner',       title: 'The Late Winner',   tag: 'Black Stars', ratio: '16x9', duration: '0:55', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-];
-
-/** Essien reverence-plate legend clip (Legends page, §3). */
-export const ESSIEN_CLIP: Clip = {
-  slug: 'clips/essien-volley',
-  title: 'The Volley vs Arsenal · 2006',
-  ratio: '4x5',
-  duration: '0:52',
-  originalUrl: 'https://x.com/Ghanacomps',
-  source: 'self',
-};
-
-/** Default Weekend Performer vertical clips (Players page, §3). */
-export const DEFAULT_PERFORMER_CLIPS: Clip[] = [
-  { slug: 'clips/kudus-vertical',   title: 'Kudus vs Man City — Matchday',   tag: 'Weekend Performer', ratio: '9x16', duration: '0:44', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-  { slug: 'clips/semenyo-vertical', title: "Semenyo's Cameo — off the bench", tag: 'Weekend Performer', ratio: '9x16', duration: '0:31', originalUrl: 'https://x.com/Ghanacomps', source: 'self' },
-];
+/** Default Black Stars matchday highlights — empty until the admin adds real
+ *  clips, so the matchday highlights grid stays hidden on the public site. */
+export const DEFAULT_BS_HIGHLIGHTS: Clip[] = [];

@@ -93,6 +93,19 @@ export default function GPA() {
     setLinks(updated);
   }
 
+  // A block counts as "filled" once the admin has written a body or set a link.
+  // Sections with no filled block are hidden on the public site; admins always
+  // see every section so they can add content.
+  const hasContent = (bodyKey: string, id: keyof GpaLinks) =>
+    getField(bodyKey, '').trim() !== '' || !!links[id]?.url;
+
+  const showMwr = isAdmin || hasContent('gpa-mwr-body', 'mwr');
+  const showPotw = isAdmin || hasContent('gpa-potw-body', 'potw');
+  const showGoal = hasContent('gpa-goal-body', 'goal');
+  const showAssist = hasContent('gpa-assist-body', 'assist');
+  const showGoalAssist = isAdmin || showGoal || showAssist;
+  const showUp = isAdmin || hasContent('gpa-up-body', 'up');
+
   return (
     <>
       <Stripe />
@@ -110,103 +123,115 @@ export default function GPA() {
       </div>
 
       {/* 1. MATCHWEEK REVIEW — editorial column */}
-      <section className="gc-editorial reveal">
-        <div className="gc-rule">
-          <span className="gc-rule-eyebrow">Matchweek Review</span>
-        </div>
-        <h2 className="gc-col-head">{getField('gpa-mwr-heading', 'Matchweek 34 Review.')}</h2>
-        <GpaBlock
-          id="mwr"
-          label="This Week's Breakdown"
-          bodyKey="gpa-mwr-body"
-          linkDefault="Watch: Kudus vs Man City — Matchday 38"
-          links={links}
-          onSaveLink={saveLink}
-          onClearLink={clearLink}
-          isAdmin={isAdmin}
-        />
-      </section>
+      {showMwr && (
+        <section className="gc-editorial reveal">
+          <div className="gc-rule">
+            <span className="gc-rule-eyebrow">Matchweek Review</span>
+          </div>
+          <h2 className="gc-col-head">{getField('gpa-mwr-heading', 'Matchweek 34 Review.')}</h2>
+          <GpaBlock
+            id="mwr"
+            label="This Week's Breakdown"
+            bodyKey="gpa-mwr-body"
+            linkDefault="Watch: Kudus vs Man City — Matchday 38"
+            links={links}
+            onSaveLink={saveLink}
+            onClearLink={clearLink}
+            isAdmin={isAdmin}
+          />
+        </section>
+      )}
 
       {/* 2. PLAYER OF THE WEEK (red accent) */}
-      <section className="gc-editorial alt red-accent reveal">
-        <div className="gc-rule">
-          <span className="gc-rule-eyebrow r">Player of the Week</span>
-        </div>
-        <h2 className="gc-col-head">Who <span className="gold">Stood Out.</span></h2>
-        <GpaBlock
-          id="potw"
-          sectionClass="red"
-          labelClass="red"
-          label="Player of the Week"
-          nameKey="gpa-potw-name"
-          nameDef="Updated Every Monday"
-          bodyKey="gpa-potw-body"
-          linkDefault="Watch: Kudus vs Man City — Matchday 38"
-          links={links}
-          onSaveLink={saveLink}
-          onClearLink={clearLink}
-          isAdmin={isAdmin}
-        />
-      </section>
+      {showPotw && (
+        <section className="gc-editorial alt red-accent reveal">
+          <div className="gc-rule">
+            <span className="gc-rule-eyebrow r">Player of the Week</span>
+          </div>
+          <h2 className="gc-col-head">Who <span className="gold">Stood Out.</span></h2>
+          <GpaBlock
+            id="potw"
+            sectionClass="red"
+            labelClass="red"
+            label="Player of the Week"
+            nameKey="gpa-potw-name"
+            nameDef="Updated Every Monday"
+            bodyKey="gpa-potw-body"
+            linkDefault="Watch: Kudus vs Man City — Matchday 38"
+            links={links}
+            onSaveLink={saveLink}
+            onClearLink={clearLink}
+            isAdmin={isAdmin}
+          />
+        </section>
+      )}
 
       {/* 3. GOAL AND ASSIST (two-block split) */}
-      <section className="gc-editorial reveal">
-        <div className="gc-rule">
-          <span className="gc-rule-eyebrow">Goal and Assist of the Week</span>
-        </div>
-        <h2 className="gc-col-head">The Moments <span className="gold">Worth Watching.</span></h2>
-        <div className="gc-col-split">
-          <div>
-            <GpaBlock
-              id="goal"
-              label="Goal of the Week"
-              nameKey="gpa-goal-name"
-              nameDef="Coming Monday"
-              bodyKey="gpa-goal-body"
-              linkDefault="Link caption..."
-              links={links}
-              onSaveLink={saveLink}
-              onClearLink={clearLink}
-              isAdmin={isAdmin}
-            />
+      {showGoalAssist && (
+        <section className="gc-editorial reveal">
+          <div className="gc-rule">
+            <span className="gc-rule-eyebrow">Goal and Assist of the Week</span>
           </div>
-          <div>
-            <GpaBlock
-              id="assist"
-              label="Assist of the Week"
-              nameKey="gpa-assist-name"
-              nameDef="Coming Monday"
-              bodyKey="gpa-assist-body"
-              linkDefault="Link caption..."
-              links={links}
-              onSaveLink={saveLink}
-              onClearLink={clearLink}
-              isAdmin={isAdmin}
-            />
+          <h2 className="gc-col-head">The Moments <span className="gold">Worth Watching.</span></h2>
+          <div className="gc-col-split">
+            {(isAdmin || showGoal) && (
+              <div>
+                <GpaBlock
+                  id="goal"
+                  label="Goal of the Week"
+                  nameKey="gpa-goal-name"
+                  nameDef="Coming Monday"
+                  bodyKey="gpa-goal-body"
+                  linkDefault="Link caption..."
+                  links={links}
+                  onSaveLink={saveLink}
+                  onClearLink={clearLink}
+                  isAdmin={isAdmin}
+                />
+              </div>
+            )}
+            {(isAdmin || showAssist) && (
+              <div>
+                <GpaBlock
+                  id="assist"
+                  label="Assist of the Week"
+                  nameKey="gpa-assist-name"
+                  nameDef="Coming Monday"
+                  bodyKey="gpa-assist-body"
+                  linkDefault="Link caption..."
+                  links={links}
+                  onSaveLink={saveLink}
+                  onClearLink={clearLink}
+                  isAdmin={isAdmin}
+                />
+              </div>
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 4. UNDERRATED (green accent) */}
-      <section className="gc-editorial alt green-accent reveal">
-        <div className="gc-rule">
-          <span className="gc-rule-eyebrow gr">Underrated Performance of the Week</span>
-        </div>
-        <h2 className="gc-col-head">The One <span className="gold">Everybody Missed.</span></h2>
-        <GpaBlock
-          id="up"
-          sectionClass="grn"
-          label="Underrated Performance"
-          nameKey="gpa-up-name"
-          nameDef="Updated Every Week"
-          bodyKey="gpa-up-body"
-          linkDefault="Link caption..."
-          links={links}
-          onSaveLink={saveLink}
-          onClearLink={clearLink}
-          isAdmin={isAdmin}
-        />
-      </section>
+      {showUp && (
+        <section className="gc-editorial alt green-accent reveal">
+          <div className="gc-rule">
+            <span className="gc-rule-eyebrow gr">Underrated Performance of the Week</span>
+          </div>
+          <h2 className="gc-col-head">The One <span className="gold">Everybody Missed.</span></h2>
+          <GpaBlock
+            id="up"
+            sectionClass="grn"
+            label="Underrated Performance"
+            nameKey="gpa-up-name"
+            nameDef="Updated Every Week"
+            bodyKey="gpa-up-body"
+            linkDefault="Link caption..."
+            links={links}
+            onSaveLink={saveLink}
+            onClearLink={clearLink}
+            isAdmin={isAdmin}
+          />
+        </section>
+      )}
 
       <Footer />
       <Stripe />

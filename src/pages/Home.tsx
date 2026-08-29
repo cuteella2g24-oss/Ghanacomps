@@ -388,14 +388,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HIGHLIGHTS — self-hosted video tiles (VIDEO_DESIGN_SPEC §3 Home 2) */}
-      <HighlightsSection
-        eyebrow="Highlights"
-        headingLead="The Best of the"
-        headingGold="Weekend."
-        clips={highlights}
-        onChange={setHighlights}
-      />
+      {/* HIGHLIGHTS — self-hosted video tiles (VIDEO_DESIGN_SPEC §3 Home 2).
+          Hidden entirely until the admin adds clips; admins still see it (with
+          the empty state + add panel) so they can populate it. */}
+      {(highlights.length > 0 || isAdmin) && (
+        <HighlightsSection
+          eyebrow="Highlights"
+          headingLead="The Best of the"
+          headingGold="Weekend."
+          clips={highlights}
+          onChange={setHighlights}
+        />
+      )}
 
       {/* SOCIAL — the only place raw X/TikTok embeds live (§3 Home 3) */}
       <SocialStrip />

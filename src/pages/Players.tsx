@@ -8,7 +8,7 @@ import { useContentList, useContent } from '../contexts/ContentContext';
 import { Button } from '@/components/ui/button';
 import VideoCard from '../components/VideoCard';
 import UniversalEmbed from '../components/UniversalEmbed';
-import { type Clip, DEFAULT_PERFORMER_CLIPS } from '../data/clips';
+import { type Clip } from '../data/clips';
 import { staticPlayers, leagueBadges, leagueFilters, leagueLabels } from '../data/players';
 
 interface Performer { caption: string; url: string; }
@@ -212,12 +212,17 @@ export default function Players() {
         {performers.length > 0 ? (
           <div className="performers-grid">
             {performers.map((item, i) => {
-              // Phone-shot vertical clip per card (§3 Players). Placeholder clips
-              // cycle the default pool; the lightbox caption + attribution use
-              // the performer's own caption/url. Drop a real MP4 at the clip's
-              // slug path to swap it in (see the video README).
-              const base = DEFAULT_PERFORMER_CLIPS[i % DEFAULT_PERFORMER_CLIPS.length];
-              const clip: Clip = { ...base, title: item.caption, originalUrl: item.url };
+              // Each card embeds the performer's own X/TikTok post, so the tile
+              // plays the real clip inline (no placeholder footage). The tag is
+              // constant; caption/link come from the performer record.
+              const clip: Clip = {
+                slug: `performer-${i}`,
+                title: item.caption,
+                tag: 'Weekend Performer',
+                ratio: '9x16',
+                source: 'embed',
+                originalUrl: item.url,
+              };
               return (
                 <div key={i} className="performer-card">
                   <VideoCard clip={clip} size="sm" showCaption={false} />
